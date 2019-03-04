@@ -13,58 +13,54 @@
 
 public class User {
 		
-	private String userID; // ID of the user
-	private String userPosition; // Job title (manager, cook, etc)
-	private String userName; // User's name
-	private int userAge;  // User's age
-	private double userNumber; // User's Phone Number
+	private String userID;
+	private String userFirstName;
+	private String userLastName;
+	private String userRank;
+	private String userHireDate;
 		
-	public User(String userID, String userPosition, String userName, int userAge, double userNumber) {
+	public User(String userID, String userFirstName, String userLastName, String userRank, String userHireDate) {
 		this.userID = userID;
-		this.userPosition = userPosition; 
-		this.userName = userName;
-		this.userAge = userAge;
-		this.userNumber = userNumber;
+		this.userFirstName = userFirstName; 
+		this.userLastName = userLastName;
+		this.userRank = userRank;
+		this.userHireDate = userHireDate;
 	}
 
 	public String getUserID() {
 		return userID;
 	}
-
 	public void setUserID(String userID) {
 		this.userID = userID;
 	}
-		
-	public String getUserPosition() {
-		return userPosition;
+
+	public String getUserFirstName() {
+		return userFirstName;
+	}
+	public void setUserFirstName(String userFirstName) {
+		this.userFirstName = userFirstName;
 	}
 
-	public void setUserPositon(String userPosition) {
-		this.userPosition = userPosition;
+	public String getUserLastName() {
+		return userLastName;
 	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-		
-	public int getUserAge() {
-		return userAge;
+	public void setUserLastName(String userLastName) {
+		this.userLastName = userLastName;
 	}
 	
-	public void setUSerAge(int userAge) {
-		this.userAge = userAge;
+	public String getUserRank() {
+		return userRank;
+	}
+	public void setUserRank(String userRank) {
+		this.userRank = userRank;
+	}
+	
+	public String getUserHireDate() {
+		return userHireDate;
 	}
 
-	public double getUserNumber() {
-		return userNumber;
-	}
-
-	public void setUserNumber(double userNumber) {
-		this.userNumber = userNumber;
+	public void setUserHireDate(String userHireDate) {
+		this.userHireDate = userHireDate;
 	}
 }
 

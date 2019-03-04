@@ -20,7 +20,10 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.BorderFactory;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -124,14 +127,16 @@ public class Main extends JFrame {
 	public static String currentUserID = new String("");
 	public static String currentUserName = new String("");
 	
-	public static String dipeshBhandari = new String("Dipesh B.");
 	public static String alexGayle = new String("Alex G.");
 	public static String ericGreene = new String("Eric G.");
 	public static String joshuaHenderson = new String("Joshua H.");
-	public static String dipeshID = new String("000100");
+
 	public static String alexID = new String("000200");
 	public static String ericID = new String("000300");
 	public static String joshuaID = new String("000400");
+	
+	// ******************** USERS ***************************************
+	public static User dipeshBhandari = new User("", "", "", "", "");
 	
 	// ******************** BUTTONS ********************
 	// We didn't define these as MenuButtons because we're simply attaching
@@ -314,6 +319,9 @@ public class Main extends JFrame {
 // ************************ MAIN METHOD *****************************************
 	public static void main(String[] args) {
 
+		// Load database elements
+		loadData();
+		
 		// Create a new Main object and add the panels to it. Each swing component
 		// has the method add.		
 		Main main = new Main();
@@ -418,7 +426,6 @@ public class Main extends JFrame {
 	public static String getUserName(String id) {
 		
 		switch (id) {
-			case "000100": return dipeshBhandari;
 			case "000200": return alexGayle;
 			case "000300": return ericGreene;
 			case "000400": return joshuaHenderson;
@@ -469,5 +476,26 @@ public class Main extends JFrame {
 		 *  |                          statusPanel                          |
 		 *  |_______________________________________________________________| 
 		 */
+	}
+	public static void loadData() {
+		
+		// Load database elements
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://108.167.172.113:3306/jhenders_group_project", "jhenders_1", "password");
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT userID FROM Users WHERE userFirstName = 'Dipesh'");
+			
+			while (rs.next()) {
+				dipeshBhandari.setUserID(rs.getString(1));
+				dipeshBhandari.setUserFirstName(rs.getString(2));
+				dipeshBhandari.setUserLastName(rs.getString(3));
+				dipeshBhandari.setUserRank(rs.getString(4));
+				dipeshBhandari.setUserHireDate(rs.getString(5));
+			}
+		}
+		catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+		}
 	}
 }
