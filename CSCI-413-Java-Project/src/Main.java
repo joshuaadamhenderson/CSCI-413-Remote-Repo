@@ -82,6 +82,7 @@ public class Main extends JFrame {
 	// Fonts have three arguments, the name of the font, the weight, and the pixel size.
 	// There are predefined constants in the Font class for PLAIN, BOLD, ITALIC, etc.
 	public static final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 18);
+	public static final Font TABLE_BUTTON_FONT = new Font("Arial", Font.BOLD, 24);
 	public static final Font KEYPAD_FONT = new Font("Arial", Font.BOLD, 30);
 	
 	// ******************** DIMENSIONS ********************
@@ -103,6 +104,8 @@ public class Main extends JFrame {
 	public static final int PAYMENT_BUTTON_WIDTH = 250;
 	public static final int PAYMENT_BUTTON_HEIGHT = 110;
 	
+	public static final int TABLE_BUTTON_HEIGHT = 70;
+	public static final int TABLE_BUTTON_WIDTH = 880;
 	// ******************** PANELS ******************************************
 	// Our JFrames are divided into panels for easy organization and layout.
 	public static FunctionPanel functionPanel = new FunctionPanel();			// The very top row of functions
@@ -117,26 +120,39 @@ public class Main extends JFrame {
 	public static LoginPanel userLoginPanel = new LoginPanel();
 	public static UserPanel userPanel = new UserPanel();
 	
+	// ******************** USERS *********************************************************
+	public static String currentUserID = "";
+	
+	public static User currentUser;
+	public static User dipeshBhandari = new User("1111", "Dipesh", "Bhandari", "Manager", "11-Apr-2015");
+	public static User alexGayle = new User("2222", "Alex", "Gayle", "Waiter", "3-Sep-2018");
+	public static User ericGreene = new User("3333", "Eric", "Greene", "Cook", "22-Jan-2017");
+	public static User joshuaHenderson = new User("4444", "Joshua", "Henderson", "Busser", "15-Feb-2019");
+
+	// ************************** TABLES *****************************************
+	public static Table[] currentUserTables = new Table[20];
+	
+	public static Table currentTable = new Table("", 0, "", "", "0");
+	
+	public static Table table100 = new Table("100", 2, "10:05 PM", "7-Mar-2019", "16.77");
+	public static Table table101 = new Table("101", 1, "10:08 PM", "7-Mar-2019", "31.05");
+	public static Table table200 = new Table("200", 4, "10:15 PM", "7-Mar-2019", "7.66");
+	public static Table table201 = new Table("201", 2, "10:22 PM", "7-Mar-2019", "3.05");	
+	public static Table[] dipeshTables = new Table[]{table100, table101, table200, table201};
+		
+	// ******************** MENU ITEMS ****************************************************
+	public static MenuItem buffaloWings = new MenuItem("1000", "Buffalo Wings", 6.99);
+	public static MenuItem chickenTenders = new MenuItem("1005", "Chicken Tenders", 6.99);
+	public static MenuItem friedAsparagus = new MenuItem("1010", "Fried Asparagus", 6.99);
+	public static MenuItem spicyHummus = new MenuItem("1015", "Spicy Hummus", 6.99);
+	public static MenuItem ultimateNachos = new MenuItem("1020", "Ultimate Nachos", 6.99);
+	public static MenuItem crabCakes = new MenuItem("1025", "Crab Cakes", 6.99);
+
 	// ******************** LABELS ********************
 	public static JLabel currentUserLabel = new JLabel("");
 	
 	// **************** TEXT FIELDS ****************************************
 	public static JTextField userLoginTextField = new JTextField(6);
-	
-	// ******************** STRINGS ***************************************
-	public static String currentUserID = new String("");
-	public static String currentUserName = new String("");
-	
-	public static String alexGayle = new String("Alex G.");
-	public static String ericGreene = new String("Eric G.");
-	public static String joshuaHenderson = new String("Joshua H.");
-
-	public static String alexID = new String("000200");
-	public static String ericID = new String("000300");
-	public static String joshuaID = new String("000400");
-	
-	// ******************** USERS ***************************************
-	public static User dipeshBhandari = new User("", "", "", "", "");
 	
 	// ******************** BUTTONS ********************
 	// We didn't define these as MenuButtons because we're simply attaching
@@ -235,15 +251,28 @@ public class Main extends JFrame {
 		
 		loginPanel.add(blank, BorderLayout.PAGE_START);
 		loginPanel.add(keypadPanel, BorderLayout.CENTER);
-		// ************************** USER BUTTON ************************************
+
+		// ************************** CHECKS BUTTON ************************************
+		
+		// We'll temporarily declare some tables here for now.
+		dipeshBhandari.setTables(dipeshTables);
+
 		currentUserChecks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				optionsPanel.removeAll();
 				optionsPanel.repaint();
 				optionsPanel.revalidate();
 				
+				currentUserTables = currentUser.getTables();
+				for (Table table: currentUserTables) {
+					optionsPanel.add(table.getTableButton());
+				}
+				
+				optionsPanel.repaint();
+				optionsPanel.revalidate();
 			}
 		});
+		
 		//************************* PAYMENTS BUTTON ***********************************
 		
 		// Set the size of our cash image buttons.
@@ -287,20 +316,10 @@ public class Main extends JFrame {
 				Main.optionsPanel.validate();
 			}
 		});
-				
-		// ************************** OPEN *****************************
 		functionPanel.add(Main.buttonOpen);
-
-		// ************************** PRINT ****************************
 		functionPanel.add(Main.buttonPrint);
-
-		// ************************** MODIFY ***************************
 		functionPanel.add(Main.buttonModify);
-		
-		// ************************** EDIT TIPS ************************
 		functionPanel.add(Main.buttonEditTips);
-		
-		// ************************** EXTRA BUTTONS ********************
 		functionPanel.add(Main.button6);		
 		functionPanel.add(Main.button7);		
 		functionPanel.add(Main.button8);
@@ -320,7 +339,7 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 
 		// Load database elements
-		loadData();
+		// loadData();
 		
 		// Create a new Main object and add the panels to it. Each swing component
 		// has the method add.		
@@ -331,7 +350,7 @@ public class Main extends JFrame {
 
 // ************************** OTHER METHODS *************************************
 	public static void loadLoginKeyValues(Main main) {
-		
+				
 		button1Key.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				currentUserID += "1";
@@ -401,8 +420,9 @@ public class Main extends JFrame {
 		});			
 		buttonConfirmKey.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				currentUserName = getUserName(currentUserID);
-				currentUserLabel.setText(currentUserName);
+				
+				currentUser = getUser(currentUserID);
+				currentUserLabel.setText(currentUser.getUserFirstName() + " " + currentUser.getUserLastName());
 				userPanel.removeAll();
 				userPanel.repaint();
 				userPanel.revalidate();
@@ -423,13 +443,14 @@ public class Main extends JFrame {
 		main.repaint();
 		main.revalidate();
 	}	
-	public static String getUserName(String id) {
+	public static User getUser(String id) {
 		
 		switch (id) {
-			case "000200": return alexGayle;
-			case "000300": return ericGreene;
-			case "000400": return joshuaHenderson;
-			default: return null;
+		case "1111": return dipeshBhandari;
+		case "2222": return alexGayle;
+		case "3333": return ericGreene;
+		case "4444": return joshuaHenderson;
+		default: return null;
 		}
 	}
 	public static void loadMainMenu(Main main) {

@@ -18,6 +18,7 @@ public class User {
 	private String userLastName;
 	private String userRank;
 	private String userHireDate;
+	private Table tables[];
 		
 	public User(String userID, String userFirstName, String userLastName, String userRank, String userHireDate) {
 		this.userID = userID;
@@ -61,6 +62,14 @@ public class User {
 
 	public void setUserHireDate(String userHireDate) {
 		this.userHireDate = userHireDate;
+	}
+
+	public Table[] getTables() {
+		return tables;
+	}
+
+	public void setTables(Table tables[]) {
+		this.tables = tables;
 	}
 }
 

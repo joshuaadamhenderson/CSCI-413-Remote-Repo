@@ -1,3 +1,10 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
 /*
  * PROJECT:			Software Engineering Group Project, Restaurant Point-Of-Sale System
  * GROUP:			Round Two
@@ -10,42 +17,60 @@
 
 public class Table {
 	
-	private int tableID;
+	private String tableID;
 	private int tableCapacity;
-	private int tableSeat;
+	private String timeCreated;
+	private String dateCreated;
+	private String total;
+	private MenuItem menuItems[];
+	private TableButton tableButton;
 	
-	public static final int NUMBER_OF_TABLES = 20;
-	
-	public Table(int tableID, int tableCapacity, int tableSeat) {
+	// Name the table objects something like "table101, table500"
+	public Table(String tableID, int tableCapacity, String timeCreated, String dateCreated, String total) {
 		this.tableID = tableID;
 		this.tableCapacity = tableCapacity;
-		this.tableSeat = tableSeat;
-	}
-	
-	////////////////////////////////////////////////
-	public void setTableID(int tableID) { 
+		this.timeCreated = timeCreated;
+		this.dateCreated = dateCreated;
+		this.total = total;
+		tableButton = new TableButton(this);
+	}	
+	public void setTableID(String tableID) { 
 		this.tableID = tableID;
-	}
-	
-	public int getTableID() {
+	}	
+	public String getTableID() {
 		return this.tableID;
 	}
-	/////////////////////////////////////////////////
-	
 	public void setTableCapacity(int tableCapacity) {
 		this.tableCapacity = tableCapacity;
-	}
-	
+	}	
 	public int getTableCapacity() {
 		return this.tableCapacity;
 	}
-	/////////////////////////////////////////////////
-	public void setTableSeat(int tableSeat) {
-		this.tableSeat = tableSeat;
+	public MenuItem[] getMenuItems() {
+		return menuItems;
 	}
-	
-	public int getTableSeat() {
-		return this.tableSeat;
+	public void setMenuItems(MenuItem menuItems[]) {
+		this.menuItems = menuItems;
 	}
-	/////////////////////////////////////////////////
+	public String getTimeCreated() {
+		return timeCreated;
+	}
+	public void setTimeCreated(String timeCreated) {
+		this.timeCreated = timeCreated;
+	}
+	public String getDateCreated() {
+		return dateCreated;
+	}
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+	public TableButton getTableButton() {
+		return tableButton;
+	}
+	public String getTotal() {
+		return total;
+	}
+	public void setTotal(String total) {
+		this.total = total;
+	}
 }
