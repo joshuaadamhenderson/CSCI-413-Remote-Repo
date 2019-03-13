@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,19 +23,22 @@ public class Table {
 	private int tableCapacity;
 	private String timeCreated;
 	private String dateCreated;
-	private String total;
-	private MenuItem menuItems[];
+	private double subtotal;
+	private double total;
+	private List<MenuItem> menuItems;
 	private TableButton tableButton;
 	
-	// Name the table objects something like "table101, table500"
-	public Table(String tableID, int tableCapacity, String timeCreated, String dateCreated, String total) {
+	public Table(String tableID, int tableCapacity, String timeCreated, String dateCreated) {
 		this.tableID = tableID;
 		this.tableCapacity = tableCapacity;
 		this.timeCreated = timeCreated;
 		this.dateCreated = dateCreated;
-		this.total = total;
+		this.subtotal = 0;
+		this.total = 0;
 		tableButton = new TableButton(this);
-	}	
+		menuItems = new ArrayList<MenuItem>();
+	}
+	
 	public void setTableID(String tableID) { 
 		this.tableID = tableID;
 	}	
@@ -46,10 +51,10 @@ public class Table {
 	public int getTableCapacity() {
 		return this.tableCapacity;
 	}
-	public MenuItem[] getMenuItems() {
+	public List<MenuItem> getMenuItems() {
 		return menuItems;
 	}
-	public void setMenuItems(MenuItem menuItems[]) {
+	public void setMenuItems(List<MenuItem> menuItems) {
 		this.menuItems = menuItems;
 	}
 	public String getTimeCreated() {
@@ -67,10 +72,24 @@ public class Table {
 	public TableButton getTableButton() {
 		return tableButton;
 	}
-	public String getTotal() {
-		return total;
+	public double getTotal() {
+		double sub = getSubtotal();
+		return (sub * Main.CALCASIEU_TAX_RATE) + sub;
 	}
-	public void setTotal(String total) {
+	public void setTotal(double total) {
 		this.total = total;
+	}
+	public double getSubtotal() {
+		if (menuItems != null) {
+			for (MenuItem menuItem: menuItems) {
+				subtotal += menuItem.getMenuItemPrice();
+			}
+			return subtotal;
+		}
+		else
+			return 0;
+	}
+	public void setSubtotal(double subtotal) {
+		this.subtotal = subtotal;
 	}
 }

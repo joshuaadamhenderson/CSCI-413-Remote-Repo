@@ -9,6 +9,7 @@
  * */
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -56,11 +57,28 @@ public class MenuPanel extends JPanel {
 		setVisible(true);
 		setLayout(new GridLayout());
 		setPreferredSize(new Dimension(0, 48));
-		
 		// Instantiate the MenuButtons
-			
+		
 			// Appetizers
 		buffaloWings = new MenuButton("BUFFALO", "WINGS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+		buffaloWings.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				Main.currentTableMenuItems.add(Main.buffaloWings);
+				Main.menuItemPanel.removeAll();
+				Main.menuItemPanel.repaint();
+				Main.menuItemPanel.revalidate();
+				Main.currentTableMenuItems = Main.currentTable.getMenuItems();
+				for (MenuItem menuItem: Main.currentTableMenuItems) {
+					JOptionPane.showMessageDialog(null, menuItem);
+					Main.menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+				}
+				TableButton currentTableButton = Main.currentTable.getTableButton();
+				Main.menuItemPanel.add(currentTableButton.getTableSubtotalLabel());
+				Main.menuItemPanel.add(currentTableButton.getTableTotalLabel());
+				Main.menuItemPanel.repaint();
+				Main.menuItemPanel.revalidate();
+			}
+		});
 		chickenTenders = new MenuButton("CHICKEN", "TENDERS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
 		friedAsparagus = new MenuButton("FRIED", "ASPARAGUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
 		spicyHummus = new MenuButton("SPICY", "HUMMUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);

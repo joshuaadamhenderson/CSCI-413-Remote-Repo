@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /*
  * PROJECT:			Software Engineering Group Project, Restaurant Point-Of-Sale System
  * GROUP:			Round Two
@@ -18,7 +21,7 @@ public class User {
 	private String userLastName;
 	private String userRank;
 	private String userHireDate;
-	private Table tables[];
+	private List<Table> tables;
 		
 	public User(String userID, String userFirstName, String userLastName, String userRank, String userHireDate) {
 		this.userID = userID;
@@ -26,6 +29,7 @@ public class User {
 		this.userLastName = userLastName;
 		this.userRank = userRank;
 		this.userHireDate = userHireDate;
+		tables = new ArrayList<Table>();
 	}
 
 	public String getUserID() {
@@ -64,11 +68,11 @@ public class User {
 		this.userHireDate = userHireDate;
 	}
 
-	public Table[] getTables() {
+	public List<Table> getTables() {
 		return tables;
 	}
 
-	public void setTables(Table tables[]) {
+	public void setTables(List<Table> tables) {
 		this.tables = tables;
 	}
 }

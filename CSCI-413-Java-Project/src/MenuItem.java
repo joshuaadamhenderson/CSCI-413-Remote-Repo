@@ -9,19 +9,28 @@
  * */
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
-public class MenuItem {
+public class MenuItem implements Cloneable{
 
 	private String menuItemID;
 	private String menuItemName;
 	private double menuItemPrice;
+	private JLabel menuItemNameLabel;
+	private JLabel menuItemPriceLabel;
+	private MenuItemLabelPanel menuItemLabelPanel;
 		
 	public MenuItem(String menuItemID, String menuItemName, double menuItemPrice) {
 		this.menuItemID = menuItemID;
 		this.menuItemName = menuItemName;
 		this.menuItemPrice = menuItemPrice;
+		setMenuItemNameLabel(new JLabel(menuItemName));
+		setMenuItemPriceLabel(new JLabel(Double.toString(menuItemPrice)));
+		menuItemNameLabel.setFont(Main.MENU_ITEM_NAME_LABEL_FONT);
+		menuItemPriceLabel.setFont(Main.MENU_ITEM_PRICE_LABEL_FONT);
+		menuItemLabelPanel = new MenuItemLabelPanel(menuItemNameLabel, menuItemPriceLabel);
 	}
 	
 	public void setMenuItemID(String menuItemID) {
@@ -46,5 +55,29 @@ public class MenuItem {
 	
 	public double getMenuItemPrice() {
 		return this.menuItemPrice;
+	}
+
+	public JLabel getMenuItemNameLabel() {
+		return menuItemNameLabel;
+	}
+
+	public void setMenuItemNameLabel(JLabel menuItemNameLabel) {
+		this.menuItemNameLabel = menuItemNameLabel;
+	}
+
+	public JLabel getMenuItemPriceLabel() {
+		return menuItemPriceLabel;
+	}
+
+	public void setMenuItemPriceLabel(JLabel menuItemPriceLabel) {
+		this.menuItemPriceLabel = menuItemPriceLabel;
+	}
+
+	public MenuItemLabelPanel getMenuItemLabelPanel() {
+		return menuItemLabelPanel;
+	}
+
+	public void setMenuItemLabelPanel(MenuItemLabelPanel menuItemLabelPanel) {
+		this.menuItemLabelPanel = menuItemLabelPanel;
 	}	
 }
