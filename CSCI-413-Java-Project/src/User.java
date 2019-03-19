@@ -8,11 +8,8 @@ import java.util.List;
  * COURSE:			CSCI 413, Software Engineering II
  * INSTRUCTOR:		Dr. Bei Xie
  * DATE CREATED:	2/20/2019
- * EDITED BY:		2/20/2019:	Eric Greene
- * */
-
-// Eric - "This is just a rough draft of the User class.
-	// Debating changing the class name to Employee"
+ * 
+ */
 
 public class User {
 		
@@ -29,7 +26,7 @@ public class User {
 		this.userLastName = userLastName;
 		this.userRank = userRank;
 		this.userHireDate = userHireDate;
-		tables = new ArrayList<Table>();
+		this.tables = new ArrayList<Table>();
 	}
 
 	public String getUserID() {

@@ -9,8 +9,8 @@ import javax.swing.border.LineBorder;
 public class MenuItemPanel extends JPanel {
 
 	public MenuItemPanel() {
-		setBackground(Color.WHITE);
-		setPreferredSize(new Dimension(100,485));
-		setBorder(new LineBorder(Color.WHITE, 10));
+		setBackground(Main.MENU_ITEM_PANEL_BG_COLOR);
+		setPreferredSize(new Dimension(100,460));
+		setBorder(new LineBorder(Main.MENU_ITEM_PANEL_BG_COLOR));
 	}
 }

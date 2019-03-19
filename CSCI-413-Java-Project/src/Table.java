@@ -1,3 +1,12 @@
+/*
+ * PROJECT:			Software Engineering Group Project, Restaurant Point-Of-Sale System
+ * GROUP:			Round Two
+ * MEMBERS:			Dipesh Bhandari, Alex Gayle, Eric Greene, Joshua Henderson
+ * COURSE:			CSCI 413, Software Engineering II
+ * INSTRUCTOR:		Dr. Bei Xie
+ * DATE CREATED:	2/17/2019
+ */
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -6,51 +15,57 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-
+import javax.swing.JOptionPane;
 /*
- * PROJECT:			Software Engineering Group Project, Restaurant Point-Of-Sale System
- * GROUP:			Round Two
- * MEMBERS:			Dipesh Bhandari, Alex Gayle, Eric Greene, Joshua Henderson
- * COURSE:			CSCI 413, Software Engineering II
- * INSTRUCTOR:		Dr. Bei Xie
- * DATE CREATED:	2/17/2019
- * EDITED BY:		2/17/2019:	Alex Gayle
- * */
-
+ * TABLE CLASS
+ */
 public class Table {
 	
-	private String tableID;
-	private int tableCapacity;
+	private int tableID;
 	private String timeCreated;
-	private String dateCreated;
 	private double subtotal;
+	private double tax;
 	private double total;
 	private List<MenuItem> menuItems;
+	private List<DisplayPanelLabelPanel> menuItemLabelPanels;
+	private DisplayPanelLabelPanel subtotalPanel;
+	private DisplayPanelLabelPanel taxPanel;
+	private DisplayPanelLabelPanel totalPanel;
 	private TableButton tableButton;
-	
-	public Table(String tableID, int tableCapacity, String timeCreated, String dateCreated) {
-		this.tableID = tableID;
-		this.tableCapacity = tableCapacity;
-		this.timeCreated = timeCreated;
-		this.dateCreated = dateCreated;
+
+	public Table() {
+		this.tableID = 0;
+		this.timeCreated = "";
 		this.subtotal = 0;
 		this.total = 0;
-		tableButton = new TableButton(this);
 		menuItems = new ArrayList<MenuItem>();
+		subtotalPanel = new DisplayPanelLabelPanel();
+		totalPanel = new DisplayPanelLabelPanel();
+		taxPanel = new DisplayPanelLabelPanel();
+		subtotalPanel.add(new JLabel("SUBTOTAL"), BorderLayout.WEST);
+		taxPanel.add(new JLabel("TAX"), BorderLayout.WEST);
+		totalPanel.add(new JLabel("TOTAL"), BorderLayout.WEST);
+		tableButton = new TableButton();
+		tableButton.setTableNumberOnLabel(tableID);
+		tableButton.setTableTotalOnLabel(total);
+	}
+
+	public void calculateTotals() {
+		for (MenuItem menuItem: menuItems) {
+			subtotal += menuItem.getMenuItemPrice();
+		}
+		tax = subtotal * Main.CURRENT_TAX_RATE;
+		total = tax + subtotal;
 	}
 	
-	public void setTableID(String tableID) { 
+	public void setTableID(int tableID) { 
 		this.tableID = tableID;
-	}	
-	public String getTableID() {
+	}
+	
+	public double getTableID() {
 		return this.tableID;
 	}
-	public void setTableCapacity(int tableCapacity) {
-		this.tableCapacity = tableCapacity;
-	}	
-	public int getTableCapacity() {
-		return this.tableCapacity;
-	}
+	
 	public List<MenuItem> getMenuItems() {
 		return menuItems;
 	}
@@ -63,33 +78,41 @@ public class Table {
 	public void setTimeCreated(String timeCreated) {
 		this.timeCreated = timeCreated;
 	}
-	public String getDateCreated() {
-		return dateCreated;
-	}
-	public void setDateCreated(String dateCreated) {
-		this.dateCreated = dateCreated;
-	}
 	public TableButton getTableButton() {
 		return tableButton;
 	}
 	public double getTotal() {
-		double sub = getSubtotal();
-		return (sub * Main.CALCASIEU_TAX_RATE) + sub;
+		return total;
 	}
 	public void setTotal(double total) {
 		this.total = total;
 	}
 	public double getSubtotal() {
-		if (menuItems != null) {
-			for (MenuItem menuItem: menuItems) {
-				subtotal += menuItem.getMenuItemPrice();
-			}
-			return subtotal;
-		}
-		else
-			return 0;
+		return subtotal;
 	}
 	public void setSubtotal(double subtotal) {
 		this.subtotal = subtotal;
+	}
+
+	public double getTax() {
+		return tax;
+	}
+
+	public void setTax(double tax) {
+		this.tax = tax;
+	}
+	public DisplayPanelLabelPanel getSubtotalPanel() {
+		return subtotalPanel;
+	}
+	public void setSubtotalPanel(DisplayPanelLabelPanel subtotalPanel) {
+		this.subtotalPanel = subtotalPanel;
+	}
+
+	public List<DisplayPanelLabelPanel> getMenuItemLabelPanels() {
+		return menuItemLabelPanels;
+	}
+
+	public void setMenuItemLabelPanels(List<DisplayPanelLabelPanel> menuItemLabelPanels) {
+		this.menuItemLabelPanels = menuItemLabelPanels;
 	}
 }

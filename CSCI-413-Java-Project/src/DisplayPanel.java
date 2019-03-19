@@ -13,6 +13,6 @@ public class DisplayPanel extends JPanel {
 		setVisible(true);
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(Main.DISPLAY_PANEL_WIDTH, Main.DISPLAY_PANEL_HEIGHT));
-		setBackground(Color.WHITE);
+		setBackground(Main.DISPLAY_PANEL_BG_COLOR);
 	}
 }

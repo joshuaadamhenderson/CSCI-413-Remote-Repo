@@ -5,55 +5,59 @@
  * COURSE:			CSCI 413, Software Engineering II
  * INSTRUCTOR:		Dr. Bei Xie
  * DATE CREATED:	2/1/2019
- * EDITED BY:		2/1/2019:	Joshua Henderson
- * */
-
-// ******************** IMPORTED CLASSES ********************
-// The two class libraries we'll be using the most are the Abstract Windows Toolkit (awt), and
-// Java's Swing components. The swing components have an automatic "look and feel" to them,
-// meaning while using Windows, the JFrame will look like a Windows-based window (minimize, maximize,
-// close buttons, title at the top). 
+ *
+ * IMPORTED CLASSES
+ *
+ * The two class libraries we'll be using the most are the Abstract Windows Toolkit (awt), and Java's Swing components.
+ * The swing components have an automatic "look and feel" to them, meaning while using Windows, the JFrame will look like
+ * a Windows-based window (minimize, maximize, close buttons, title at the top).  *
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
+/*
+ * MAIN CLASS
+ */
 public class Main extends JFrame {
-	
-	// **********************************************************************************************************************************************
-	// *																																			*
-	// *														DECLARED VARIABLES																	*
-	// *																																			*
-	// **********************************************************************************************************************************************
-	
-	// ******************** NAMING CONVENTIONS ***********************************************************************************************
-	// Constants:				MENU_ITEM
-	// Classes and Objects:		MenuItem
-	// Variables:				menuItem
-	
-	// ******************** IMAGES ***********************************************************************************************************
-	// The ImageIcon object needs to be imported (javax.swing.ImageIcon).
-	// The images themselves are stored in the src folder, which contains the java files.
-	
-	// FunctionPanel images
+	/*
+	 * 	NAMING CONVENTIONS
+	 * 
+	 * 	Constants:				MENU_ITEM
+	 * 	Classes and Objects:	MenuItem
+	 * 	Variables:				menuItem
+	 * 
+	 *	IMAGES
+	 */
 	public static final ImageIcon BUTTON_IMAGE_PAYMENTS = new ImageIcon("src/buttonPayments.jpg");
 	public static final ImageIcon BUTTON_IMAGE_STYLE = new ImageIcon("src/buttonStyle.jpg");
 	public static final ImageIcon BUTTON_IMAGE_OPEN = new ImageIcon("src/buttonOpen.jpg");
@@ -61,39 +65,59 @@ public class Main extends JFrame {
 	public static final ImageIcon BUTTON_IMAGE_PRINT = new ImageIcon("src/buttonPrint.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EDIT_TIPS = new ImageIcon("src/buttonEditTips.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EXIT = new ImageIcon("src/buttonExit.jpg");
-	
-	// Payments images
 	public static final ImageIcon BUTTON_IMAGE_1 = new ImageIcon("src/button_1.jpg");
 	public static final ImageIcon BUTTON_IMAGE_5 = new ImageIcon("src/button_5.jpg");
 	public static final ImageIcon BUTTON_IMAGE_20 = new ImageIcon("src/button_20.jpg");
 	public static final ImageIcon BUTTON_IMAGE_100 = new ImageIcon("src/button_100.jpg");
+	public static final ImageIcon BUTTON_IMAGE_CLOCK_IN = new ImageIcon("src/clockIn.png");
+	public static final ImageIcon BUTTON_IMAGE_CLOCK_OUT = new ImageIcon("src/clockOut.png");	
+	/*
+	 * COLORS
+	 */
+	public static final Color ORIGINAL_DARK_BLUE = new Color(0, 60, 90);
+	public static final Color ORIGINAL_DARK_BLUE_2 = new Color(0, 80, 120);
+	public static final Color TROUT = new Color(82, 85, 100);
+	public static final Color SLATE_GRAY = new Color(116, 130, 143);
+	public static final Color HALF_BAKED = new Color(150, 192, 206);
+	public static final Color COTTON_SEED = new Color(190, 185, 181);
+	public static final Color FUZZY_WUZZY = new Color(194, 91, 86);
+	public static final Color ORANGE_WHITE = new Color(254, 246, 235);
+	public static final Color WHITE = new Color(255, 255, 255);
 
-	// ******************** COLORS ***********************************************************************************************************
-	// The Color object needs to be imported (java.awt.Color).
-	// Color objects can take on different arguments, one of which is the RGB values.
-	public static final Color MENU_PANEL_BUTTON_COLOR = new Color(100, 140, 160);
-	public static final Color MENU_PANEL_FONT_COLOR = new Color(255, 255, 255);
-	public static final Color OPTIONS_PANEL_BG_COLOR = new Color(74, 89, 113);
-	public static final Color CATEGORY_PANEL_BG_COLOR = new Color(74, 89, 113);
-	public static final Color MAIN_BG_COLOR = new Color(0, 60, 90);
-	public static final Color MAIN_TEXT_COLOR = new Color(255, 255, 255);
-	public static final Color KEYPAD_BUTTON_COLOR = new Color(0, 55, 85);
+	public static final Color MENU_PANEL_BUTTON_COLOR = SLATE_GRAY;
+	public static final Color MENU_PANEL_FONT_COLOR = WHITE;
+	public static final Color OPTIONS_PANEL_BG_COLOR = HALF_BAKED;
+	public static final Color CATEGORY_PANEL_BG_COLOR = HALF_BAKED;
+	public static final Color DISPLAY_PANEL_BG_COLOR = HALF_BAKED;
+	public static final Color USER_PANEL_BG_COLOR = ORIGINAL_DARK_BLUE;
+	public static final Color STATUS_PANEL_BG_COLOR = ORIGINAL_DARK_BLUE;
+	public static final Color MENU_ITEM_PANEL_BG_COLOR = ORANGE_WHITE;	
+	public static final Color MAIN_BG_COLOR = ORIGINAL_DARK_BLUE;
+	public static final Color MAIN_TEXT_COLOR = WHITE;
+	public static final Color KEYPAD_BUTTON_COLOR = ORIGINAL_DARK_BLUE;
 	public static final Color MENU_ITEM_BUTTON_COLOR_1 = new Color(52, 147, 59);
 	public static final Color MENU_ITEM_BUTTON_COLOR_2 = new Color(216, 135, 91);
 	public static final Color MENU_ITEM_BUTTON_COLOR_3 = new Color(191, 91, 216);
 	public static final Color MENU_ITEM_BUTTON_COLOR_4 = new Color(91, 215, 216);
 	public static final Color MENU_ITEM_BUTTON_COLOR_5 = new Color(216, 103, 91);
-	
-	// ******************** FONTS ***********************************************************************************************************
-	public static final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 18);					// The Font object needs to be imported (java.awt.Font).
-	public static final Font TABLE_BUTTON_FONT = new Font("Arial", Font.BOLD, 24);				// Fonts have three arguments, the name of the font, the
-	public static final Font KEYPAD_FONT = new Font("Arial", Font.BOLD, 30);					// weight, and the pixel size. There are predefined 
-	public static final Font MENU_ITEM_NAME_LABEL_FONT = new Font("Arial", Font.BOLD, 20);		// constants in the Font class for PLAIN, BOLD, ITALIC, etc.
+	public static final Color TABLE_BUTTON_COLOR = ORANGE_WHITE;
+	public static final Color TABLE_BUTTON_TEXT_COLOR = FUZZY_WUZZY;
+	public static final Color USER_PANEL_BUTTON_COLOR = SLATE_GRAY;
+	public static final Color WELCOME_LABEL_COLOR = ORIGINAL_DARK_BLUE_2;
+	/*
+	 * FONTS
+	 */
+	public static final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 18);
+	public static final Font TABLE_BUTTON_FONT = new Font("Arial", Font.BOLD, 24);
+	public static final Font KEYPAD_FONT = new Font("Arial", Font.BOLD, 30);
+	public static final Font MENU_ITEM_NAME_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
 	public static final Font MENU_ITEM_PRICE_LABEL_FONT = new Font("Arial", Font.PLAIN, 20);
 	public static final Font USER_PANEL_FONT = new Font("Arial", Font.BOLD, 20);
-	
-	// ******************** DIMENSIONS ***********************************************************************************************************
-	public static final int MAIN_WIDTH = 1366;					// These are just integers to hold widths and heights across the program.
+	public static final Font TABLE_COSTS_PANEL_FONT = new Font("Arial", Font.BOLD, 20);
+	/*
+	 * DIMENSIONS
+	 */
+	public static final int MAIN_WIDTH = 1366;
 	public static final int MAIN_HEIGHT = 768;
 	public static final int CATEGORY_PANEL_WIDTH = 890;
 	public static final int CATEGORY_PANEL_HEIGHT = 540;
@@ -103,92 +127,158 @@ public class Main extends JFrame {
 	public static final int FUNCTION_PANEL_HEIGHT = 100;
 	public static final int OPTIONS_PANEL_WIDTH = 900;
 	public static final int OPTIONS_PANEL_HEIGHT = 550;
+	public static final int USER_PANEL_WIDTH = 0;
+	public static final int USER_PANEL_HEIGHT = 90;
 	public static final int HEADER_PANEL_WIDTH = 1366;
 	public static final int HEADER_PANEL_HEIGHT = 168;
-	public static final int KEYPAD_PANEL_WIDTH = 450;
-	public static final int KEYPAD_PANEL_HEIGHT = 500;
+	public static final int KEYPAD_PANEL_WIDTH = 420;
+	public static final int KEYPAD_PANEL_HEIGHT = 470;
 	public static final int PAYMENT_BUTTON_WIDTH = 250;
 	public static final int PAYMENT_BUTTON_HEIGHT = 110;
 	public static final int TABLE_BUTTON_HEIGHT = 70;
 	public static final int TABLE_BUTTON_WIDTH = 880;
 	public static final int MENU_ITEM_LABEL_PANEL_WIDTH = 440;
 	public static final int MENU_ITEM_LABEL_PANEL_HEIGHT = 30;
-
-	// ******************** TAX RATE ***********************************************************************************************************
-	public static final double CALCASIEU_TAX_RATE = .1075;		// Tax rates for particular regions
-	
-	// ******************** PANELS ***********************************************************************************************************
+	public static final int TABLE_COSTS_PANEL_WIDTH = 460;
+	public static final int TABLE_COSTS_PANEL_HEIGHT = 200;
+	public static final int MENU_PANEL_WIDTH = 0;
+	public static final int MENU_PANEL_HEIGHT = 48;
+	/*
+	 * TAX RATE
+	 */
+	public static final double CALCASIEU_TAX_RATE = .1075;
+	public static final double CAMERON_TAX_RATE = .04;
+	public static final double CURRENT_TAX_RATE = CALCASIEU_TAX_RATE; // Set a tax region here
+	/*
+	 * DATE
+	 */
+	public static LocalDateTime now = LocalDateTime.now();
+	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	/*
+	 * LABELS
+	 */
+	public static JLabel welcomeLabel = new JLabel(" USER LOGIN");
+	public static JLabel clockedInLabel = new JLabel(" CLOCKED IN AT " + dtf.format(now));
+	public static JLabel clockedOutLabel = new JLabel(" CLOCKED OUT AT " + dtf.format(now));
+	public static JLabel currentUserLabel = new JLabel("");
+	public static JLabel horizonLine = new JLabel("    ***************************************************************************************");
+	/*
+	 * ERROR LABELS
+	 */
+	public static ErrorLabel loginError = new ErrorLabel("Incorrect User ID.");
+	/*
+	 * TEXT FIELDS
+	 */
+	public static JTextField userLoginTextField = new JTextField(4);
+	/*
+	 * PANELS
+	 */
 	public static FunctionPanel functionPanel = new FunctionPanel();
 	public static MenuPanel menuPanel = new MenuPanel();
 	public static HeaderPanel headerPanel = new HeaderPanel();
 	public static OptionsPanel optionsPanel = new OptionsPanel();
 	public static DisplayPanel displayPanel = new DisplayPanel();
 	public static StatusPanel statusPanel = new StatusPanel();
-	public static LoginPanel loginPanel = new LoginPanel();
-	public static LoginPanel blank = new LoginPanel();
 	public static KeypadPanel keypadPanel = new KeypadPanel();
-	public static LoginPanel userLoginPanel = new LoginPanel();
+	public static LoginPanel loginPanel = new LoginPanel();
+	public static LoginPanel loginPanelCenter = new LoginPanel();
+	public static LoginPanel loginPanelHeader = new LoginPanel();
+	public static LoginPanel loginPanelHeader2 = new LoginPanel();
+	public static LoginPanel loginPanelFooter = new LoginPanel();
 	public static UserPanel userPanel = new UserPanel();
 	public static MenuItemPanel menuItemPanel = new MenuItemPanel();
-	
-	// ******************** USERS ***********************************************************************************************************
-	public static String currentUserID = "";	// This will store the login String being typed in. It will start out empty.
-	public static User currentUser;				// An empty User object that is set with a getUser() method from the String above.
+	public static CategoryPanel appetizersPanel = new CategoryPanel();
+	public static CategoryPanel entreesPanel = new CategoryPanel();
+	public static CategoryPanel	sidesPanel = new CategoryPanel();
+	public static CategoryPanel	soupsPanel = new CategoryPanel();
+	public static CategoryPanel	dessertsPanel = new CategoryPanel();
+	public static CategoryPanel	beveragesPanel = new CategoryPanel();
+	public static CategoryPanel	aLaCartePanel = new CategoryPanel();
+	public static CategoryPanel	toGoPanel = new CategoryPanel();
+	public static CategoryPanel payments = new CategoryPanel();
+	/*
+	 * USERS
+	 */
+	public static String currentUserID = ""; // Placeholder
+	public static User currentUser; // Placeholder
 	public static User dipeshBhandari = new User("1111", "Dipesh", "Bhandari", "Manager", "11-Apr-2015");
 	public static User alexGayle = new User("2222", "Alex", "Gayle", "Waiter", "3-Sep-2018");
 	public static User ericGreene = new User("3333", "Eric", "Greene", "Cook", "22-Jan-2017");
 	public static User joshuaHenderson = new User("4444", "Joshua", "Henderson", "Busser", "15-Feb-2019");
-
-	// ******************** TABLES ***********************************************************************************************************
-	public static Table currentTable = new Table("", 0, "", "");
-	public static Table table100 = new Table("100", 2, "10:05 PM", "7-Mar-2019");
-	public static Table table101 = new Table("101", 1, "10:08 PM", "7-Mar-2019");
-	public static Table table200 = new Table("200", 4, "10:15 PM", "7-Mar-2019");
-	public static Table table201 = new Table("201", 2, "10:22 PM", "7-Mar-2019");
-	public static Table table300 = new Table("300", 4, "11:05 PM", "7-Mar-2019");
-	public static Table table301 = new Table("301", 2, "11:24 PM", "7-Mar-2019");
-
-	public static List<Table> currentUserTables = new ArrayList<Table>();	// An empty array of Tables used for the currentUser object.
-	public static List<Table> dipeshTables = new ArrayList<Table>();		// This array of Tables will be dedicated to Dipesh. This one is also null.
-																			// We'll be adding the tables in the Main constructor using the User.setTables() method.
-
-	// ******************** MENU ITEMS ********************************************************************************************************
-	public static MenuItem buffaloWings = new MenuItem("1000", "Buffalo Wings", 6.99);		// These MenuItems will be declared and initialized.
-	public static MenuItem chickenTenders = new MenuItem("1005", "Chicken Tenders", 6.99);	// The values won't need to change while the program is running.
+	/*
+	 * TABLES
+	 */
+	public static Table currentTable = new Table(); // Placeholder
+	public static List<Table> currentUserTables = new ArrayList<Table>(); // Placeholder
+	/*
+	 * MENU ITEMS
+	 */
+	public static MenuItem buffaloWings = new MenuItem("1000", "Buffalo Wings", 6.99);
+	public static MenuItem chickenTenders = new MenuItem("1005", "Chicken Tenders", 6.99);
 	public static MenuItem friedAsparagus = new MenuItem("1010", "Fried Asparagus", 6.99);
 	public static MenuItem spicyHummus = new MenuItem("1015", "Spicy Hummus", 6.99);
 	public static MenuItem ultimateNachos = new MenuItem("1020", "Ultimate Nachos", 6.99);
 	public static MenuItem crabCakes = new MenuItem("1025", "Crab Cakes", 6.99);
-
-	public static List<MenuItem> currentTableMenuItems = new ArrayList<MenuItem>();		// An empty array of MenuItems for the currentTable
-	public static List<MenuItem> table100MenuItems = new ArrayList<MenuItem>();			// Another empty array of MenuItems for Table 100
-
-	// ******************** LABELS *************************************************************************************************************
-	public static JLabel currentUserLabel = new JLabel("");		// This label holds an empty String for now. Logging in will assign the User's name here.
-	
-	// **************** TEXT FIELDS ***********************************************************************************************************
-	public static JTextField userLoginTextField = new JTextField(4);	// This shows the login numbers being punched in.
-	
-	// ******************** BUTTONS ***********************************************************************************************************	
-	public static JButton buttonPayments = new JButton(BUTTON_IMAGE_PAYMENTS);		// We didn't define these as MenuButtons because we're simply attaching
-	public static JButton buttonOpen = new JButton(BUTTON_IMAGE_OPEN);				// images to them, which is already its own constructor in the JButton
-	public static JButton buttonPrint = new JButton(BUTTON_IMAGE_PRINT);			// class. We've made the MenuButton class separately so we can define a
-	public static JButton buttonModify = new JButton(BUTTON_IMAGE_MODIFY);			// constructor that uses text and colors for the arguments. But again,
-	public static JButton buttonEditTips = new JButton(BUTTON_IMAGE_EDIT_TIPS);		// in this case we only need the corresponding JPG file for each, which
-	public static JButton button6 = new JButton(BUTTON_IMAGE_STYLE);				// we previously defined as constants.
+	public static MenuItem currentMenuItem = new MenuItem("", "", 0);	
+	public static List<MenuItem> currentTableMenuItems = new ArrayList<MenuItem>(); // Placeholder
+	/*
+	 * MENU PANEL BUTTONS
+	 */
+	public static MenuPanelButton appetizersButton = new MenuPanelButton("APPETIZERS", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton entreesButton = new MenuPanelButton("ENTREES", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton sidesButton = new MenuPanelButton("SIDES", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton soupsButton = new MenuPanelButton("SOUPS", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton dessertsButton = new MenuPanelButton("DESSERTS", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton beveragesButton = new MenuPanelButton("BEVERAGES", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton aLaCarteButton = new MenuPanelButton("A LA CARTE", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	public static MenuPanelButton toGoButton = new MenuPanelButton("TO GO", Main.MENU_PANEL_BUTTON_COLOR, Main.MENU_PANEL_FONT_COLOR);
+	/*
+	 * CATEGORY PANEL MENU BUTTONS
+	 */
+	public static MenuButton chickenSaladButton = new MenuButton("CHICKEN", "SALAD", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton cheeseburgerButton = new MenuButton("CHEESEBURGER", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton tunaSteakButton = new MenuButton("TUNA", "STEAK", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton shrimpAlfredoButton = new MenuButton("SHRIMP", "ALFREDO", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton lambLollipopsButton = new MenuButton("LAMB", "LOLLIPOPS", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton friedPorkChopsButton = new MenuButton("FRIED", "PORK CHOPS", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);	
+	public static MenuButton buffaloWingsButton = new MenuButton("BUFFALO", "WINGS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);		
+	public static MenuButton chickenTendersButton = new MenuButton("CHICKEN", "TENDERS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton friedAsparagusButton = new MenuButton("FRIED", "ASPARAGUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton spicyHummusButton = new MenuButton("SPICY", "HUMMUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton ultimateNachosButton = new MenuButton("ULTIMATE", "NACHOS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton crabCakesButton = new MenuButton("CRAB", "CAKES", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	/*
+	 * FUNCTION PANEL BUTTONS
+	 */
+	public static JButton buttonPayments = new JButton(BUTTON_IMAGE_PAYMENTS);
+	public static JButton buttonOpen = new JButton(BUTTON_IMAGE_OPEN);
+	public static JButton buttonPrint = new JButton(BUTTON_IMAGE_PRINT);
+	public static JButton buttonModify = new JButton(BUTTON_IMAGE_MODIFY);
+	public static JButton buttonEditTips = new JButton(BUTTON_IMAGE_EDIT_TIPS);
+	public static JButton button6 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button7 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button8 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button9 = new JButton(BUTTON_IMAGE_STYLE);
-	public static JButton buttonExit = new JButton(BUTTON_IMAGE_EXIT);
-	
+	public static JButton FunctionPanelExitButton = new JButton(BUTTON_IMAGE_EXIT);
+	/*
+	 * PAYMENTS CATEGORY PANEL BUTTONS
+	 */
 	public static JButton button_1 = new JButton(BUTTON_IMAGE_1);
 	public static JButton button_5 = new JButton(BUTTON_IMAGE_5);
 	public static JButton button_20 = new JButton(BUTTON_IMAGE_20);
 	public static JButton button_100 = new JButton(BUTTON_IMAGE_100);
-	
-	public static JButton currentUserChecks = new JButton("Checks");
-
-	// ******************** KEYPAD BUTTONS ***********************************************************************************************************
+	/*
+	 * USER PANEL BUTTONS
+	 */
+	public static JButton currentUserChecks = new JButton("TABLES");
+	public static JButton newCheck = new JButton("NEW");
+	/*
+	 * TABLE BUTTONS
+	 */
+	public static TableButton currentTableButton = new TableButton();
+	/*
+	 * KEYPAD BUTTONS
+	 */
 	public static KeypadButton button0Key = new KeypadButton("0");
 	public static KeypadButton button1Key = new KeypadButton("1");
 	public static KeypadButton button2Key = new KeypadButton("2");
@@ -199,339 +289,526 @@ public class Main extends JFrame {
 	public static KeypadButton button7Key = new KeypadButton("7");
 	public static KeypadButton button8Key = new KeypadButton("8");
 	public static KeypadButton button9Key = new KeypadButton("9");
-	
-	public static KeypadButton buttonConfirmKey = new KeypadButton("OK");
-	public static KeypadButton buttonClearKey = new KeypadButton("CLEAR");
-	
-	// ************************* LOGIN KEY HANDLERS ********************************************
-	public static LoginKeyHandler key_1;
-	public static LoginKeyHandler key_2;
-	public static LoginKeyHandler key_3;
-	public static LoginKeyHandler key_4;
-	public static LoginKeyHandler key_5;
-	public static LoginKeyHandler key_6;
-	public static LoginKeyHandler key_7;
-	public static LoginKeyHandler key_8;
-	public static LoginKeyHandler key_9;
-	public static LoginKeyHandler key_0;
-	
-	// ******************** CATEGORIES ***********************************************************************************************************
-	public static CategoryPanel payments = new CategoryPanel();
-	public static CategoryPanel appetizers = new CategoryPanel();
-	public static CategoryPanel entrees = new CategoryPanel();
-	
-	
-	// **********************************************************************************************************************************************
-	// *																																			*
-	// *														MAIN CONSTRUCTOR																	*
-	// *																																			*
-	// **********************************************************************************************************************************************
-	
-	// Constructor for Main. We can make adjustments to the frame properties here. Since the Main class extends JFrame, we can use all of JFrame
-	// methods, including settings for the background color, text color(foreground), frame dimensions, and layout manager. The setUndecorated 
-	// method removes the buttons and title from the top of the JFrame, and the setExtendedState method forces the window to be maximized.
-	// Not every JFrame will exit the program when the exit button is clicked, some will open another frame. This method isn't that necessary right
-	// now since we've created a separate button to exit the program. Finally, we have to set the frame to be visible.
+	public static KeypadButton loginPanelConfirmKey = new KeypadButton("OK");
+	public static KeypadButton loginPanelClearKey = new KeypadButton("CLEAR");
+	public static KeypadButton loginPanelExitButton = new KeypadButton("EXIT");
+	public static JButton loginPanelClockInButton = new JButton(BUTTON_IMAGE_CLOCK_IN);
+	public static JButton loginPanelClockOutButton = new JButton(BUTTON_IMAGE_CLOCK_OUT);
+	/*
+	 * LOGIN PANEL BUTTON HANDLERS
+	 */
+	public static LoginPanelKeypadButtonHandler LoginPanelKey1;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey2;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey3;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey4;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey5;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey6;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey7;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey8;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey9;
+	public static LoginPanelKeypadButtonHandler LoginPanelKey0;
+	public static LoginPanelConfirmKeyButtonHandler loginPanelConfirmKeyButtonHandler;
+	public static LoginPanelClearKeyButtonHandler loginPanelClearKeyButtonHandler;
+	public static LoginPanelClockInButtonHandler loginPanelClockInButtonHandler;
+	public static LoginPanelClockOutButtonHandler loginPanelClockOutButtonHandler;
+	/*
+	 * FUNCTION PANEL BUTTON HANDLERS
+	 */
+	public static FunctionPanelPaymentsButtonHandler functionPanelPaymentsButtonHandler;
+	/*
+	 * MENU PANEL BUTTON HANDLERS
+	 */
+	public static MenuPanelButtonHandler appetizersHandler;
+	public static MenuPanelButtonHandler entreesHandler;
+	public static MenuPanelButtonHandler sidesHandler;
+	public static MenuPanelButtonHandler soupsHandler;
+	public static MenuPanelButtonHandler dessertsHandler;
+	public static MenuPanelButtonHandler beveragesHandler;
+	public static MenuPanelButtonHandler aLaCarteHandler;
+	public static MenuPanelButtonHandler toGoHandler;
+	/*
+	 * MENU ITEM BUTTON HANDLERS
+	 */
+	public static MenuItemButtonHandler buffaloWingsHandler;
+	public static MenuItemButtonHandler chickenTendersHandler;
+	public static MenuItemButtonHandler friedAsparagusHandler;
+	public static MenuItemButtonHandler spicyHummusHandler;
+	public static MenuItemButtonHandler ultimateNachosHandler;
+	public static MenuItemButtonHandler crabCakesHandler;
+	/*
+	 * OTHER BUTTON HANDLERS
+	 */
+	public static CurrentUserChecksButtonHandler currentUserChecksButtonHandler;
+	public static NewCheckButtonHandler newCheckButtonHandler;
+	public static TableButtonHandler tableButtonHandler;
+	public static ExitButtonHandler exitButtonHandler;
+	public static ExitSystemHandler exitSystemHandler;
+	/*
+	 ********************
+	 * 					*
+	 * MAIN CONSTRUCTOR *
+	 * 					*
+	 ********************
+	 */	
 	public Main() {
-		
-		// Main window settings
-		setBackground(Main.MAIN_BG_COLOR);
-		setForeground(Main.MAIN_TEXT_COLOR);
+		/*
+		 * MAIN FRAME SETTINGS
+		 */
+		setBackground(MAIN_BG_COLOR);
+		setForeground(MAIN_TEXT_COLOR);
 		setSize(MAIN_WIDTH, MAIN_HEIGHT);
 		getContentPane().setLayout(new BorderLayout());
 		setUndecorated(true);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		/*
+		 * OTHER OBJECT SETTINGS
+		 */
+		loginError.setFont(new Font("Arial", Font.BOLD, 24));
+		clockedInLabel.setFont(new Font("Arial", Font.BOLD, 24));
+		clockedInLabel.setBackground(MAIN_BG_COLOR);
+		welcomeLabel.setFont(new Font("Impact", Font.PLAIN, 80));
+		welcomeLabel.setForeground(WELCOME_LABEL_COLOR);
+		loginPanelExitButton.setPreferredSize(new Dimension(150, 70));
+		loginPanelClockInButton.setBackground(MAIN_BG_COLOR);
+		loginPanelClockOutButton.setBackground(MAIN_BG_COLOR);
 		
-		// *******************************************************		|
-		// *    											 	 *		|
-		// *   The following part will assemble all the panels 	 *		|
-		// *    											 	 *		|
-		// *******************************************************		V
+		currentUserLabel.setFont(new Font("Arial", Font.BOLD, 20));
+		currentUserLabel.setForeground(Color.WHITE);
+		newCheck.setBackground(USER_PANEL_BUTTON_COLOR);
+		newCheck.setFont(USER_PANEL_FONT);
+		newCheck.setForeground(Color.WHITE);
+		newCheck.setBorder(new LineBorder(ORIGINAL_DARK_BLUE, 2));
+		currentUserChecks.setBackground(USER_PANEL_BUTTON_COLOR);
+		currentUserChecks.setFont(USER_PANEL_FONT);
+		currentUserChecks.setForeground(Color.WHITE);
+		currentUserChecks.setBorder(new LineBorder(ORIGINAL_DARK_BLUE, 2));
+		userLoginTextField.setFont(KEYPAD_FONT);
+		userLoginTextField.setBackground(MAIN_BG_COLOR);
+		userLoginTextField.setForeground(MAIN_TEXT_COLOR);
 		
-		// ********************* HEADER PANEL ****************************************
+		loginPanel.setLayout(new BorderLayout());
+		loginPanelHeader.setLayout(new BorderLayout());
+		loginPanelClockInButton.setPreferredSize(new Dimension(160, 130));
+		loginPanelClockOutButton.setPreferredSize(new Dimension(160, 130));
+		button_1.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
+		button_5.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
+		button_20.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
+		button_100.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
+		/*
+		 * ASSEMBLE THE PANELS
+		 */
 		headerPanel.add(functionPanel);
 		headerPanel.add(menuPanel);
-		
-		// ********************* DISPLAY PANEL ****************************************
-		displayPanel.add(userPanel, BorderLayout.PAGE_START);		// PAGE_START puts the userPanel at the top
-		displayPanel.add(menuItemPanel, BorderLayout.PAGE_END);		// PAGE_END aligns menuItemPanel to the bottom
-		
-		// ********************* USER PANEL *******************************************
-		userPanel.add(currentUserLabel, BorderLayout.WEST);			// currentUserLabel will be aligned WEST,
-		userPanel.add(currentUserChecks, BorderLayout.EAST);		// and will be assigned when logging in.
-		currentUserLabel.setFont(new Font("Arial", Font.BOLD, 18));	// The currentUserChecks button will be on
-		currentUserChecks.setBackground(Color.WHITE);				// the right (EAST).
-		// ************************* LOGIN KEY HANDLERS ********************************************
-		key_1 = new LoginKeyHandler(1);
-		key_2 = new LoginKeyHandler(2);
-		key_3 = new LoginKeyHandler(3);
-		key_4 = new LoginKeyHandler(4);
-		key_5 = new LoginKeyHandler(5);
-		key_6 = new LoginKeyHandler(6);
-		key_7 = new LoginKeyHandler(7);
-		key_8 = new LoginKeyHandler(8);
-		key_9 = new LoginKeyHandler(9);
-		key_0 = new LoginKeyHandler(0);
-		
-		// ************************* LOGIN ********************************************
-		keypadPanel.add(button1Key);	// Add all the buttons for the keypadPanel, which will be using
-		keypadPanel.add(button2Key);	// a GridLayout. This will fill the entire panel with equally sized
-		keypadPanel.add(button3Key);	// buttons. If we adjust the size of the keypadPanel, the buttons
-		keypadPanel.add(button4Key);	// will reflect.
+		displayPanel.add(userPanel, BorderLayout.PAGE_START);
+		displayPanel.add(menuItemPanel, BorderLayout.PAGE_END);
+		userPanel.add(currentUserLabel);
+		userPanel.add(newCheck);
+		userPanel.add(currentUserChecks);
+		appetizersPanel.add(buffaloWingsButton);
+		appetizersPanel.add(chickenTendersButton);
+		appetizersPanel.add(friedAsparagusButton);
+		appetizersPanel.add(spicyHummusButton);
+		appetizersPanel.add(ultimateNachosButton);
+		appetizersPanel.add(crabCakesButton);
+		entreesPanel.add(chickenSaladButton);
+		entreesPanel.add(cheeseburgerButton);
+		entreesPanel.add(tunaSteakButton);
+		entreesPanel.add(shrimpAlfredoButton);
+		entreesPanel.add(lambLollipopsButton);
+		entreesPanel.add(friedPorkChopsButton);
+		menuPanel.add(appetizersButton);
+		menuPanel.add(entreesButton);
+		menuPanel.add(sidesButton);
+		menuPanel.add(soupsButton);
+		menuPanel.add(dessertsButton);
+		menuPanel.add(beveragesButton);
+		menuPanel.add(aLaCarteButton);
+		menuPanel.add(toGoButton);
+		keypadPanel.add(button1Key);
+		keypadPanel.add(button2Key);
+		keypadPanel.add(button3Key);
+		keypadPanel.add(button4Key);
 		keypadPanel.add(button5Key);
 		keypadPanel.add(button6Key);
 		keypadPanel.add(button7Key);
 		keypadPanel.add(button8Key);
 		keypadPanel.add(button9Key);
-		keypadPanel.add(buttonConfirmKey);
+		keypadPanel.add(loginPanelConfirmKey);
 		keypadPanel.add(button0Key);
-		keypadPanel.add(buttonClearKey);
-		userLoginTextField.setFont(KEYPAD_FONT);
-		userLoginTextField.setBackground(MAIN_BG_COLOR);
-		userLoginTextField.setForeground(MAIN_TEXT_COLOR);
-		blank.setPreferredSize(new Dimension(1366, 150));	// "blank" is a keypadPanel, but only because we want the same
-		blank.add(userLoginTextField);						// look as the keypad. The only thing it will contain is the
-		loginPanel.add(blank, BorderLayout.PAGE_START);		// login text field. We add blank to the top, and keypadPanel
-		loginPanel.add(keypadPanel, BorderLayout.CENTER);	// in the center.
-
-		
-		// ************************** TESTING SAMPLES ************************************
-		
-		// Add MenuItems to Table 100's MenuItem array.
-		table100MenuItems.add(chickenTenders);
-		table100MenuItems.add(friedAsparagus);
-
-		// Set the MenuItem array to the Table.
-		table100.setMenuItems(table100MenuItems);
-		
-		// Add these tables to a Table array.
-		dipeshTables.add(table100);
-		dipeshTables.add(table101);
-		dipeshTables.add(table200);
-		dipeshTables.add(table201);
-
-		// Set a User with an array of Tables.
-		dipeshBhandari.setTables(dipeshTables);
-	
-		//************************* CURRENT USER CHECKS BUTTON ***********************************		
-		currentUserChecks.setFont(USER_PANEL_FONT);
-		currentUserChecks.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				optionsPanel.removeAll();
-				optionsPanel.repaint();
-				optionsPanel.revalidate();
-				
-				currentUserTables = currentUser.getTables();
-				for (Table table: currentUserTables) {
-					optionsPanel.add(table.getTableButton());
-				}
-				
-				optionsPanel.repaint();
-				optionsPanel.revalidate();
-			}
-		});
-		
-		//************************* PAYMENTS BUTTON ***********************************
-		
-		// Set the size of our cash image buttons.
-		button_1.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
-		button_5.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
-		button_20.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
-		button_100.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
-		
-		// Add the cash buttons to the "payments" CategoryPanel
+		keypadPanel.add(loginPanelClearKey);
+		loginPanelHeader.add(welcomeLabel);
+		loginPanelHeader.add(loginPanelExitButton, BorderLayout.EAST);
+		loginPanelHeader.add(loginPanelHeader2, BorderLayout.SOUTH);
+		loginPanelHeader2.add(userLoginTextField, BorderLayout.SOUTH);
+		loginPanelFooter.add(loginPanelClockInButton, BorderLayout.WEST);
+		loginPanelFooter.add(loginPanelClockOutButton, BorderLayout.EAST);
+		loginPanelCenter.add(keypadPanel, BorderLayout.SOUTH);
+		loginPanel.add(loginPanelHeader, BorderLayout.NORTH);
+		loginPanel.add(loginPanelCenter, BorderLayout.CENTER);
+		loginPanel.add(loginPanelFooter, BorderLayout.SOUTH);
+		functionPanel.add(buttonPayments);
+		functionPanel.add(buttonOpen);
+		functionPanel.add(buttonPrint);
+		functionPanel.add(buttonModify);
+		functionPanel.add(buttonEditTips);
+		functionPanel.add(button6);		
+		functionPanel.add(button7);		
+		functionPanel.add(button8);
+		functionPanel.add(FunctionPanelExitButton);
 		payments.add(button_1);
 		payments.add(button_5);
 		payments.add(button_20);
 		payments.add(button_100);
-			
-		// Add buttonPayments to the FunctionPanel
-		functionPanel.add(Main.buttonPayments);
+		add(loginPanel);
+		repaint();
+		revalidate();
+		/*
+		 * INSTANTIATE EVENT LISTENERS
+		 */
+		loginPanelConfirmKeyButtonHandler = new LoginPanelConfirmKeyButtonHandler();
+		loginPanelClearKeyButtonHandler = new LoginPanelClearKeyButtonHandler();
+		loginPanelClockInButtonHandler = new LoginPanelClockInButtonHandler();
+		loginPanelClockOutButtonHandler = new LoginPanelClockOutButtonHandler();
+		LoginPanelKey1 = new LoginPanelKeypadButtonHandler(1);
+		LoginPanelKey2 = new LoginPanelKeypadButtonHandler(2);
+		LoginPanelKey3 = new LoginPanelKeypadButtonHandler(3);
+		LoginPanelKey4 = new LoginPanelKeypadButtonHandler(4);
+		LoginPanelKey5 = new LoginPanelKeypadButtonHandler(5);
+		LoginPanelKey6 = new LoginPanelKeypadButtonHandler(6);
+		LoginPanelKey7 = new LoginPanelKeypadButtonHandler(7);
+		LoginPanelKey8 = new LoginPanelKeypadButtonHandler(8);
+		LoginPanelKey9 = new LoginPanelKeypadButtonHandler(9);
+		LoginPanelKey0 = new LoginPanelKeypadButtonHandler(0);
+
+		appetizersHandler = new MenuPanelButtonHandler(appetizersPanel);
+		entreesHandler = new MenuPanelButtonHandler(entreesPanel);
+		sidesHandler = new MenuPanelButtonHandler(sidesPanel);
+		soupsHandler = new MenuPanelButtonHandler(soupsPanel);
+		dessertsHandler = new MenuPanelButtonHandler(dessertsPanel);
+		beveragesHandler = new MenuPanelButtonHandler(beveragesPanel);
+		aLaCarteHandler = new MenuPanelButtonHandler(aLaCartePanel);
+		toGoHandler = new MenuPanelButtonHandler(toGoPanel);
 		
-		// Define buttonPayments
-		Main.buttonPayments.addActionListener(new ActionListener() {
-			
-			// This new object ActionListener defines a single method
-			// of what will happen when the button is pressed.
-			// This object requires that you implement its only method,
-			// actionPerformed. The @Override annotation replaces the
-			// original actionPerformed method with the new one here.
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				// We'll modify the OptionsPanel here, which is where we
-				// want the buttons to display. The removeAll method removes
-				// all the components in optionsPanel. The repaint and validate
-				// methods are required to basically reassess the panel.
-				Main.optionsPanel.removeAll();
-				Main.optionsPanel.repaint();
-				Main.optionsPanel.validate();					
-				
-				// Here is where we'll add the corresponding CategoryPanel.
-				// We'll run the repaint and validate methods again.
-				Main.optionsPanel.add(Main.payments);
-				Main.optionsPanel.repaint();
-				Main.optionsPanel.validate();
-			}
-		});
-		functionPanel.add(Main.buttonOpen);
-		functionPanel.add(Main.buttonPrint);
-		functionPanel.add(Main.buttonModify);
-		functionPanel.add(Main.buttonEditTips);
-		functionPanel.add(Main.button6);		
-		functionPanel.add(Main.button7);		
-		functionPanel.add(Main.button8);
+		buffaloWingsHandler = new MenuItemButtonHandler(buffaloWings);
+		chickenTendersHandler = new MenuItemButtonHandler(chickenTenders);
+		friedAsparagusHandler = new MenuItemButtonHandler(friedAsparagus);
+		spicyHummusHandler = new MenuItemButtonHandler(spicyHummus);
+		ultimateNachosHandler = new MenuItemButtonHandler(ultimateNachos);
+		crabCakesHandler = new MenuItemButtonHandler(crabCakes);
 		
-		// ************************** EXIT *****************************
-		functionPanel.add(Main.buttonExit);
-		
-		buttonExit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				
-				// For now, we'll have this button just terminate the program.
-				System.exit(0);
-			} 
-		});
+		currentUserChecksButtonHandler = new CurrentUserChecksButtonHandler();
+		newCheckButtonHandler = new NewCheckButtonHandler();
+		exitButtonHandler = new ExitButtonHandler();
+		exitSystemHandler = new ExitSystemHandler();
+		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
+		/*
+		 * ADD EVENT LISTENERS
+		 */
+		buffaloWingsButton.addActionListener(buffaloWingsHandler);
+		chickenTendersButton.addActionListener(chickenTendersHandler);
+		friedAsparagusButton.addActionListener(friedAsparagusHandler);
+		spicyHummusButton.addActionListener(spicyHummusHandler);
+		ultimateNachosButton.addActionListener(ultimateNachosHandler);
+		crabCakesButton.addActionListener(crabCakesHandler);
+		appetizersButton.addActionListener(appetizersHandler);
+		entreesButton.addActionListener(entreesHandler);
+		sidesButton.addActionListener(sidesHandler);
+		soupsButton.addActionListener(soupsHandler);
+		dessertsButton.addActionListener(dessertsHandler);
+		beveragesButton.addActionListener(beveragesHandler);
+		aLaCarteButton.addActionListener(aLaCarteHandler);
+		toGoButton.addActionListener(toGoHandler);
+		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
+		newCheck.addActionListener(newCheckButtonHandler);
+		FunctionPanelExitButton.addActionListener(exitButtonHandler);
+		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
+		button1Key.addActionListener(LoginPanelKey1);
+		button2Key.addActionListener(LoginPanelKey2);
+		button3Key.addActionListener(LoginPanelKey3);
+		button4Key.addActionListener(LoginPanelKey4);
+		button5Key.addActionListener(LoginPanelKey5);
+		button6Key.addActionListener(LoginPanelKey6);
+		button7Key.addActionListener(LoginPanelKey7);
+		button8Key.addActionListener(LoginPanelKey8);
+		button9Key.addActionListener(LoginPanelKey9);
+		button0Key.addActionListener(LoginPanelKey0);
+		loginPanelClearKey.addActionListener(loginPanelClearKeyButtonHandler);
+		loginPanelConfirmKey.addActionListener(loginPanelConfirmKeyButtonHandler);
+		loginPanelExitButton.addActionListener(exitSystemHandler);
+		loginPanelClockInButton.addActionListener(loginPanelClockInButtonHandler);
+		loginPanelClockOutButton.addActionListener(loginPanelClockOutButtonHandler);
+		currentTableButton.addActionListener(tableButtonHandler);
 	}
-// ************************ MAIN METHOD *****************************************
+	/*
+	 ***************
+	 * 			   *
+	 * MAIN METHOD *
+	 *			   *
+	 ***************
+	 */	
 	public static void main(String[] args) {
 
-		// Load database elements
-		// loadData();
-		
-		// Create a new Main object and add the panels to it. Each swing component
-		// has the method add.		
 		Main main = new Main();
-		loadLoginKeyValues(main);
-		loadLoginScreen(main);
 	}
+	/**************
+	 * 			  *
+	 * SUBCLASSES *
+	 *			  *
+	/**************
+	 * 
+	 * LOGIN PANEL KEYPAD BUTTON HANDLER
+	 */
+	private class LoginPanelKeypadButtonHandler implements ActionListener {
 
-	
-	// ************************ LOGIN KEY HANDLER **********************************************************************************
-	private class LoginKeyHandler implements ActionListener { 	// We can define this sub-class inside of the Main class.
-																// It controls what happens when you click a number button to login.
 		private int keyValue;									
 																
-		private LoginKeyHandler(int keyValue) {					// We put a constructor in it so we can pass a value to it that we
-			this.keyValue = keyValue;							// want for the login key (keyValue).
+		private LoginPanelKeypadButtonHandler(int keyValue) {
+			this.keyValue = keyValue;
 		}
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			currentUserID += Integer.toString(keyValue);		// This converts the integer keyValue to a String object, which we'll
-			userLoginTextField.setText(currentUserID);			// need it to be in order to concatenate it to the currentUserID String.
-		}														// The results are then set to the text field.
-	}
-	
-	// **********************************************************************************************************************************
-	// *																																*
-	// *													OTHER METHODS																*
-	// *																																*
-	// **********************************************************************************************************************************
-	
-	// METHOD:		loadLoginKeyValues
-	// PARAMETERS:	Main object
-	// PURPOSE:		Give all the login keys their button event handlers.
-	// **********************************************************************************************************************************
-	public static void loadLoginKeyValues(Main main) {
-		button1Key.addActionListener(key_1);	// We declared these handlers, then initialized them in the Main constructor for
-		button2Key.addActionListener(key_2);	// reuse and less code. They'll be assigned to each KeyPadButton here.
-		button3Key.addActionListener(key_3);
-		button4Key.addActionListener(key_4);
-		button5Key.addActionListener(key_5);
-		button6Key.addActionListener(key_6);
-		button7Key.addActionListener(key_7);
-		button8Key.addActionListener(key_8);
-		button9Key.addActionListener(key_9);
-		button0Key.addActionListener(key_0);
-		buttonClearKey.addActionListener(new ActionListener() { // We didn't predefine the CLEAR or OK keys because their functions
-			public void actionPerformed(ActionEvent event) {	// are a little different. We're declaring and initializing them here.
-				currentUserID = "";								
-				userLoginTextField.setText(currentUserID);		// CLEAR will set the String in the text field back to null.
-			}
-		});			
-		buttonConfirmKey.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				currentUser = getUser(currentUserID); // getUser() is another function in this class that will select a list of Users based on currentUserID.
-				currentUserLabel.setText(currentUser.getUserFirstName() + " " + currentUser.getUserLastName());
-				userPanel.removeAll();
-				userPanel.repaint();
-				userPanel.revalidate();
-				userPanel.add(currentUserLabel, BorderLayout.WEST);
-				userPanel.add(currentUserChecks, BorderLayout.EAST);
-				userPanel.repaint();
-				userPanel.revalidate();
-				main.remove(loginPanel);
-				main.repaint();
-				main.revalidate();
-				loadMainMenu(main);
-			}
-		});
-	}
-	// **********************************************************************************************************************************
-	public static void loadLoginScreen(Main main) {
-		main.add(loginPanel);
-		main.repaint();
-		main.revalidate();
-	}	
-	// **********************************************************************************************************************************
-	public static User getUser(String id) {
-		
-		switch (id) {
-		case "1111": return dipeshBhandari;
-		case "2222": return alexGayle;
-		case "3333": return ericGreene;
-		case "4444": return joshuaHenderson;
-		default: return null;
+			currentUserID += Integer.toString(keyValue);
+			userLoginTextField.setText(currentUserID);
 		}
 	}
-	// **********************************************************************************************************************************
-	public static void loadMainMenu(Main main) {
-		main.add(headerPanel, BorderLayout.PAGE_START);
-		main.add(optionsPanel, BorderLayout.LINE_START);
-		main.add(displayPanel, BorderLayout.LINE_END);
-		main.add(statusPanel, BorderLayout.PAGE_END);
-		main.repaint();
-		main.revalidate();
-		// The BorderLayout positions can be seen here. We've squeezed the
-		// center out of our layout by forcing widths on the adjacent panels.
-		
-		//********************** BORDER LAYOUT ******************************
-		/*   _______________________________________________________________
-		 *  |                                                               |
-		 *  |                          PAGE_START                           |
-		 *  |_______________________________________________________________|
-		 *  |                   |                     |                     |
-		 *  |                   |                     |                     |
-		 *  |                   |                     |                     |
-		 *  |     LINE_START    |        CENTER       |      LINE_END       |
-		 *  |                   |                     |                     |
-		 *  |                   |                     |                     |
-		 *  |                   |                     |                     |
-		 *  |___________________|_____________________|_____________________|
-		 *  |                                                               |
-		 *  |                           PAGE_END                            |
-		 *  |_______________________________________________________________| 
-		 */
-		
-		//************************* OUR LAYOUT ******************************
-		/*   _______________________________________________________________
-		 *  |                                                               |        _______________________
-		 *  |                          headerPanel                          | <---- |     functionPanel     |
-		 *  |_______________________________________________________________|       |_______________________|
-		 *  |                                   |  _______________________  |       |       menuPanel       |
-		 *  |                                   | |      userPanel        | |       |_______________________|
-		 *  |                                   | |_______________________| |
-		 *  |           optionsPanel            |                           |
-		 *  |                                   |       displayPanel        |
-		 *  |                                   |                           |
-		 *  |                                   |                           |
-		 *  |___________________________________|___________________________|
-		 *  |                          statusPanel                          |
-		 *  |_______________________________________________________________| 
-		 */
+	/*
+	 * LOGIN PANEL CLEAR KEY BUTTON HANDLER
+	 */
+	private class LoginPanelClearKeyButtonHandler implements ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			currentUserID = "";								
+			userLoginTextField.setText(currentUserID);
+		}
 	}
+	/*
+	 * LOGIN PANEL CONFIRM KEY BUTTON HANDLER
+	 */
+	private class LoginPanelConfirmKeyButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			/*
+			 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
+			 */
+			switch (currentUserID) {
+			case "1111": currentUser = dipeshBhandari;
+				break;
+			case "2222": currentUser = alexGayle;
+				break;
+			case "3333": currentUser = ericGreene;
+				break;
+			case "4444": currentUser = joshuaHenderson;
+				break;
+			default: JOptionPane.showMessageDialog(null, loginError);
+			}
+			if (currentUser != null) {
+				switch (currentUser.getUserRank()) {
+				case "Manager":
+				case "Waiter":
+					currentUserTables = currentUser.getTables();
+					currentUserLabel.setText(currentUser.getUserFirstName());
+					remove(loginPanel);
+					repaint();
+					revalidate();
+					add(headerPanel, BorderLayout.PAGE_START);
+					add(optionsPanel, BorderLayout.LINE_START);
+					add(displayPanel, BorderLayout.LINE_END);
+					add(statusPanel, BorderLayout.PAGE_END);
+					repaint();
+					revalidate();
+					break;
+				case "Cook":
+				case "Busser":
+					System.exit(0);
+					break;
+				}
+			}
+		}
+	}
+	/*
+	 * LOGIN PANEL CLOCK IN BUTTON HANDLER
+	 */
+	private class LoginPanelClockInButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JOptionPane.showMessageDialog(null, clockedInLabel, "", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	/*
+	 * LOGIN PANEL CLOCK OUT BUTTON HANDLER
+	 */
+	private class LoginPanelClockOutButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	/*
+	 * FUNCTION PANEL PAYMENTS BUTTON HANDLER
+	 */
+	private class FunctionPanelPaymentsButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			optionsPanel.removeAll();
+			optionsPanel.repaint();
+			optionsPanel.validate();					
+			optionsPanel.add(payments);
+			optionsPanel.repaint();
+			optionsPanel.validate();
+		}
+	}
+	/*
+	 * TABLE BUTTON HANDLER
+	 */
+	private class TableButtonHandler implements ActionListener {
+
+		private List<MenuItemLabelPanel> menuItemLabelPanels;
+		
+		private TableButtonHandler(List<MenuItemLabelPanel> menuItemLabelPanels) {
+			this.menuItemLabelPanels = menuItemLabelPanels;
+		}
+		public void actionPerformed(ActionEvent event) {
+			
+			menuItemPanel.removeAll();
+			menuItemPanel.repaint();
+			menuItemPanel.revalidate();
+			menuItemPanel.add(horizonLine, BorderLayout.WEST);
+			for (MenuItemLabelPanel menuItemLabelPanel: menuItemLabelPanels) {
+				menuItemPanel.add(menuItemLabelPanel);
+			}
+			menuItemPanel.add(horizonLine, BorderLayout.WEST);
+			menuItemPanel.repaint();
+			menuItemPanel.revalidate();
+		} 
+	}
+	/*
+	 * MENU PANEL BUTTON HANDLER
+	 */
+	private class MenuPanelButtonHandler implements ActionListener {
+		
+		private CategoryPanel categoryPanel;
+		
+		private MenuPanelButtonHandler(CategoryPanel categoryPanel) {
+			this.categoryPanel = categoryPanel;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			optionsPanel.removeAll();
+			optionsPanel.revalidate();
+			optionsPanel.repaint();
+			optionsPanel.add(categoryPanel);
+			optionsPanel.revalidate();
+			optionsPanel.repaint();
+		}
+	}	
+	/*
+	 * MENU ITEM BUTTON HANDLER
+	 */
+	private class MenuItemButtonHandler implements ActionListener {
+		
+		private MenuItem menuItem;
+		
+		private MenuItemButtonHandler(MenuItem menuItem) {
+			this.menuItem = menuItem;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			MenuItem currentMenuItemCopy = new MenuItem(menuItem);
+			currentTableMenuItems = currentTable.getTableButton().getMenuItems();
+			currentTableMenuItems.add(currentMenuItemCopy);
+			menuItemPanel.removeAll();
+			menuItemPanel.repaint();
+			menuItemPanel.revalidate();
+			menuItemPanel.add(horizonLine, BorderLayout.WEST);
+			menuItemPanel.add(horizonLine, BorderLayout.WEST);
+			currentTableMenuItems = currentTable.getMenuItems();
+			for (MenuItem menuItem: currentTable.getMenuItems()) {
+				menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+			}
+			menuItemPanel.repaint();
+			menuItemPanel.revalidate();
+		}
+	}
+	/*
+	 * CURRENT USER CHECKS BUTTON HANDLER
+	 */                  
+	private class CurrentUserChecksButtonHandler implements ActionListener {
+				
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			
+			optionsPanel.removeAll();
+			optionsPanel.repaint();
+			optionsPanel.revalidate();
+			for (Table table: currentUserTables) {
+				optionsPanel.add(table.getTableButton());
+			}
+			optionsPanel.repaint();
+			optionsPanel.revalidate();
+		}
+	}
+	/*
+	 * NEW CHECK BUTTON HANDLER
+	 */
+	private class NewCheckButtonHandler implements ActionListener {
+		
+		public void actionPerformed(ActionEvent event) {
+			currentUserTables = currentUser.getTables();
+			Table newTable = new Table();
+			now = LocalDateTime.now();
+			newTable.setTableID(1000);
+			newTable.getTableButton().setTimeCreatedOnLabel(dtf.format(now));
+			currentUserTables.add(newTable);
+			optionsPanel.removeAll();
+			optionsPanel.repaint();
+			optionsPanel.revalidate();
+			for (Table table: currentUserTables) {
+				optionsPanel.add(table.getTableButton());
+			}
+			optionsPanel.repaint();
+			optionsPanel.revalidate();
+		}
+	}
+	/*
+	 * EXIT BUTTON HANDLER
+	 */
+	private class ExitButtonHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			remove(headerPanel);
+			remove(optionsPanel);
+			remove(displayPanel);
+			remove(statusPanel);
+			repaint();
+			revalidate();
+			currentUserID = "";
+			currentUser = null;
+			userLoginTextField.setText("");
+			add(loginPanel);
+			repaint();
+			revalidate();
+		} 
+	}
+	/*
+	 * EXIT SYSTEM BUTTON HANDLER
+	 */
+	private class ExitSystemHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			System.exit(0);
+		} 
+	}
+	
+	
 	public static void loadData() {
 		
 		// Load database elements

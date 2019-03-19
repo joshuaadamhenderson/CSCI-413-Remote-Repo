@@ -11,7 +11,7 @@ public class StatusPanel extends JPanel {
 	
 	public StatusPanel() {
 		setPreferredSize(new Dimension(1366, 50));
-		setBackground(new Color(0, 54, 86));
+		setBackground(Main.STATUS_PANEL_BG_COLOR);
 		setLayout(new BorderLayout());
 		add(logo, BorderLayout.WEST);
 

@@ -12,8 +12,9 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Serializable;
 
-public class MenuItem implements Cloneable{
+public class MenuItem implements Serializable {
 
 	private String menuItemID;
 	private String menuItemName;
@@ -31,6 +32,9 @@ public class MenuItem implements Cloneable{
 		menuItemNameLabel.setFont(Main.MENU_ITEM_NAME_LABEL_FONT);
 		menuItemPriceLabel.setFont(Main.MENU_ITEM_PRICE_LABEL_FONT);
 		menuItemLabelPanel = new MenuItemLabelPanel(menuItemNameLabel, menuItemPriceLabel);
+	}
+	public MenuItem(MenuItem menuItem) {
+		this(menuItem.getMenuItemID(), menuItem.getMenuItemName(), menuItem.getMenuItemPrice());
 	}
 	
 	public void setMenuItemID(String menuItemID) {
