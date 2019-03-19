@@ -16,9 +16,19 @@ public class TableButton extends JButton {
 	private JLabel tableNumberLabel;
 	private JLabel tableTotalLabel;
 	private JLabel tableTimeCreatedLabel;
+	private DisplayPanelLabelPanel subtotalPanel;
+	private DisplayPanelLabelPanel taxPanel;
+	private DisplayPanelLabelPanel totalPanel;
+	private List<DisplayPanelLabelPanel> menuItemLabelPanels;
 	private List<MenuItem> menuItems;
+	private Table table;
+	private TableButtonHandler tableButtonHandler;
 	
-	public TableButton() {
+	public TableButton(Table table) {
+		/*
+		 * ASSIGN VARIABLES
+		 */
+		this.table = table;
 		/*
 		 * TABLE BUTTON SETTINGS
 		 */
@@ -32,8 +42,9 @@ public class TableButton extends JButton {
 		 */
 		tableNumberLabel = new JLabel("");
 		tableTotalLabel = new JLabel("");
-		tableTimeCreatedLabel = new JLabel("");
+		tableTimeCreatedLabel = new JLabel(table.getTimeCreated());
 		menuItems = new ArrayList<MenuItem>();
+		tableButtonHandler = new TableButtonHandler(table);
 		/*
 		 * LABEL SETTINGS
 		 */
@@ -49,14 +60,82 @@ public class TableButton extends JButton {
 		add(tableNumberLabel, BorderLayout.WEST);
 		add(tableTotalLabel);
 		add(tableTimeCreatedLabel, BorderLayout.EAST);
+		addActionListener(tableButtonHandler);
 	}
-	
+	/*
+	 * TABLE BUTTON HANDLER
+	 */
+	private class TableButtonHandler implements ActionListener {
+
+		private Table table;
+		
+		private TableButtonHandler(Table table) {
+			this.table = table;
+		}
+		public void actionPerformed(ActionEvent event) {
+			try {
+				/*
+				 * GET VARIABLES
+				 */
+				Main.currentTable = table;
+				/*
+				 * REMOVE EVERYTHING TO UPDATE THE PANEL
+				 */
+				Main.menuItemPanel.removeAll();
+				Main.menuItemPanel.repaint();
+				Main.menuItemPanel.revalidate();
+				/*
+				 * ADD A HORIZON LINE AT THE TOP
+				 */
+				Main.menuItemPanel.add(Main.horizonLine, BorderLayout.WEST);
+				/*
+				 * ADD THE TABLE INFORMATION
+				 */
+				Main.menuItemPanel.add(Main.currentTable.getTableInformationPanel());
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				Main.menuItemPanel.add(Main.horizonLine2, BorderLayout.WEST);
+				/*
+				 * ADD THE MENU ITEMS
+				 */
+				Main.currentTableMenuItems = Main.currentTable.getMenuItems();
+				for (MenuItem menuItem: Main.currentTable.getMenuItems()) {
+					Main.menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+				}
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				Main.menuItemPanel.add(Main.horizonLine3, BorderLayout.WEST);
+				/*
+				 * UPDATE COSTS
+				 */
+				Main.currentTable.calculateTotals();
+				/*
+				 * ADD THE COST INFORMATION
+				 */
+				Main.menuItemPanel.add(Main.currentTable.getSubtotalPanel());
+				Main.menuItemPanel.add(Main.currentTable.getTaxPanel());
+				Main.menuItemPanel.add(Main.currentTable.getTotalPanel());
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				Main.menuItemPanel.add(Main.horizonLine4, BorderLayout.WEST);
+				Main.menuItemPanel.repaint();
+				Main.menuItemPanel.revalidate();					
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+
+		} 
+	}	
 	public void setTableNumberOnLabel(int tableNumber) {
 		tableNumberLabel.setText("Table " + Integer.toString(tableNumber) + "     ");
 	}
 	
 	public void setTableTotalOnLabel(double tableTotal) {
-		tableTotalLabel.setText(Double.toString(tableTotal));
+		tableTotalLabel.setText(String.format("$%.2f", tableTotal));
 	}
 	
 	public void setTimeCreatedOnLabel(String timeCreated) {
@@ -90,5 +169,45 @@ public class TableButton extends JButton {
 	}
 	public void setMenuItems(List<MenuItem> menuItems) {
 		this.menuItems = menuItems;
+	}
+
+	public DisplayPanelLabelPanel getSubtotalPanel() {
+		return subtotalPanel;
+	}
+
+	public void setSubtotalPanel(DisplayPanelLabelPanel subtotalPanel) {
+		this.subtotalPanel = subtotalPanel;
+	}
+
+	public DisplayPanelLabelPanel getTaxPanel() {
+		return taxPanel;
+	}
+
+	public void setTaxPanel(DisplayPanelLabelPanel taxPanel) {
+		this.taxPanel = taxPanel;
+	}
+
+	public DisplayPanelLabelPanel getTotalPanel() {
+		return totalPanel;
+	}
+
+	public void setTotalPanel(DisplayPanelLabelPanel totalPanel) {
+		this.totalPanel = totalPanel;
+	}
+
+	public List<DisplayPanelLabelPanel> getMenuItemLabelPanels() {
+		return menuItemLabelPanels;
+	}
+
+	public void setMenuItemLabelPanels(List<DisplayPanelLabelPanel> menuItemLabelPanels) {
+		this.menuItemLabelPanels = menuItemLabelPanels;
+	}
+
+	public Table getTable() {
+		return table;
+	}
+
+	public void setTable(Table table) {
+		this.table = table;
 	}
 }

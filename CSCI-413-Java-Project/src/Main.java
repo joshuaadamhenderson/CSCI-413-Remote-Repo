@@ -110,7 +110,7 @@ public class Main extends JFrame {
 	public static final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Font TABLE_BUTTON_FONT = new Font("Arial", Font.BOLD, 24);
 	public static final Font KEYPAD_FONT = new Font("Arial", Font.BOLD, 30);
-	public static final Font MENU_ITEM_NAME_LABEL_FONT = new Font("Arial", Font.BOLD, 20);
+	public static final Font DISPLAY_PANEL_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Font MENU_ITEM_PRICE_LABEL_FONT = new Font("Arial", Font.PLAIN, 20);
 	public static final Font USER_PANEL_FONT = new Font("Arial", Font.BOLD, 20);
 	public static final Font TABLE_COSTS_PANEL_FONT = new Font("Arial", Font.BOLD, 20);
@@ -162,6 +162,9 @@ public class Main extends JFrame {
 	public static JLabel clockedOutLabel = new JLabel(" CLOCKED OUT AT " + dtf.format(now));
 	public static JLabel currentUserLabel = new JLabel("");
 	public static JLabel horizonLine = new JLabel("    ***************************************************************************************");
+	public static JLabel horizonLine2 = new JLabel("    ***************************************************************************************");
+	public static JLabel horizonLine3 = new JLabel("    ***************************************************************************************");
+	public static JLabel horizonLine4 = new JLabel("    ***************************************************************************************");
 	/*
 	 * ERROR LABELS
 	 */
@@ -275,7 +278,7 @@ public class Main extends JFrame {
 	/*
 	 * TABLE BUTTONS
 	 */
-	public static TableButton currentTableButton = new TableButton();
+	public static TableButton currentTableButton = new TableButton(currentTable);
 	/*
 	 * KEYPAD BUTTONS
 	 */
@@ -340,7 +343,6 @@ public class Main extends JFrame {
 	 */
 	public static CurrentUserChecksButtonHandler currentUserChecksButtonHandler;
 	public static NewCheckButtonHandler newCheckButtonHandler;
-	public static TableButtonHandler tableButtonHandler;
 	public static ExitButtonHandler exitButtonHandler;
 	public static ExitSystemHandler exitSystemHandler;
 	/*
@@ -539,7 +541,6 @@ public class Main extends JFrame {
 		loginPanelExitButton.addActionListener(exitSystemHandler);
 		loginPanelClockInButton.addActionListener(loginPanelClockInButtonHandler);
 		loginPanelClockOutButton.addActionListener(loginPanelClockOutButtonHandler);
-		currentTableButton.addActionListener(tableButtonHandler);
 	}
 	/*
 	 ***************
@@ -569,8 +570,20 @@ public class Main extends JFrame {
 		}
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			currentUserID += Integer.toString(keyValue);
-			userLoginTextField.setText(currentUserID);
+			
+			try {
+				/*
+				 * CONCATENATE THE KEY VALUE TO THE STRING
+				 */
+				currentUserID += Integer.toString(keyValue);
+				/*
+				 * SET THE NEW STRING TO THE TEXT FIELD
+				 */
+				userLoginTextField.setText(currentUserID);
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -580,8 +593,21 @@ public class Main extends JFrame {
 	
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			currentUserID = "";								
-			userLoginTextField.setText(currentUserID);
+			
+			try {
+				/*
+				 * RESET THE STRING TO BLANK
+				 */
+				currentUserID = "";
+				/*
+				 * ASSIGN THE BLANK STRING TO THE TEXT FIELD
+				 */
+				userLoginTextField.setText(currentUserID);				
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+
 		}
 	}
 	/*
@@ -592,44 +618,57 @@ public class Main extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			/*
-			 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
-			 */
-			switch (currentUserID) {
-			case "1111": currentUser = dipeshBhandari;
-				break;
-			case "2222": currentUser = alexGayle;
-				break;
-			case "3333": currentUser = ericGreene;
-				break;
-			case "4444": currentUser = joshuaHenderson;
-				break;
-			default: JOptionPane.showMessageDialog(null, loginError);
-			}
-			if (currentUser != null) {
-				switch (currentUser.getUserRank()) {
-				case "Manager":
-				case "Waiter":
-					currentUserTables = currentUser.getTables();
-					currentUserLabel.setText(currentUser.getUserFirstName());
-					remove(loginPanel);
-					repaint();
-					revalidate();
-					add(headerPanel, BorderLayout.PAGE_START);
-					add(optionsPanel, BorderLayout.LINE_START);
-					add(displayPanel, BorderLayout.LINE_END);
-					add(statusPanel, BorderLayout.PAGE_END);
-					repaint();
-					revalidate();
+			try {
+				/*
+				 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
+				 */
+				switch (currentUserID) {
+				case "1111": currentUser = dipeshBhandari;
 					break;
-				case "Cook":
-				case "Busser":
-					System.exit(0);
+				case "2222": currentUser = alexGayle;
 					break;
+				case "3333": currentUser = ericGreene;
+					break;
+				case "4444": currentUser = joshuaHenderson;
+					break;
+				default: JOptionPane.showMessageDialog(null, loginError);
 				}
+				/*
+				 * GET USER VARIABLES
+				 * 
+				 */
+				currentUserTables = currentUser.getTables();
+				currentUserLabel.setText(currentUser.getUserFirstName());
+				/*
+				 * REMOVE THE LOGIN PANEL
+				 */
+				remove(loginPanel);
+				repaint();
+				revalidate();
+				/*
+				 * ADD EACH OF THE USER'S TABLE BUTTONS
+				 */
+				for (Table table: currentUserTables) {
+					optionsPanel.add(table.getTableButton());
+				}
+				optionsPanel.repaint();
+				optionsPanel.revalidate();
+				/*
+				 * ADD THE MAIN PANELS
+				 */
+				add(headerPanel, BorderLayout.PAGE_START);
+				add(optionsPanel, BorderLayout.LINE_START);
+				add(displayPanel, BorderLayout.LINE_END);
+				add(statusPanel, BorderLayout.PAGE_END);
+				repaint();
+				revalidate();
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
 			}
 		}
 	}
+
 	/*
 	 * LOGIN PANEL CLOCK IN BUTTON HANDLER
 	 */
@@ -664,30 +703,7 @@ public class Main extends JFrame {
 			optionsPanel.validate();
 		}
 	}
-	/*
-	 * TABLE BUTTON HANDLER
-	 */
-	private class TableButtonHandler implements ActionListener {
 
-		private List<MenuItemLabelPanel> menuItemLabelPanels;
-		
-		private TableButtonHandler(List<MenuItemLabelPanel> menuItemLabelPanels) {
-			this.menuItemLabelPanels = menuItemLabelPanels;
-		}
-		public void actionPerformed(ActionEvent event) {
-			
-			menuItemPanel.removeAll();
-			menuItemPanel.repaint();
-			menuItemPanel.revalidate();
-			menuItemPanel.add(horizonLine, BorderLayout.WEST);
-			for (MenuItemLabelPanel menuItemLabelPanel: menuItemLabelPanels) {
-				menuItemPanel.add(menuItemLabelPanel);
-			}
-			menuItemPanel.add(horizonLine, BorderLayout.WEST);
-			menuItemPanel.repaint();
-			menuItemPanel.revalidate();
-		} 
-	}
 	/*
 	 * MENU PANEL BUTTON HANDLER
 	 */
@@ -722,20 +738,68 @@ public class Main extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			MenuItem currentMenuItemCopy = new MenuItem(menuItem);
-			currentTableMenuItems = currentTable.getTableButton().getMenuItems();
-			currentTableMenuItems.add(currentMenuItemCopy);
-			menuItemPanel.removeAll();
-			menuItemPanel.repaint();
-			menuItemPanel.revalidate();
-			menuItemPanel.add(horizonLine, BorderLayout.WEST);
-			menuItemPanel.add(horizonLine, BorderLayout.WEST);
-			currentTableMenuItems = currentTable.getMenuItems();
-			for (MenuItem menuItem: currentTable.getMenuItems()) {
-				menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+			try {
+				/*
+				 * GET VARIABLES
+				 */
+				currentTableMenuItems = currentTable.getMenuItems();
+				/*
+				 * MAKE A COPY OF THE MENU ITEM
+				 */
+				MenuItem currentMenuItemCopy = new MenuItem(menuItem);
+				/*
+				 * ADD IT TO THE TABLE'S MENU ITEMS
+				 */
+				currentTableMenuItems.add(currentMenuItemCopy);
+				/*
+				 * REMOVE EVERYTHING TO UPDATE THE PANEL
+				 */
+				menuItemPanel.removeAll();
+				menuItemPanel.repaint();
+				menuItemPanel.revalidate();
+				/*
+				 * ADD A HORIZON LINE AT THE TOP
+				 */
+				menuItemPanel.add(horizonLine, BorderLayout.WEST);
+				/*
+				 * ADD THE TABLE INFORMATION
+				 */
+				menuItemPanel.add(currentTable.getTableInformationPanel());
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				menuItemPanel.add(horizonLine2, BorderLayout.WEST);
+				/*
+				 * ADD THE MENU ITEMS
+				 */
+				currentTableMenuItems = currentTable.getMenuItems();
+				for (MenuItem menuItem: currentTable.getMenuItems()) {
+					menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+				}
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				menuItemPanel.add(horizonLine3, BorderLayout.WEST);
+				/*
+				 * CALCULATE TOTALS
+				 */
+				currentTable.calculateTotals();
+				/*
+				 * ADD THE COST INFORMATION
+				 */
+				menuItemPanel.add(currentTable.getSubtotalPanel());
+				menuItemPanel.add(currentTable.getTaxPanel());
+				menuItemPanel.add(currentTable.getTotalPanel());
+				/*
+				 * ADD ANOTHER HORIZON LINE
+				 */
+				menuItemPanel.add(horizonLine4, BorderLayout.WEST);
+				menuItemPanel.repaint();
+				menuItemPanel.revalidate();				
 			}
-			menuItemPanel.repaint();
-			menuItemPanel.revalidate();
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -746,14 +810,29 @@ public class Main extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			optionsPanel.removeAll();
-			optionsPanel.repaint();
-			optionsPanel.revalidate();
-			for (Table table: currentUserTables) {
-				optionsPanel.add(table.getTableButton());
+			try {
+				/*
+				 * GET VARIABLES
+				 */
+				currentUserTables = currentUser.getTables();
+				/*
+				 * REMOVE EVERYTHING TO UPDATE PANEL
+				 */
+				optionsPanel.removeAll();
+				optionsPanel.repaint();
+				optionsPanel.revalidate();
+				/*
+				 * ADD EACH OF THE USER'S TABLES BUTTONS
+				 */
+				for (Table table: currentUserTables) {
+					optionsPanel.add(table.getTableButton());
+				}
+				optionsPanel.repaint();
+				optionsPanel.revalidate();
 			}
-			optionsPanel.repaint();
-			optionsPanel.revalidate();
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -761,21 +840,42 @@ public class Main extends JFrame {
 	 */
 	private class NewCheckButtonHandler implements ActionListener {
 		
+		@Override
 		public void actionPerformed(ActionEvent event) {
-			currentUserTables = currentUser.getTables();
-			Table newTable = new Table();
-			now = LocalDateTime.now();
-			newTable.setTableID(1000);
-			newTable.getTableButton().setTimeCreatedOnLabel(dtf.format(now));
-			currentUserTables.add(newTable);
-			optionsPanel.removeAll();
-			optionsPanel.repaint();
-			optionsPanel.revalidate();
-			for (Table table: currentUserTables) {
-				optionsPanel.add(table.getTableButton());
+			
+			try {
+				/*
+				 * GET VARIABLES
+				 */
+				currentUserTables = currentUser.getTables();
+				now = LocalDateTime.now();			
+				/*
+				 * MAKE A NEW TABLE AND APPLY ATTRIBUTES
+				 */
+				Table newTable = new Table();
+				newTable.calculateTotals();
+				/*
+				 * ADD IT TO THE USER'S TABLES
+				 */
+				currentUserTables.add(newTable);
+				/*
+				 * REMOVE EVERYTHING TO UPDATE PANEL
+				 */
+				optionsPanel.removeAll();
+				optionsPanel.repaint();
+				optionsPanel.revalidate();		
+				/*
+				 * ADD EACH OF THE USER'S TABLE BUTTONS
+				 */
+				for (Table table: currentUserTables) {
+					optionsPanel.add(table.getTableButton());
+				}
+				optionsPanel.repaint();
+				optionsPanel.revalidate();
 			}
-			optionsPanel.repaint();
-			optionsPanel.revalidate();
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -784,15 +884,34 @@ public class Main extends JFrame {
 	private class ExitButtonHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
+			/*
+			 * RESET ALL USER SETTINGS
+			 */
+			currentUserID = "";
+			currentUser = null;
+			currentUserTables = null;
+			currentTableMenuItems = null;
+			/*
+			 * REMOVE ALL OPEN CHECKS AND TABLES
+			 */
+			optionsPanel.removeAll();
+			menuItemPanel.removeAll();
+			/*
+			 * REMOVE MAIN PANELS
+			 */
 			remove(headerPanel);
 			remove(optionsPanel);
 			remove(displayPanel);
 			remove(statusPanel);
 			repaint();
 			revalidate();
-			currentUserID = "";
-			currentUser = null;
+			/*
+			 * RESET THE LOGIN TEXT FIELD
+			 */
 			userLoginTextField.setText("");
+			/*
+			 * ADD THE LOGIN PANEL
+			 */
 			add(loginPanel);
 			repaint();
 			revalidate();

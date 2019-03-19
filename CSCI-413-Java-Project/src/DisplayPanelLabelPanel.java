@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -7,8 +8,8 @@ import javax.swing.border.LineBorder;
 public class DisplayPanelLabelPanel extends JPanel {
 
 	public DisplayPanelLabelPanel() {
-		setBackground(Color.WHITE);
-		setPreferredSize(new Dimension(460,100));
-		setBorder(new LineBorder(Color.WHITE, 10));
+		setBackground(Main.ORANGE_WHITE);
+		setPreferredSize(new Dimension(Main.MENU_ITEM_LABEL_PANEL_WIDTH, Main.MENU_ITEM_LABEL_PANEL_HEIGHT));
+		setLayout(new BorderLayout());
 	}
 }

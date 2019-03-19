@@ -32,9 +32,9 @@ public class TableCostsLabelPanel extends JPanel {
 		tableTotalLabel = new JLabel(String.format("$%.2f", tableTotal));
 		horizonLine = new JLabel("    ***************************************************************************************");
 		
-		tableSubtotalNameLabel.setFont(Main.MENU_ITEM_NAME_LABEL_FONT);
+		tableSubtotalNameLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		tableSubtotalLabel.setFont(Main.MENU_ITEM_PRICE_LABEL_FONT);
-		tableTotalNameLabel.setFont(Main.MENU_ITEM_NAME_LABEL_FONT);
+		tableTotalNameLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		tableTotalLabel.setFont(Main.MENU_ITEM_PRICE_LABEL_FONT);
 		
 		subtotalPanel = new MenuItemLabelPanel(tableSubtotalNameLabel, tableSubtotalLabel);
