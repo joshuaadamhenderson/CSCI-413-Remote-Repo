@@ -50,7 +50,6 @@ import javax.swing.border.LineBorder;
  */
 public class Main extends JFrame {
 	/*
-	 * TEST TEST TEST
 	 * 
 	 * 	NAMING CONVENTIONS
 	 * 
