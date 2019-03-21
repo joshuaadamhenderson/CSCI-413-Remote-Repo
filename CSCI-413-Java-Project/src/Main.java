@@ -84,6 +84,11 @@ public class Main extends JFrame {
 	public static final Color FUZZY_WUZZY = new Color(194, 91, 86);
 	public static final Color ORANGE_WHITE = new Color(254, 246, 235);
 	public static final Color WHITE = new Color(255, 255, 255);
+	public static final Color MENU_ITEM_BUTTON_COLOR_1 = new Color(52, 147, 59);
+	public static final Color MENU_ITEM_BUTTON_COLOR_2 = new Color(216, 135, 91);
+	public static final Color MENU_ITEM_BUTTON_COLOR_3 = new Color(191, 91, 216);
+	public static final Color MENU_ITEM_BUTTON_COLOR_4 = new Color(91, 215, 216);
+	public static final Color MENU_ITEM_BUTTON_COLOR_5 = new Color(216, 103, 91);
 
 	public static final Color MENU_PANEL_BUTTON_COLOR = SLATE_GRAY;
 	public static final Color MENU_PANEL_FONT_COLOR = WHITE;
@@ -96,11 +101,6 @@ public class Main extends JFrame {
 	public static final Color MAIN_BG_COLOR = ORIGINAL_DARK_BLUE;
 	public static final Color MAIN_TEXT_COLOR = WHITE;
 	public static final Color KEYPAD_BUTTON_COLOR = ORIGINAL_DARK_BLUE;
-	public static final Color MENU_ITEM_BUTTON_COLOR_1 = new Color(52, 147, 59);
-	public static final Color MENU_ITEM_BUTTON_COLOR_2 = new Color(216, 135, 91);
-	public static final Color MENU_ITEM_BUTTON_COLOR_3 = new Color(191, 91, 216);
-	public static final Color MENU_ITEM_BUTTON_COLOR_4 = new Color(91, 215, 216);
-	public static final Color MENU_ITEM_BUTTON_COLOR_5 = new Color(216, 103, 91);
 	public static final Color TABLE_BUTTON_COLOR = ORANGE_WHITE;
 	public static final Color TABLE_BUTTON_TEXT_COLOR = FUZZY_WUZZY;
 	public static final Color USER_PANEL_BUTTON_COLOR = SLATE_GRAY;
@@ -150,6 +150,10 @@ public class Main extends JFrame {
 	public static final double CALCASIEU_TAX_RATE = .1075;
 	public static final double CAMERON_TAX_RATE = .04;
 	public static final double CURRENT_TAX_RATE = CALCASIEU_TAX_RATE; // Set a tax region here
+	/*
+	 * CHECK NUMBERS
+	 */
+	public static int nextTableCheckNum = 1;
 	/*
 	 * DATE
 	 */
@@ -204,7 +208,7 @@ public class Main extends JFrame {
 	 * USERS
 	 */
 	public static String currentUserID = ""; // Placeholder
-	public static User currentUser; // Placeholder
+	public static User currentUser = new User("", "", "", "", ""); // Placeholder
 	public static User dipeshBhandari = new User("1111", "Dipesh", "Bhandari", "Manager", "11-Apr-2015");
 	public static User alexGayle = new User("2222", "Alex", "Gayle", "Waiter", "3-Sep-2018");
 	public static User ericGreene = new User("3333", "Eric", "Greene", "Cook", "22-Jan-2017");
@@ -366,17 +370,26 @@ public class Main extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		/*
-		 * OTHER OBJECT SETTINGS
+		 * LOGIN PANEL SETTINGS
 		 */
-		loginError.setFont(new Font("Arial", Font.BOLD, 24));
-		clockedInLabel.setFont(new Font("Arial", Font.BOLD, 24));
-		clockedInLabel.setBackground(MAIN_BG_COLOR);
 		welcomeLabel.setFont(new Font("Impact", Font.PLAIN, 80));
 		welcomeLabel.setForeground(WELCOME_LABEL_COLOR);
+		clockedInLabel.setFont(new Font("Arial", Font.BOLD, 24));
+		clockedInLabel.setBackground(MAIN_BG_COLOR);
+		userLoginTextField.setFont(KEYPAD_FONT);
+		userLoginTextField.setBackground(MAIN_BG_COLOR);
+		userLoginTextField.setForeground(MAIN_TEXT_COLOR);
+		loginPanel.setLayout(new BorderLayout());
 		loginPanelExitButton.setPreferredSize(new Dimension(150, 70));
 		loginPanelClockInButton.setBackground(MAIN_BG_COLOR);
 		loginPanelClockOutButton.setBackground(MAIN_BG_COLOR);
-		
+		loginPanelHeader.setLayout(new BorderLayout());
+		loginPanelClockInButton.setPreferredSize(new Dimension(160, 130));
+		loginPanelClockOutButton.setPreferredSize(new Dimension(160, 130));
+		loginError.setFont(new Font("Arial", Font.BOLD, 24));
+		/*
+		 * USER CHECKS SETTINGS
+		 */
 		currentUserLabel.setFont(new Font("Arial", Font.BOLD, 20));
 		currentUserLabel.setForeground(Color.WHITE);
 		newCheck.setBackground(USER_PANEL_BUTTON_COLOR);
@@ -387,14 +400,7 @@ public class Main extends JFrame {
 		currentUserChecks.setFont(USER_PANEL_FONT);
 		currentUserChecks.setForeground(Color.WHITE);
 		currentUserChecks.setBorder(new LineBorder(ORIGINAL_DARK_BLUE, 2));
-		userLoginTextField.setFont(KEYPAD_FONT);
-		userLoginTextField.setBackground(MAIN_BG_COLOR);
-		userLoginTextField.setForeground(MAIN_TEXT_COLOR);
 		
-		loginPanel.setLayout(new BorderLayout());
-		loginPanelHeader.setLayout(new BorderLayout());
-		loginPanelClockInButton.setPreferredSize(new Dimension(160, 130));
-		loginPanelClockOutButton.setPreferredSize(new Dimension(160, 130));
 		button_1.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
 		button_5.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
 		button_20.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
@@ -402,6 +408,28 @@ public class Main extends JFrame {
 		/*
 		 * ASSEMBLE THE PANELS
 		 */
+		loginPanelHeader.add(welcomeLabel);
+		loginPanelHeader.add(loginPanelExitButton, BorderLayout.EAST);
+		loginPanelHeader.add(loginPanelHeader2, BorderLayout.SOUTH);
+		loginPanelHeader2.add(userLoginTextField, BorderLayout.SOUTH);
+		loginPanelFooter.add(loginPanelClockInButton, BorderLayout.WEST);
+		loginPanelFooter.add(loginPanelClockOutButton, BorderLayout.EAST);
+		loginPanelCenter.add(keypadPanel, BorderLayout.SOUTH);
+		loginPanel.add(loginPanelHeader, BorderLayout.NORTH);
+		loginPanel.add(loginPanelCenter, BorderLayout.CENTER);
+		loginPanel.add(loginPanelFooter, BorderLayout.SOUTH);
+		keypadPanel.add(button1Key);
+		keypadPanel.add(button2Key);
+		keypadPanel.add(button3Key);
+		keypadPanel.add(button4Key);
+		keypadPanel.add(button5Key);
+		keypadPanel.add(button6Key);
+		keypadPanel.add(button7Key);
+		keypadPanel.add(button8Key);
+		keypadPanel.add(button9Key);
+		keypadPanel.add(loginPanelConfirmKey);
+		keypadPanel.add(button0Key);
+		keypadPanel.add(loginPanelClearKey);
 		headerPanel.add(functionPanel);
 		headerPanel.add(menuPanel);
 		displayPanel.add(userPanel, BorderLayout.PAGE_START);
@@ -409,6 +437,19 @@ public class Main extends JFrame {
 		userPanel.add(currentUserLabel);
 		userPanel.add(newCheck);
 		userPanel.add(currentUserChecks);
+		functionPanel.add(buttonPayments);
+		functionPanel.add(buttonOpen);
+		functionPanel.add(buttonPrint);
+		functionPanel.add(buttonModify);
+		functionPanel.add(buttonEditTips);
+		functionPanel.add(button6);		
+		functionPanel.add(button7);		
+		functionPanel.add(button8);
+		functionPanel.add(FunctionPanelExitButton);
+		payments.add(button_1);
+		payments.add(button_5);
+		payments.add(button_20);
+		payments.add(button_100);
 		appetizersPanel.add(buffaloWingsButton);
 		appetizersPanel.add(chickenTendersButton);
 		appetizersPanel.add(friedAsparagusButton);
@@ -429,41 +470,6 @@ public class Main extends JFrame {
 		menuPanel.add(beveragesButton);
 		menuPanel.add(aLaCarteButton);
 		menuPanel.add(toGoButton);
-		keypadPanel.add(button1Key);
-		keypadPanel.add(button2Key);
-		keypadPanel.add(button3Key);
-		keypadPanel.add(button4Key);
-		keypadPanel.add(button5Key);
-		keypadPanel.add(button6Key);
-		keypadPanel.add(button7Key);
-		keypadPanel.add(button8Key);
-		keypadPanel.add(button9Key);
-		keypadPanel.add(loginPanelConfirmKey);
-		keypadPanel.add(button0Key);
-		keypadPanel.add(loginPanelClearKey);
-		loginPanelHeader.add(welcomeLabel);
-		loginPanelHeader.add(loginPanelExitButton, BorderLayout.EAST);
-		loginPanelHeader.add(loginPanelHeader2, BorderLayout.SOUTH);
-		loginPanelHeader2.add(userLoginTextField, BorderLayout.SOUTH);
-		loginPanelFooter.add(loginPanelClockInButton, BorderLayout.WEST);
-		loginPanelFooter.add(loginPanelClockOutButton, BorderLayout.EAST);
-		loginPanelCenter.add(keypadPanel, BorderLayout.SOUTH);
-		loginPanel.add(loginPanelHeader, BorderLayout.NORTH);
-		loginPanel.add(loginPanelCenter, BorderLayout.CENTER);
-		loginPanel.add(loginPanelFooter, BorderLayout.SOUTH);
-		functionPanel.add(buttonPayments);
-		functionPanel.add(buttonOpen);
-		functionPanel.add(buttonPrint);
-		functionPanel.add(buttonModify);
-		functionPanel.add(buttonEditTips);
-		functionPanel.add(button6);		
-		functionPanel.add(button7);		
-		functionPanel.add(button8);
-		functionPanel.add(FunctionPanelExitButton);
-		payments.add(button_1);
-		payments.add(button_5);
-		payments.add(button_20);
-		payments.add(button_100);
 		add(loginPanel);
 		repaint();
 		revalidate();
@@ -485,6 +491,12 @@ public class Main extends JFrame {
 		LoginPanelKey9 = new LoginPanelKeypadButtonHandler(9);
 		LoginPanelKey0 = new LoginPanelKeypadButtonHandler(0);
 
+		currentUserChecksButtonHandler = new CurrentUserChecksButtonHandler();
+		newCheckButtonHandler = new NewCheckButtonHandler();
+		exitButtonHandler = new ExitButtonHandler();
+		exitSystemHandler = new ExitSystemHandler();
+		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
+
 		appetizersHandler = new MenuPanelButtonHandler(appetizersPanel);
 		entreesHandler = new MenuPanelButtonHandler(entreesPanel);
 		sidesHandler = new MenuPanelButtonHandler(sidesPanel);
@@ -500,33 +512,14 @@ public class Main extends JFrame {
 		spicyHummusHandler = new MenuItemButtonHandler(spicyHummus);
 		ultimateNachosHandler = new MenuItemButtonHandler(ultimateNachos);
 		crabCakesHandler = new MenuItemButtonHandler(crabCakes);
-		
-		currentUserChecksButtonHandler = new CurrentUserChecksButtonHandler();
-		newCheckButtonHandler = new NewCheckButtonHandler();
-		exitButtonHandler = new ExitButtonHandler();
-		exitSystemHandler = new ExitSystemHandler();
-		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
 		/*
 		 * ADD EVENT LISTENERS
 		 */
-		buffaloWingsButton.addActionListener(buffaloWingsHandler);
-		chickenTendersButton.addActionListener(chickenTendersHandler);
-		friedAsparagusButton.addActionListener(friedAsparagusHandler);
-		spicyHummusButton.addActionListener(spicyHummusHandler);
-		ultimateNachosButton.addActionListener(ultimateNachosHandler);
-		crabCakesButton.addActionListener(crabCakesHandler);
-		appetizersButton.addActionListener(appetizersHandler);
-		entreesButton.addActionListener(entreesHandler);
-		sidesButton.addActionListener(sidesHandler);
-		soupsButton.addActionListener(soupsHandler);
-		dessertsButton.addActionListener(dessertsHandler);
-		beveragesButton.addActionListener(beveragesHandler);
-		aLaCarteButton.addActionListener(aLaCarteHandler);
-		toGoButton.addActionListener(toGoHandler);
-		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
-		newCheck.addActionListener(newCheckButtonHandler);
-		FunctionPanelExitButton.addActionListener(exitButtonHandler);
-		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
+		loginPanelClearKey.addActionListener(loginPanelClearKeyButtonHandler);
+		loginPanelConfirmKey.addActionListener(loginPanelConfirmKeyButtonHandler);
+		loginPanelExitButton.addActionListener(exitSystemHandler);
+		loginPanelClockInButton.addActionListener(loginPanelClockInButtonHandler);
+		loginPanelClockOutButton.addActionListener(loginPanelClockOutButtonHandler);
 		button1Key.addActionListener(LoginPanelKey1);
 		button2Key.addActionListener(LoginPanelKey2);
 		button3Key.addActionListener(LoginPanelKey3);
@@ -537,11 +530,24 @@ public class Main extends JFrame {
 		button8Key.addActionListener(LoginPanelKey8);
 		button9Key.addActionListener(LoginPanelKey9);
 		button0Key.addActionListener(LoginPanelKey0);
-		loginPanelClearKey.addActionListener(loginPanelClearKeyButtonHandler);
-		loginPanelConfirmKey.addActionListener(loginPanelConfirmKeyButtonHandler);
-		loginPanelExitButton.addActionListener(exitSystemHandler);
-		loginPanelClockInButton.addActionListener(loginPanelClockInButtonHandler);
-		loginPanelClockOutButton.addActionListener(loginPanelClockOutButtonHandler);
+		FunctionPanelExitButton.addActionListener(exitButtonHandler);
+		newCheck.addActionListener(newCheckButtonHandler);
+		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
+		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
+		appetizersButton.addActionListener(appetizersHandler);
+		entreesButton.addActionListener(entreesHandler);
+		sidesButton.addActionListener(sidesHandler);
+		soupsButton.addActionListener(soupsHandler);
+		dessertsButton.addActionListener(dessertsHandler);
+		beveragesButton.addActionListener(beveragesHandler);
+		aLaCarteButton.addActionListener(aLaCarteHandler);
+		toGoButton.addActionListener(toGoHandler);
+		buffaloWingsButton.addActionListener(buffaloWingsHandler);
+		chickenTendersButton.addActionListener(chickenTendersHandler);
+		friedAsparagusButton.addActionListener(friedAsparagusHandler);
+		spicyHummusButton.addActionListener(spicyHummusHandler);
+		ultimateNachosButton.addActionListener(ultimateNachosHandler);
+		crabCakesButton.addActionListener(crabCakesHandler);
 	}
 	/*
 	 ***************
@@ -608,7 +614,6 @@ public class Main extends JFrame {
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
 			}
-
 		}
 	}
 	/*
@@ -619,20 +624,38 @@ public class Main extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			
-			try {
-				/*
-				 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
-				 */
+			/*
+			 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
+			 * 
 				switch (currentUserID) {
 				case "1111": currentUser = dipeshBhandari;
-					break;
+				break;
 				case "2222": currentUser = alexGayle;
-					break;
+				break;
 				case "3333": currentUser = ericGreene;
-					break;
+				break;
 				case "4444": currentUser = joshuaHenderson;
-					break;
+				break;
 				default: JOptionPane.showMessageDialog(null, loginError);
+			}
+			 *
+			 *
+			 */
+			
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				Statement stmt = conn.createStatement();
+				String statement = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";				
+				ResultSet rs = stmt.executeQuery(statement);
+				
+			
+				while (rs.next()) {	
+					currentUser.setUserID(rs.getString(1));
+					currentUser.setUserFirstName(rs.getString(2));
+					currentUser.setUserLastName(rs.getString(3));
+					currentUser.setUserRank(rs.getString(4));
+					currentUser.setUserHireDate(rs.getString(5));
 				}
 				/*
 				 * GET USER VARIABLES
@@ -662,10 +685,11 @@ public class Main extends JFrame {
 				add(displayPanel, BorderLayout.LINE_END);
 				add(statusPanel, BorderLayout.PAGE_END);
 				repaint();
-				revalidate();
+				revalidate();					
+				
 			}
 			catch (Exception e) {
-				JOptionPane.showMessageDialog(null, e);
+				JOptionPane.showMessageDialog(null, e.getStackTrace()[0].getLineNumber());
 			}
 		}
 	}
@@ -859,6 +883,28 @@ public class Main extends JFrame {
 				 * ADD IT TO THE USER'S TABLES
 				 */
 				currentUserTables.add(newTable);
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+					Statement stmt = conn.createStatement();
+					String statement = "INSERT INTO Tables (userID, tableCheckNum, tableNum, tableTimeCreated, tableTotal)"
+							+ "VALUES ('"
+							+ currentUserID
+							+ "', '"
+							+ nextTableCheckNum
+							+ "', '"
+							+ currentTable.getTableID()
+							+ "', '"
+							+ currentTable.getTimeCreated()
+							+ "', '"
+							+ currentTable.getTotal()
+							+ "');";
+					stmt.executeUpdate(statement);
+				}
+				catch (Exception e ) {
+					JOptionPane.showMessageDialog(null, e);
+				}
+				
 				/*
 				 * REMOVE EVERYTHING TO UPDATE PANEL
 				 */
@@ -889,11 +935,15 @@ public class Main extends JFrame {
 			 * RESET ALL USER SETTINGS
 			 */
 			currentUserID = "";
-			currentUser = null;
+			currentUser.setUserID("");
+			currentUser.setUserFirstName("");
+			currentUser.setUserLastName("");
+			currentUser.setUserRank("");
+			currentUser.setUserHireDate("");
 			currentUserTables = null;
 			currentTableMenuItems = null;
 			/*
-			 * REMOVE ALL OPEN CHECKS AND TABLES
+			 * REMOVE ALL TABLES AND OPEN CHECKS
 			 */
 			optionsPanel.removeAll();
 			menuItemPanel.removeAll();
@@ -928,26 +978,30 @@ public class Main extends JFrame {
 		} 
 	}
 	
-	
+	/*
+	 * 
+	 * 
 	public static void loadData() {
 		
-		// Load database elements
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://108.167.172.113:3306/jhenders_group_project", "jhenders_1", "password");
+			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT userID FROM Users WHERE userFirstName = 'Dipesh'");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Users WHERE userFirstName = 'Dipesh'");
 			
 			while (rs.next()) {
-				dipeshBhandari.setUserID(rs.getString(1));
-				dipeshBhandari.setUserFirstName(rs.getString(2));
-				dipeshBhandari.setUserLastName(rs.getString(3));
-				dipeshBhandari.setUserRank(rs.getString(4));
-				dipeshBhandari.setUserHireDate(rs.getString(5));
+				JOptionPane.showMessageDialog(null, rs.getString(1));
+				JOptionPane.showMessageDialog(null, rs.getString(2));
+				JOptionPane.showMessageDialog(null, rs.getString(3));
+				JOptionPane.showMessageDialog(null, rs.getString(4));
+				JOptionPane.showMessageDialog(null, rs.getString(5));
 			}
 		}
 		catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e);
 		}
 	}
+	*
+	*
+	*/
 }

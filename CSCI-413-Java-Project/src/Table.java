@@ -48,7 +48,7 @@ public class Table {
 		/*
 		 * GET VARIABLES
 		 */
-		now = LocalDateTime.now();			
+		now = LocalDateTime.now();
 		/*
 		 * ASSIGN VALUES TO VARIABLES
 		 */
