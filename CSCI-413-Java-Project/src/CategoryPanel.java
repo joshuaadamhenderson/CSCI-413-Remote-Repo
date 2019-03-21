@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 
 public class CategoryPanel extends JPanel {
 
+
 	// The CategoryPanel will hold JButtons related to its category (appetizers, entrees, desserts).
 	// The FlowLayout will line up buttons horizontally, and adjusting the window size will force them
 	// down to new rows as needed. Since the OptionsPanel they will be displayed in is constrained to
