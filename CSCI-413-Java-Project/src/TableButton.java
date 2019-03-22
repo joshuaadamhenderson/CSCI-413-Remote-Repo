@@ -42,7 +42,7 @@ public class TableButton extends JButton {
 		 */
 		tableNumberLabel = new JLabel("");
 		tableTotalLabel = new JLabel("");
-		tableTimeCreatedLabel = new JLabel(table.getTimeCreated());
+		tableTimeCreatedLabel = new JLabel(table.getDateCreated() + "   " + table.getTimeCreated());
 		menuItems = new ArrayList<MenuItem>();
 		tableButtonHandler = new TableButtonHandler(table);
 		/*
@@ -68,6 +68,8 @@ public class TableButton extends JButton {
 	private class TableButtonHandler implements ActionListener {
 
 		private Table table;
+		private int count = 0;
+		private int scrollPaneAdjustment;
 		
 		private TableButtonHandler(Table table) {
 			this.table = table;
@@ -102,6 +104,7 @@ public class TableButton extends JButton {
 				Main.currentTableMenuItems = Main.currentTable.getMenuItems();
 				for (MenuItem menuItem: Main.currentTable.getMenuItems()) {
 					Main.menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+					count++;
 				}
 				/*
 				 * ADD ANOTHER HORIZON LINE
@@ -121,8 +124,12 @@ public class TableButton extends JButton {
 				 * ADD ANOTHER HORIZON LINE
 				 */
 				Main.menuItemPanel.add(Main.horizonLine4, BorderLayout.WEST);
+				scrollPaneAdjustment = (count * 35) - 230;
+				Main.menuItemPanel.setPreferredSize(new Dimension(Main.MENU_ITEM_PANEL_WIDTH, Main.MENU_ITEM_PANEL_HEIGHT + scrollPaneAdjustment));
 				Main.menuItemPanel.repaint();
-				Main.menuItemPanel.revalidate();					
+				Main.menuItemPanel.revalidate();
+				count = 0;
+				scrollPaneAdjustment = 0;
 			}
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
@@ -139,7 +146,7 @@ public class TableButton extends JButton {
 	}
 	
 	public void setTimeCreatedOnLabel(String timeCreated) {
-		tableTotalLabel.setText(timeCreated);
+		tableTimeCreatedLabel.setText(timeCreated);
 	}
 	
 	public JLabel getTableNumberLabel() {

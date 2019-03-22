@@ -15,26 +15,18 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -42,8 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 /*
  * MAIN CLASS
@@ -123,7 +114,7 @@ public class Main extends JFrame {
 	public static final int CATEGORY_PANEL_WIDTH = 890;
 	public static final int CATEGORY_PANEL_HEIGHT = 540;
 	public static final int DISPLAY_PANEL_WIDTH = 466;
-	public static final int DISPLAY_PANEL_HEIGHT = 0;
+	public static final int DISPLAY_PANEL_HEIGHT = 466;
 	public static final int FUNCTION_PANEL_WIDTH = 0;
 	public static final int FUNCTION_PANEL_HEIGHT = 100;
 	public static final int OPTIONS_PANEL_WIDTH = 900;
@@ -138,7 +129,11 @@ public class Main extends JFrame {
 	public static final int PAYMENT_BUTTON_HEIGHT = 110;
 	public static final int TABLE_BUTTON_HEIGHT = 70;
 	public static final int TABLE_BUTTON_WIDTH = 880;
-	public static final int MENU_ITEM_LABEL_PANEL_WIDTH = 440;
+	public static final int MENU_ITEM_PANEL_WIDTH = 430;
+	public static final int MENU_ITEM_PANEL_HEIGHT = 455;
+	public static final int MENU_ITEM_PANEL_SCROLL_PANE_WIDTH = 450;
+	public static final int MENU_ITEM_PANEL_SCROLL_PANE_HEIGHT = 460;
+	public static final int MENU_ITEM_LABEL_PANEL_WIDTH = 400;
 	public static final int MENU_ITEM_LABEL_PANEL_HEIGHT = 30;
 	public static final int TABLE_COSTS_PANEL_WIDTH = 460;
 	public static final int TABLE_COSTS_PANEL_HEIGHT = 200;
@@ -151,14 +146,13 @@ public class Main extends JFrame {
 	public static final double CAMERON_TAX_RATE = .04;
 	public static final double CURRENT_TAX_RATE = CALCASIEU_TAX_RATE; // Set a tax region here
 	/*
-	 * CHECK NUMBERS
-	 */
-	public static int nextTableCheckNum = 1;
-	/*
 	 * DATE
 	 */
+	
 	public static LocalDateTime now = LocalDateTime.now();
 	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	public static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	public static DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
 	/*
 	 * LABELS
 	 */
@@ -166,10 +160,10 @@ public class Main extends JFrame {
 	public static JLabel clockedInLabel = new JLabel(" CLOCKED IN AT " + dtf.format(now));
 	public static JLabel clockedOutLabel = new JLabel(" CLOCKED OUT AT " + dtf.format(now));
 	public static JLabel currentUserLabel = new JLabel("");
-	public static JLabel horizonLine = new JLabel("    ***************************************************************************************");
-	public static JLabel horizonLine2 = new JLabel("    ***************************************************************************************");
-	public static JLabel horizonLine3 = new JLabel("    ***************************************************************************************");
-	public static JLabel horizonLine4 = new JLabel("    ***************************************************************************************");
+	public static JLabel horizonLine = new JLabel("***********************************************************************************");
+	public static JLabel horizonLine2 = new JLabel("***********************************************************************************");
+	public static JLabel horizonLine3 = new JLabel("***********************************************************************************");
+	public static JLabel horizonLine4 = new JLabel("***********************************************************************************");
 	/*
 	 * ERROR LABELS
 	 */
@@ -205,19 +199,18 @@ public class Main extends JFrame {
 	public static CategoryPanel	toGoPanel = new CategoryPanel();
 	public static CategoryPanel payments = new CategoryPanel();
 	/*
-	 * USERS
+	 * SCROLL PANES
+	 */
+	public static JScrollPane menuItemPanelScrollPane = new JScrollPane(menuItemPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+	/*
+	 * PLACEHOLDERS
 	 */
 	public static String currentUserID = ""; // Placeholder
 	public static User currentUser = new User("", "", "", "", ""); // Placeholder
-	public static User dipeshBhandari = new User("1111", "Dipesh", "Bhandari", "Manager", "11-Apr-2015");
-	public static User alexGayle = new User("2222", "Alex", "Gayle", "Waiter", "3-Sep-2018");
-	public static User ericGreene = new User("3333", "Eric", "Greene", "Cook", "22-Jan-2017");
-	public static User joshuaHenderson = new User("4444", "Joshua", "Henderson", "Busser", "15-Feb-2019");
-	/*
-	 * TABLES
-	 */
 	public static Table currentTable = new Table(); // Placeholder
 	public static List<Table> currentUserTables = new ArrayList<Table>(); // Placeholder
+	public static MenuItem currentMenuItem = new MenuItem("", "", 0);	
+	public static List<MenuItem> currentTableMenuItems = new ArrayList<MenuItem>(); // Placeholder
 	/*
 	 * MENU ITEMS
 	 */
@@ -229,7 +222,6 @@ public class Main extends JFrame {
 	public static MenuItem ultimateNachos = new MenuItem("1020", "Ultimate Nachos", 6.99);
 	public static MenuItem crabCakes = new MenuItem("1025", "Crab Cakes", 6.99);
 	
-	
 	//entree
 	public static MenuItem chickenSalad = new MenuItem("2000", "Chicken Salad", 8.50);
 	public static MenuItem cheeseburger = new MenuItem("2005", "Cheeseburger", 8.50);
@@ -237,7 +229,6 @@ public class Main extends JFrame {
 	public static MenuItem shrimpAlfredo = new MenuItem("2015", "Shrimp Alfredo", 8.50);
 	public static MenuItem lambLollipops = new MenuItem("2020", "Lamb Lollipops", 8.50);
 	public static MenuItem friedPorkChops = new MenuItem("2025", "Fried Pork Chops", 8.50);
-	
 	
 	//sides
 	public static MenuItem mashedPotatoes = new MenuItem("3000", "mashed Potatoes", 2.35);
@@ -249,8 +240,8 @@ public class Main extends JFrame {
 	
 	//soups
 	public static MenuItem clamChowder = new MenuItem("4000", "Clam Chowder", 3.25);
-	public static MenuItem loadedBakedPotatoe = new MenuItem("4005", "Loaded Baked Potatoe", 3.25);
-	public static MenuItem broccoliChedder = new MenuItem("4010", "Broccoli Chedder", 3.25);
+	public static MenuItem loadedBakedPotato = new MenuItem("4005", "Loaded Baked Potatoe", 3.25);
+	public static MenuItem broccoliCheddar = new MenuItem("4010", "Broccoli Chedder", 3.25);
 	public static MenuItem tortilla = new MenuItem("4015", "Tortilla Soup", 3.25);
 	
 	//desserts
@@ -268,9 +259,6 @@ public class Main extends JFrame {
 	public static MenuItem lemonade = new MenuItem("6020", "Lemonade", 2.20);
 	public static MenuItem sweetTea = new MenuItem("6025", "Sweet Tea", 2.20);
 	public static MenuItem pepsi = new MenuItem("6030", "Pepsi", 2.20);
-	
-	public static MenuItem currentMenuItem = new MenuItem("", "", 0);	
-	public static List<MenuItem> currentTableMenuItems = new ArrayList<MenuItem>(); // Placeholder
 	/*
 	 * MENU PANEL BUTTONS
 	 */
@@ -285,7 +273,6 @@ public class Main extends JFrame {
 	/*
 	 * CATEGORY PANEL MENU BUTTONS
 	 */
-	
 	//appetizers
 	public static MenuButton buffaloWingsButton = new MenuButton("BUFFALO", "WINGS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);		
 	public static MenuButton chickenTendersButton = new MenuButton("CHICKEN", "TENDERS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
@@ -331,12 +318,6 @@ public class Main extends JFrame {
 	public static MenuButton lemonadeButton = new MenuButton("Lemonade", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
 	public static MenuButton sweetTeaButton = new MenuButton("Sweet Tea", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
 	public static MenuButton pepsiButton = new MenuButton("Pepsi", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
-	
-	
-	
-	
-	
-	
 	/*
 	 * FUNCTION PANEL BUTTONS
 	 */
@@ -419,7 +400,6 @@ public class Main extends JFrame {
 	/*
 	 * MENU ITEM BUTTON HANDLERS
 	 */
-	
 	//appetizer
 	public static MenuItemButtonHandler buffaloWingsHandler;
 	public static MenuItemButtonHandler chickenTendersHandler;
@@ -465,7 +445,6 @@ public class Main extends JFrame {
 	public static MenuItemButtonHandler lemonadeHandler;
 	public static MenuItemButtonHandler sweetTeaHandler;
 	public static MenuItemButtonHandler pepsiHandler;
-	
 	/*
 	 * OTHER BUTTON HANDLERS
 	 */
@@ -528,6 +507,11 @@ public class Main extends JFrame {
 		button_5.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
 		button_20.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
 		button_100.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
+		
+		menuItemPanelScrollPane.setPreferredSize(new Dimension(MENU_ITEM_PANEL_SCROLL_PANE_WIDTH, MENU_ITEM_PANEL_SCROLL_PANE_HEIGHT));
+		menuItemPanel.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
+		menuItemPanelScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(25, 0));
+		menuItemPanelScrollPane.getVerticalScrollBar().setBackground(ORIGINAL_DARK_BLUE);
 		/*
 		 * ASSEMBLE THE PANELS
 		 */
@@ -556,7 +540,7 @@ public class Main extends JFrame {
 		headerPanel.add(functionPanel);
 		headerPanel.add(menuPanel);
 		displayPanel.add(userPanel, BorderLayout.PAGE_START);
-		displayPanel.add(menuItemPanel, BorderLayout.PAGE_END);
+		displayPanel.add(menuItemPanelScrollPane, BorderLayout.PAGE_END);
 		userPanel.add(currentUserLabel);
 		userPanel.add(newCheck);
 		userPanel.add(currentUserChecks);
@@ -667,6 +651,7 @@ public class Main extends JFrame {
 		shrimpAlfredoHandler = new MenuItemButtonHandler(shrimpAlfredo);
 		lambLollipopsHandler = new MenuItemButtonHandler(lambLollipops);
 		friedPorkChopsHandler= new MenuItemButtonHandler(friedPorkChops);
+		
 		//sides
 		mashedPotatoesHandler = new MenuItemButtonHandler(mashedPotatoes);
 		greenBeansHandler = new MenuItemButtonHandler(greenBeans);
@@ -674,17 +659,20 @@ public class Main extends JFrame {
 		waffleFriesHandler = new MenuItemButtonHandler(waffleFries);
 		macAndCheeseHandler = new MenuItemButtonHandler(macAndCheese);
 		steamedBroccoliHandler = new MenuItemButtonHandler(steamedBroccoli);
+		
 		//soups
 		clamChowderHandler = new MenuItemButtonHandler(clamChowder);
-		loadedBakedPotatoeHandler = new MenuItemButtonHandler(loadedBakedPotatoe);
-		broccoliChedderHandler = new MenuItemButtonHandler(broccoliChedder);
+		loadedBakedPotatoeHandler = new MenuItemButtonHandler(loadedBakedPotato);
+		broccoliChedderHandler = new MenuItemButtonHandler(broccoliCheddar);
 		tortillaHandler = new MenuItemButtonHandler(tortilla);
+		
 		//desserts
 		cheesecakeHandler = new MenuItemButtonHandler(cheesecake);
 		moltenLavaCakeHandler = new MenuItemButtonHandler(moltenLavaCake);
 		cookieSkilletHandler = new MenuItemButtonHandler(cookieSkillet);
 		breadPuddingHandler = new MenuItemButtonHandler(breadPudding);
 		friedIceCreamHandler = new MenuItemButtonHandler(friedIceCream);
+		
 		//beverages
 		cocaColaHandler = new MenuItemButtonHandler(cocaCola);
 		drPepperHandler = new MenuItemButtonHandler(drPepper);
@@ -693,14 +681,6 @@ public class Main extends JFrame {
 		lemonadeHandler = new MenuItemButtonHandler(lemonade);
 		sweetTeaHandler = new MenuItemButtonHandler(sweetTea);
 		pepsiHandler = new MenuItemButtonHandler(pepsi);
-		
-		
-		
-		currentUserChecksButtonHandler = new CurrentUserChecksButtonHandler();
-		newCheckButtonHandler = new NewCheckButtonHandler();
-		exitButtonHandler = new ExitButtonHandler();
-		exitSystemHandler = new ExitSystemHandler();
-		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
 		/*
 		 * ADD EVENT LISTENERS
 		 */
@@ -760,8 +740,6 @@ public class Main extends JFrame {
 		
 		aLaCarteButton.addActionListener(aLaCarteHandler);
 		toGoButton.addActionListener(toGoHandler);
-		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
-		newCheck.addActionListener(newCheckButtonHandler);
 		FunctionPanelExitButton.addActionListener(exitButtonHandler);
 		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
 		button1Key.addActionListener(LoginPanelKey1);
@@ -786,12 +764,6 @@ public class Main extends JFrame {
 		beveragesButton.addActionListener(beveragesHandler);
 		aLaCarteButton.addActionListener(aLaCarteHandler);
 		toGoButton.addActionListener(toGoHandler);
-		buffaloWingsButton.addActionListener(buffaloWingsHandler);
-		chickenTendersButton.addActionListener(chickenTendersHandler);
-		friedAsparagusButton.addActionListener(friedAsparagusHandler);
-		spicyHummusButton.addActionListener(spicyHummusHandler);
-		ultimateNachosButton.addActionListener(ultimateNachosHandler);
-		crabCakesButton.addActionListener(crabCakesHandler);
 	}
 	/*
 	 ***************
@@ -868,25 +840,7 @@ public class Main extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			
-			/*
-			 * THIS SWITCH STATEMENT NEEDS TO BE CHANGED TO A DATABASE CALL!
-			 * 
-				switch (currentUserID) {
-				case "1111": currentUser = dipeshBhandari;
-				break;
-				case "2222": currentUser = alexGayle;
-				break;
-				case "3333": currentUser = ericGreene;
-				break;
-				case "4444": currentUser = joshuaHenderson;
-				break;
-				default: JOptionPane.showMessageDialog(null, loginError);
-			}
-			 *
-			 *
-			 */
-			
+						
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
@@ -1000,6 +954,8 @@ public class Main extends JFrame {
 	private class MenuItemButtonHandler implements ActionListener {
 		
 		private MenuItem menuItem;
+		private int count = 0;
+		private int scrollPaneAdjustment;
 		
 		private MenuItemButtonHandler(MenuItem menuItem) {
 			this.menuItem = menuItem;
@@ -1007,6 +963,7 @@ public class Main extends JFrame {
 		
 		@Override
 		public void actionPerformed(ActionEvent event) {
+			
 			
 			try {
 				/*
@@ -1045,6 +1002,7 @@ public class Main extends JFrame {
 				currentTableMenuItems = currentTable.getMenuItems();
 				for (MenuItem menuItem: currentTable.getMenuItems()) {
 					menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+					count++;
 				}
 				/*
 				 * ADD ANOTHER HORIZON LINE
@@ -1064,8 +1022,12 @@ public class Main extends JFrame {
 				 * ADD ANOTHER HORIZON LINE
 				 */
 				menuItemPanel.add(horizonLine4, BorderLayout.WEST);
+				scrollPaneAdjustment = (count * 35) - 230;
+				menuItemPanel.setPreferredSize(new Dimension(Main.MENU_ITEM_PANEL_WIDTH, Main.MENU_ITEM_PANEL_HEIGHT + scrollPaneAdjustment));
 				menuItemPanel.repaint();
-				menuItemPanel.revalidate();				
+				menuItemPanel.revalidate();
+				count = 0;
+				scrollPaneAdjustment = 0;
 			}
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
@@ -1132,17 +1094,15 @@ public class Main extends JFrame {
 					Class.forName("com.mysql.cj.jdbc.Driver");
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
 					Statement stmt = conn.createStatement();
-					String statement = "INSERT INTO Tables (userID, tableCheckNum, tableNum, tableTimeCreated, tableTotal)"
+					String statement = "INSERT INTO Tables (userID, tableNum, tableDateCreated, tableTimeCreated)"
 							+ "VALUES ('"
 							+ currentUserID
 							+ "', '"
-							+ nextTableCheckNum
+							+ currentTable.getTableNum()
 							+ "', '"
-							+ currentTable.getTableID()
+							+ currentTable.getDateCreated()
 							+ "', '"
 							+ currentTable.getTimeCreated()
-							+ "', '"
-							+ currentTable.getTotal()
 							+ "');";
 					stmt.executeUpdate(statement);
 				}

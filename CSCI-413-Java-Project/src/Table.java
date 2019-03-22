@@ -10,7 +10,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,8 @@ import javax.swing.JOptionPane;
 public class Table {
 	
 	private int tableID;
+	private int tableNum;
+	private String dateCreated;
 	private String timeCreated;
 	private double subtotal;
 	private double tax;
@@ -40,23 +44,27 @@ public class Table {
 	private JLabel taxLabel;
 	private JLabel totalLabel;
 	private JLabel tableIDLabel;
+	private JLabel tableDateCreatedLabel;
 	private JLabel tableTimeCreatedLabel;
 	private TableButton tableButton;
-	private LocalDateTime now;
+	private LocalDate currentDate;
+	private LocalTime currentTime;
 
 	public Table() {
 		/*
 		 * GET VARIABLES
 		 */
-		now = LocalDateTime.now();
+		currentDate = LocalDate.now();
+		currentTime = LocalTime.now();
 		/*
 		 * ASSIGN VALUES TO VARIABLES
 		 */
-		this.tableID = 0;
-		this.timeCreated = Main.dtf.format(now);
-		this.subtotal = 0;
-		this.tax = subtotal * Main.CURRENT_TAX_RATE;
-		this.total = 0;
+			this.tableID = 0;
+			this.dateCreated = Main.df.format(currentDate);
+			this.timeCreated = Main.tf.format(currentTime);
+			this.subtotal = 0;
+			this.tax = subtotal * Main.CURRENT_TAX_RATE;
+			this.total = 0;
 		/*
 		 * INSTANTIATE NEW OBJECTS FOR THE TABLE
 		 */
@@ -66,7 +74,7 @@ public class Table {
 		totalPanel = new DisplayPanelLabelPanel();
 		taxPanel = new DisplayPanelLabelPanel();
 		tableIDLabel = new JLabel("Table " + Integer.toString(tableID));
-		tableTimeCreatedLabel = new JLabel(timeCreated);
+		tableTimeCreatedLabel = new JLabel(dateCreated + "   " + timeCreated);
 		subtotalTitleLabel = new JLabel("Subtotal");
 		taxTitleLabel = new JLabel("Tax");
 		totalTitleLabel = new JLabel("Total");
@@ -105,7 +113,7 @@ public class Table {
 		tableButton.setTable(this);
 		tableButton.setTableNumberOnLabel(tableID);
 		tableButton.setTableTotalOnLabel(total);
-		tableButton.setTimeCreatedOnLabel(timeCreated);
+		tableButton.setTimeCreatedOnLabel(dateCreated + "   " + timeCreated);
 	}
 
 	public void calculateTotals() {
@@ -232,5 +240,37 @@ public class Table {
 
 	public void setTotalLabel(JLabel totalLabel) {
 		this.totalLabel = totalLabel;
+	}
+
+	public int getTableNum() {
+		return tableNum;
+	}
+
+	public void setTableNum(int tableNum) {
+		this.tableNum = tableNum;
+	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public LocalDate getCurrentDate() {
+		return currentDate;
+	}
+
+	public void setCurrentDate(LocalDate currentDate) {
+		this.currentDate = currentDate;
+	}
+
+	public JLabel getTableDateCreatedLabel() {
+		return tableDateCreatedLabel;
+	}
+
+	public void setTableDateCreatedLabel(JLabel tableDateCreatedLabel) {
+		this.tableDateCreatedLabel = tableDateCreatedLabel;
 	}
 }
