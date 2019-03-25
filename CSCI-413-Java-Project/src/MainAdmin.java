@@ -99,7 +99,7 @@ public class MainAdmin extends JFrame {
 		setUndecorated(true);
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setVisible(true);
+		setVisible(false);
 		/*
 		 * INSTANTIATIONS
 		 */
@@ -194,10 +194,6 @@ public class MainAdmin extends JFrame {
 			userSelectionModel.addElement(user.getUserID() + " - " + user.getUserFirstName() + " " + user.getUserLastName());
 		}			
 	}
-	public static void main(String args[]) {
-		
-		MainAdmin mainAdmin = new MainAdmin();
-	}
 	/*
 	 * GET USERS
 	 */
@@ -259,7 +255,7 @@ public class MainAdmin extends JFrame {
 	private class ExitSystemHandler implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			System.exit(0);
+			setVisible(false);
 		} 
 	}
 	/*

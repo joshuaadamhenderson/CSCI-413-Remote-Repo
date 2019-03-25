@@ -56,6 +56,7 @@ public class Main extends JFrame {
 	public static final ImageIcon BUTTON_IMAGE_MODIFY = new ImageIcon("src/buttonModify.jpg");
 	public static final ImageIcon BUTTON_IMAGE_PRINT = new ImageIcon("src/buttonPrint.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EDIT_TIPS = new ImageIcon("src/buttonEditTips.jpg");
+	public static final ImageIcon BUTTON_IMAGE_EMPLOYEES = new ImageIcon("src/buttonEmployees.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EXIT = new ImageIcon("src/buttonExit.jpg");
 	public static final ImageIcon BUTTON_IMAGE_1 = new ImageIcon("src/button_1.jpg");
 	public static final ImageIcon BUTTON_IMAGE_5 = new ImageIcon("src/button_5.jpg");
@@ -172,6 +173,10 @@ public class Main extends JFrame {
 	 * TEXT FIELDS
 	 */
 	public static JTextField userLoginTextField = new JTextField(4);
+	/*
+	 * FRAMES
+	 */
+	public static MainAdmin mainAdmin = new MainAdmin();
 	/*
 	 * PANELS
 	 */
@@ -326,7 +331,7 @@ public class Main extends JFrame {
 	public static JButton buttonPrint = new JButton(BUTTON_IMAGE_PRINT);
 	public static JButton buttonModify = new JButton(BUTTON_IMAGE_MODIFY);
 	public static JButton buttonEditTips = new JButton(BUTTON_IMAGE_EDIT_TIPS);
-	public static JButton button6 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton buttonEmployees = new JButton(BUTTON_IMAGE_EMPLOYEES);
 	public static JButton button7 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button8 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button9 = new JButton(BUTTON_IMAGE_STYLE);
@@ -386,6 +391,7 @@ public class Main extends JFrame {
 	 * FUNCTION PANEL BUTTON HANDLERS
 	 */
 	public static FunctionPanelPaymentsButtonHandler functionPanelPaymentsButtonHandler;
+	public static FunctionPanelEmployeesButtonHandler functionPanelEmployeesButtonHandler;
 	/*
 	 * MENU PANEL BUTTON HANDLERS
 	 */
@@ -549,7 +555,7 @@ public class Main extends JFrame {
 		functionPanel.add(buttonPrint);
 		functionPanel.add(buttonModify);
 		functionPanel.add(buttonEditTips);
-		functionPanel.add(button6);		
+		functionPanel.add(buttonEmployees);		
 		functionPanel.add(button7);		
 		functionPanel.add(button8);
 		functionPanel.add(FunctionPanelExitButton);
@@ -626,6 +632,7 @@ public class Main extends JFrame {
 		exitButtonHandler = new ExitButtonHandler();
 		exitSystemHandler = new ExitSystemHandler();
 		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
+		functionPanelEmployeesButtonHandler = new FunctionPanelEmployeesButtonHandler();
 
 		appetizersHandler = new MenuPanelButtonHandler(appetizersPanel);
 		entreesHandler = new MenuPanelButtonHandler(entreesPanel);
@@ -737,11 +744,11 @@ public class Main extends JFrame {
 		sweetTeaButton.addActionListener(sweetTeaHandler);
 		pepsiButton.addActionListener(pepsiHandler);
 		beveragesButton.addActionListener(beveragesHandler);
-		
 		aLaCarteButton.addActionListener(aLaCarteHandler);
 		toGoButton.addActionListener(toGoHandler);
-		FunctionPanelExitButton.addActionListener(exitButtonHandler);
+		
 		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
+		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
 		button1Key.addActionListener(LoginPanelKey1);
 		button2Key.addActionListener(LoginPanelKey2);
 		button3Key.addActionListener(LoginPanelKey3);
@@ -775,7 +782,6 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 
 		Main main = new Main();
-
 	}
 	/**************
 	 * 			  *
@@ -925,6 +931,16 @@ public class Main extends JFrame {
 			optionsPanel.add(payments);
 			optionsPanel.repaint();
 			optionsPanel.validate();
+		}
+	}
+	/*
+	 * FUNCTION PANEL EMPLOYEES BUTTON HANDLER
+	 */
+	private class FunctionPanelEmployeesButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mainAdmin.setVisible(true);
 		}
 	}
 
