@@ -749,6 +749,8 @@ public class Main extends JFrame {
 		
 		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
 		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
+		
+		
 		button1Key.addActionListener(LoginPanelKey1);
 		button2Key.addActionListener(LoginPanelKey2);
 		button3Key.addActionListener(LoginPanelKey3);
