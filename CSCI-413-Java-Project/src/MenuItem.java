@@ -28,7 +28,7 @@ public class MenuItem implements Serializable {
 		this.menuItemName = menuItemName;
 		this.menuItemPrice = menuItemPrice;
 		setMenuItemNameLabel(new JLabel(menuItemName));
-		setMenuItemPriceLabel(new JLabel(Double.toString(menuItemPrice)));
+		setMenuItemPriceLabel(new JLabel(String.format("%.2f", menuItemPrice)));
 		menuItemLabelPanel = new MenuItemLabelPanel(menuItemNameLabel, menuItemPriceLabel);
 	}
 	public MenuItem(MenuItem menuItem) {

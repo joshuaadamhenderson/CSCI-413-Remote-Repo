@@ -63,11 +63,11 @@ public class Main extends JFrame {
 	public static final ImageIcon BUTTON_IMAGE_100 = new ImageIcon("src/button_100.jpg");
 	public static final ImageIcon BUTTON_IMAGE_CLOCK_IN = new ImageIcon("src/clockIn.png");
 	public static final ImageIcon BUTTON_IMAGE_CLOCK_OUT = new ImageIcon("src/clockOut.png");	
+	public static final ImageIcon LOGO = new ImageIcon("src/welcomeLabel.png");	
 	/*
 	 * COLORS
 	 */
 	public static final Color ORIGINAL_DARK_BLUE = new Color(0, 60, 90);
-	public static final Color ORIGINAL_DARK_BLUE_2 = new Color(0, 80, 120);
 	public static final Color TROUT = new Color(82, 85, 100);
 	public static final Color SLATE_GRAY = new Color(116, 130, 143);
 	public static final Color HALF_BAKED = new Color(150, 192, 206);
@@ -95,13 +95,13 @@ public class Main extends JFrame {
 	public static final Color TABLE_BUTTON_COLOR = ORANGE_WHITE;
 	public static final Color TABLE_BUTTON_TEXT_COLOR = FUZZY_WUZZY;
 	public static final Color USER_PANEL_BUTTON_COLOR = SLATE_GRAY;
-	public static final Color WELCOME_LABEL_COLOR = ORIGINAL_DARK_BLUE_2;
 	/*
 	 * FONTS
 	 */
 	public static final Font PROGRAM_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Font TABLE_BUTTON_FONT = new Font("Arial", Font.BOLD, 24);
 	public static final Font KEYPAD_FONT = new Font("Arial", Font.BOLD, 30);
+	public static final Font ADMIN_PANEL_FONT = new Font("Arial", Font.PLAIN, 22);
 	public static final Font DISPLAY_PANEL_FONT = new Font("Arial", Font.BOLD, 18);
 	public static final Font MENU_ITEM_PRICE_LABEL_FONT = new Font("Arial", Font.PLAIN, 20);
 	public static final Font USER_PANEL_FONT = new Font("Arial", Font.BOLD, 20);
@@ -156,7 +156,7 @@ public class Main extends JFrame {
 	/*
 	 * LABELS
 	 */
-	public static JLabel welcomeLabel = new JLabel(" USER LOGIN");
+	public static JLabel welcomeLabel = new JLabel();
 	public static JLabel clockedInLabel = new JLabel(" CLOCKED IN AT " + dtf.format(now));
 	public static JLabel clockedOutLabel = new JLabel(" CLOCKED OUT AT " + dtf.format(now));
 	public static JLabel currentUserLabel = new JLabel("");
@@ -299,8 +299,8 @@ public class Main extends JFrame {
 
 	//soup
 	public static MenuButton clamChowderButton = new MenuButton("Clam", "Chowder", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
-	public static MenuButton loadedBakedPotatoeButton = new MenuButton("Loaded Baked", "Potatoe Soup", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
-	public static MenuButton broccoliChedderButton = new MenuButton("Broccoli", "Chedder Soup", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
+	public static MenuButton loadedBakedPotatoeButton = new MenuButton("Loaded Baked", "Potato Soup", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
+	public static MenuButton broccoliChedderButton = new MenuButton("Broccoli", "Cheddar Soup", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
 	public static MenuButton tortillaButton = new MenuButton("Tortilla Soup", Main.MENU_ITEM_BUTTON_COLOR_4, Color.WHITE);
 	
 	//desserts
@@ -475,7 +475,6 @@ public class Main extends JFrame {
 		 * LOGIN PANEL SETTINGS
 		 */
 		welcomeLabel.setFont(new Font("Impact", Font.PLAIN, 80));
-		welcomeLabel.setForeground(WELCOME_LABEL_COLOR);
 		clockedInLabel.setFont(new Font("Arial", Font.BOLD, 24));
 		clockedInLabel.setBackground(MAIN_BG_COLOR);
 		userLoginTextField.setFont(KEYPAD_FONT);
@@ -509,9 +508,10 @@ public class Main extends JFrame {
 		button_100.setPreferredSize(new Dimension(PAYMENT_BUTTON_WIDTH, PAYMENT_BUTTON_HEIGHT));
 		
 		menuItemPanelScrollPane.setPreferredSize(new Dimension(MENU_ITEM_PANEL_SCROLL_PANE_WIDTH, MENU_ITEM_PANEL_SCROLL_PANE_HEIGHT));
-		menuItemPanel.setAlignmentX(JScrollPane.LEFT_ALIGNMENT);
 		menuItemPanelScrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(25, 0));
 		menuItemPanelScrollPane.getVerticalScrollBar().setBackground(ORIGINAL_DARK_BLUE);
+		
+		welcomeLabel.setIcon(LOGO);
 		/*
 		 * ASSEMBLE THE PANELS
 		 */
@@ -1182,31 +1182,4 @@ public class Main extends JFrame {
 			System.exit(0);
 		} 
 	}
-	
-	/*
-	 * 
-	 * 
-	public static void loadData() {
-		
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
-			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Users WHERE userFirstName = 'Dipesh'");
-			
-			while (rs.next()) {
-				JOptionPane.showMessageDialog(null, rs.getString(1));
-				JOptionPane.showMessageDialog(null, rs.getString(2));
-				JOptionPane.showMessageDialog(null, rs.getString(3));
-				JOptionPane.showMessageDialog(null, rs.getString(4));
-				JOptionPane.showMessageDialog(null, rs.getString(5));
-			}
-		}
-		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
-		}
-	}
-	*
-	*
-	*/
 }
