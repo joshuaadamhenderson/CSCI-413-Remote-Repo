@@ -392,6 +392,17 @@ public class Main extends JFrame {
 	 */
 	public static FunctionPanelPaymentsButtonHandler functionPanelPaymentsButtonHandler;
 	public static FunctionPanelEmployeesButtonHandler functionPanelEmployeesButtonHandler;
+	
+	/*
+	 * Payment button handlers
+	 */
+	
+	public static PaymentButtonHandler payment100Handler;
+	public static PaymentButtonHandler payment20Handler;
+	public static PaymentButtonHandler payment5Handler;
+	public static PaymentButtonHandler payment1Handler;
+	
+	
 	/*
 	 * MENU PANEL BUTTON HANDLERS
 	 */
@@ -631,7 +642,13 @@ public class Main extends JFrame {
 		newCheckButtonHandler = new NewCheckButtonHandler();
 		exitButtonHandler = new ExitButtonHandler();
 		exitSystemHandler = new ExitSystemHandler();
+		
 		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
+		payment100Handler = new PaymentButtonHandler(100);
+		payment20Handler = new PaymentButtonHandler(20);
+		payment5Handler = new PaymentButtonHandler(5);
+		payment1Handler = new PaymentButtonHandler(1);
+		
 		functionPanelEmployeesButtonHandler = new FunctionPanelEmployeesButtonHandler();
 
 		appetizersHandler = new MenuPanelButtonHandler(appetizersPanel);
@@ -750,6 +767,10 @@ public class Main extends JFrame {
 		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
 		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
 		
+		button_100.addActionListener(payment100Handler);
+		button_20.addActionListener(payment20Handler);
+		button_5.addActionListener(payment5Handler);
+		button_1.addActionListener(payment1Handler);
 		
 		button1Key.addActionListener(LoginPanelKey1);
 		button2Key.addActionListener(LoginPanelKey2);
@@ -935,6 +956,24 @@ public class Main extends JFrame {
 			optionsPanel.validate();
 		}
 	}
+	
+	private class PaymentButtonHandler implements ActionListener {
+		
+			private int value;
+		
+		private PaymentButtonHandler(int value) {
+			this.value = value;
+		}
+		
+		public void actionPerformed(ActionEvent e) {
+			currentTable.setTotal(currentTable.getTotal() - value);
+		}
+	}
+	
+	
+	
+	
+	
 	/*
 	 * FUNCTION PANEL EMPLOYEES BUTTON HANDLER
 	 */

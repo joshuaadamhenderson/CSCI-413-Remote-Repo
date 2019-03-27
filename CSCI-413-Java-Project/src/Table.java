@@ -50,6 +50,7 @@ public class Table {
 	private LocalDate currentDate;
 	private LocalTime currentTime;
 
+	private double[] tablePayments;//
 	public Table() {
 		/*
 		 * GET VARIABLES
@@ -272,5 +273,13 @@ public class Table {
 
 	public void setTableDateCreatedLabel(JLabel tableDateCreatedLabel) {
 		this.tableDateCreatedLabel = tableDateCreatedLabel;
+	}
+
+	public double[] getTablePayments() {
+		return tablePayments;
+	}
+
+	public void setTablePayments(double[] tablePayments) {
+		this.tablePayments = tablePayments;
 	}
 }

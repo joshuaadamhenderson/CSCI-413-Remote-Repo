@@ -24,6 +24,9 @@ public class TableButton extends JButton {
 	private Table table;
 	private TableButtonHandler tableButtonHandler;
 	
+	private List<DisplayPanelLabelPanel> paymentLabelPanels;
+	private double[] payments;
+	
 	public TableButton(Table table) {
 		/*
 		 * ASSIGN VARIABLES
@@ -216,5 +219,21 @@ public class TableButton extends JButton {
 
 	public void setTable(Table table) {
 		this.table = table;
+	}
+
+	public List<DisplayPanelLabelPanel> getPaymentLabelPanels() {
+		return paymentLabelPanels;
+	}
+
+	public void setPaymentLabelPanels(List<DisplayPanelLabelPanel> paymentLabelPanels) {
+		this.paymentLabelPanels = paymentLabelPanels;
+	}
+
+	public double[] getPayments() {
+		return payments;
+	}
+
+	public void setPayments(double[] payments) {
+		this.payments = payments;
 	}
 }
