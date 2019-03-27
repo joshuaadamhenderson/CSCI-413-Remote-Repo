@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +45,9 @@ public class TableButton extends JButton {
 		/*
 		 * INSTANTIATE LABELS AND MENUITEM LIST
 		 */
-		tableNumberLabel = new JLabel("");
-		tableTotalLabel = new JLabel("");
-		tableTimeCreatedLabel = new JLabel(table.getDateCreated() + "   " + table.getTimeCreated());
+		tableNumberLabel = new JLabel(String.format("%f", table.getTableID()));
+		tableTotalLabel = new JLabel(String.format("%f", table.getTotal()));
+		tableTimeCreatedLabel = new JLabel("table time created goes here");
 		menuItems = new ArrayList<MenuItem>();
 		tableButtonHandler = new TableButtonHandler(table);
 		/*
@@ -141,15 +143,15 @@ public class TableButton extends JButton {
 		} 
 	}	
 	public void setTableNumberOnLabel(int tableNumber) {
-		tableNumberLabel.setText("Table " + Integer.toString(tableNumber) + "     ");
+		tableNumberLabel.setText("Check " + Integer.toString(tableNumber) + "     ");
 	}
 	
 	public void setTableTotalOnLabel(double tableTotal) {
 		tableTotalLabel.setText(String.format("$%.2f", tableTotal));
 	}
 	
-	public void setTimeCreatedOnLabel(String timeCreated) {
-		tableTimeCreatedLabel.setText(timeCreated);
+	public void setTimeCreatedOnLabel(Date date, Time time) {
+		tableTimeCreatedLabel.setText(date.toString() + "   " + time.toString());
 	}
 	
 	public JLabel getTableNumberLabel() {

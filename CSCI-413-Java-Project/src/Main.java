@@ -150,16 +150,14 @@ public class Main extends JFrame {
 	 * DATE
 	 */
 	
-	public static LocalDateTime now = LocalDateTime.now();
+	public static LocalDateTime now;
 	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-	public static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	public static DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
+	public static DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public static DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm:ss");
 	/*
 	 * LABELS
 	 */
 	public static JLabel welcomeLabel = new JLabel();
-	public static JLabel clockedInLabel = new JLabel(" CLOCKED IN AT " + dtf.format(now));
-	public static JLabel clockedOutLabel = new JLabel(" CLOCKED OUT AT " + dtf.format(now));
 	public static JLabel currentUserLabel = new JLabel("");
 	public static JLabel horizonLine = new JLabel("***********************************************************************************");
 	public static JLabel horizonLine2 = new JLabel("***********************************************************************************");
@@ -492,8 +490,6 @@ public class Main extends JFrame {
 		 * LOGIN PANEL SETTINGS
 		 */
 		welcomeLabel.setFont(new Font("Impact", Font.PLAIN, 80));
-		clockedInLabel.setFont(new Font("Arial", Font.BOLD, 24));
-		clockedInLabel.setBackground(MAIN_BG_COLOR);
 		userLoginTextField.setFont(KEYPAD_FONT);
 		userLoginTextField.setBackground(MAIN_BG_COLOR);
 		userLoginTextField.setForeground(MAIN_TEXT_COLOR);
@@ -863,73 +859,93 @@ public class Main extends JFrame {
 		}
 	}
 	/*
-	 * LOGIN PANEL CONFIRM KEY BUTTON HANDLER
-	 */
-	private class LoginPanelConfirmKeyButtonHandler implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-						
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
-				Statement stmt = conn.createStatement();
-				String statement = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";				
-				ResultSet rs = stmt.executeQuery(statement);
-				
-			
-				while (rs.next()) {	
-					currentUser.setUserID(rs.getString(1));
-					currentUser.setUserFirstName(rs.getString(2));
-					currentUser.setUserLastName(rs.getString(3));
-					currentUser.setUserRank(rs.getString(4));
-					currentUser.setUserHireDate(rs.getString(5));
-				}
-				/*
-				 * GET USER VARIABLES
-				 * 
-				 */
-				currentUserTables = currentUser.getTables();
-				currentUserLabel.setText(currentUser.getUserFirstName());
-				/*
-				 * REMOVE THE LOGIN PANEL
-				 */
-				remove(loginPanel);
-				repaint();
-				revalidate();
-				/*
-				 * ADD EACH OF THE USER'S TABLE BUTTONS
-				 */
-				for (Table table: currentUserTables) {
-					optionsPanel.add(table.getTableButton());
-				}
-				optionsPanel.repaint();
-				optionsPanel.revalidate();
-				/*
-				 * ADD THE MAIN PANELS
-				 */
-				add(headerPanel, BorderLayout.PAGE_START);
-				add(optionsPanel, BorderLayout.LINE_START);
-				add(displayPanel, BorderLayout.LINE_END);
-				add(statusPanel, BorderLayout.PAGE_END);
-				repaint();
-				revalidate();					
-				
-			}
-			catch (Exception e) {
-				JOptionPane.showMessageDialog(null, e);
-			}
-		}
-	}
-
-	/*
 	 * LOGIN PANEL CLOCK IN BUTTON HANDLER
 	 */
 	private class LoginPanelClockInButtonHandler implements ActionListener {
 
+
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(null, clockedInLabel, "", JOptionPane.PLAIN_MESSAGE);
+		public void actionPerformed(ActionEvent event) {
+			
+			now = LocalDateTime.now();
+
+			try {
+				/*
+				 * CREATE CONNECTION
+				 */
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				/*
+				 * GET THE CLOCKED IN STATUS OF THE USER ID
+				 */
+				Statement stmt = conn.createStatement();
+				String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";
+				/*
+				 * EXECUTE QUERY
+				 */
+				ResultSet clockedInStatus = stmt.executeQuery(getClockedInStatus);
+				
+				while (clockedInStatus.next()) {
+					/*
+					 * CHECK STATUS
+					 */
+					if (clockedInStatus.getInt(1) == 0) {
+						/*
+						 * CLOCK USER IN
+						 */
+						JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked in at " + tf.format(now) + ".");
+						Statement stmt2 = conn.createStatement();
+						/*
+						 * CHANGE CLOCKED IN STATUS
+						 */
+						String setClockedInStatus = "UPDATE Users SET userClockedIn='1' WHERE userID='" + currentUserID + "';";
+						/*
+						 * CREATE A NEW SHIFT AND ADD A START TIME
+						 */
+						String setUserTimeIn = "INSERT INTO Shifts (userID, shiftStart, shiftEnd, shiftDate) VALUES ('"
+								+ currentUserID
+								+ "', '"
+								+ tf.format(now)
+								+ "', '"
+								+ tf.format(now)
+								+ "', '"
+								+ df.format(now)
+								+ "');";
+						/*
+						 * EXECUTE UPDATES
+						 */
+						stmt2.executeUpdate(setClockedInStatus);						
+						stmt2.executeUpdate(setUserTimeIn);
+						/*
+						 * GET THE USER'S ATTRIBUTES
+						 */
+						Statement stmt3 = conn.createStatement();
+						String getUserAttributes = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";
+						/*
+						 * EXECUTE QUERY
+						 */
+						ResultSet userAttributes = stmt3.executeQuery(getUserAttributes);
+						/*
+						 * SET THE USER'S ATTRIBUTES TO THE CURRENT USER				
+						 */
+						while (userAttributes.next()) {	
+							currentUser.setUserID(userAttributes.getString(1));
+							currentUser.setUserFirstName(userAttributes.getString(2));
+							currentUser.setUserLastName(userAttributes.getString(3));
+							currentUser.setUserRank(userAttributes.getString(4));
+							currentUser.setUserHireDate(userAttributes.getString(5));
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "User already clocked in.");
+					}
+					userLoginTextField.setText("");
+					currentUserID = "";
+				}
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -938,7 +954,138 @@ public class Main extends JFrame {
 	private class LoginPanelClockOutButtonHandler implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent event) {
+
+			now = LocalDateTime.now();
+
+			try {
+				/*
+				 * GET CONNECTION
+				 */
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				/*
+				 * GET THE CLOCKED IN STATUS
+				 */
+				Statement stmt = conn.createStatement();
+				String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";				
+				ResultSet clockedInStatus = stmt.executeQuery(getClockedInStatus);
+				
+				while (clockedInStatus.next()) {
+					/*
+					 * CHECK THE STATUS
+					 */
+					if (clockedInStatus.getInt(1) == 1) {
+						/*
+						 * CLOCK THE USER OUT
+						 */
+						JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked out at " + tf.format(now) + ".");
+						Statement stmt2 = conn.createStatement();
+						String setClockedOutStatus = "UPDATE Users SET userClockedIn='0' WHERE userID='" + currentUserID + "';";
+						String setUserTimeOut = "UPDATE Shifts SET shiftEnd='"
+						+ tf.format(now)
+						+ "' WHERE userID='"
+						+ currentUserID
+						+ "'AND shiftDate='"
+						+ df.format(now)
+						+ "';";						
+						stmt2.executeUpdate(setClockedOutStatus);
+						stmt2.executeUpdate(setUserTimeOut);
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "User isn't clocked in.");
+					}
+				}
+				userLoginTextField.setText("");
+				currentUserID = "";
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+		}
+	}
+	/*
+	 * LOGIN PANEL CONFIRM KEY BUTTON HANDLER
+	 */
+	private class LoginPanelConfirmKeyButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+						
+			try {
+				now = LocalDateTime.now();
+				/*
+				 * CREATE CONNECTION
+				 */
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				/*
+				 * GET THE CLOCKED IN STATUS OF THE USER ID
+				 */
+				Statement stmt = conn.createStatement();
+				String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";
+				/*
+				 * EXECUTE QUERY
+				 */
+				ResultSet clockedInStatus = stmt.executeQuery(getClockedInStatus);
+				
+				while (clockedInStatus.next()) {
+					if (clockedInStatus.getInt(1) == 1) {
+						/*
+						 * GET THE USER'S ATTRIBUTES
+						 */
+						Statement stmt2 = conn.createStatement();
+						String getUserAttributes = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";
+						/*
+						 * EXECUTE QUERY
+						 */
+						ResultSet userAttributes = stmt2.executeQuery(getUserAttributes);
+						/*
+						 * SET THE USER'S ATTRIBUTES TO THE CURRENT USER				
+						 */
+						while (userAttributes.next()) {	
+							currentUser.setUserID(userAttributes.getString(1));
+							currentUser.setUserFirstName(userAttributes.getString(2));
+							currentUser.setUserLastName(userAttributes.getString(3));
+							currentUser.setUserRank(userAttributes.getString(4));
+							currentUser.setUserHireDate(userAttributes.getString(5));
+						}
+						/*
+						 * GET USER VARIABLES
+						 */
+						currentUserLabel.setText(currentUser.getUserFirstName());
+						/*
+						 * REMOVE THE LOGIN PANEL
+						 */
+						remove(loginPanel);
+						repaint();
+						revalidate();
+						/*
+						 * REMOVE THE OPTIONS PANEL TO UPDATE
+						 */
+						optionsPanel.removeAll();
+						optionsPanel.repaint();
+						optionsPanel.revalidate();
+						/*
+						 * ADD THE MAIN PANELS
+						 */
+						add(headerPanel, BorderLayout.PAGE_START);
+						add(optionsPanel, BorderLayout.LINE_START);
+						add(displayPanel, BorderLayout.LINE_END);
+						add(statusPanel, BorderLayout.PAGE_END);
+						repaint();
+						revalidate();											
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "User needs to be clocked in.");
+					}
+				}
+				
+				
+			}
+			catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);
+			}
 		}
 	}
 	/*
@@ -947,7 +1094,7 @@ public class Main extends JFrame {
 	private class FunctionPanelPaymentsButtonHandler implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent event) {
 			optionsPanel.removeAll();
 			optionsPanel.repaint();
 			optionsPanel.validate();					
@@ -980,11 +1127,10 @@ public class Main extends JFrame {
 	private class FunctionPanelEmployeesButtonHandler implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent event) {
 			mainAdmin.setVisible(true);
 		}
 	}
-
 	/*
 	 * MENU PANEL BUTTON HANDLER
 	 */
@@ -996,7 +1142,7 @@ public class Main extends JFrame {
 			this.categoryPanel = categoryPanel;
 		}
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent event) {
 			optionsPanel.removeAll();
 			optionsPanel.revalidate();
 			optionsPanel.repaint();
@@ -1100,10 +1246,37 @@ public class Main extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
+				now = LocalDateTime.now();
 				/*
-				 * GET VARIABLES
+				 * GET CONNECTION
 				 */
-				currentUserTables = currentUser.getTables();
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				/*
+				 * CLEAR CURRENT TABLES				
+				 */
+				currentUserTables.clear();
+				/*
+				 * LOOP THROUGH RESULTS AND SET TABLES TO ARRAY
+				 */
+				Statement stmt = conn.createStatement();
+				String getUserTables = "SELECT tableID, menuItemListID, tableNum, tableDateCreated, tableTimeCreated "
+						+ "FROM Tables WHERE userID='"
+						+ currentUser.getUserID()
+						+ "' AND tableDateCreated='"
+						+ df.format(now)
+						+ "';";
+				ResultSet userTables = stmt.executeQuery(getUserTables);
+				while (userTables.next()) {
+					currentTable = new Table();
+					currentTable.setTableID(userTables.getInt(1));
+					currentTable.setMenuItemListID(userTables.getInt(2));
+					currentTable.setTableNum(userTables.getInt(3));
+					currentTable.getTableButton().setTimeCreatedOnLabel(userTables.getDate(4), userTables.getTime(5));
+					currentUserTables.add(currentTable);
+					currentTable = null;
+				}
+				currentUser.setTables(currentUserTables);
 				/*
 				 * REMOVE EVERYTHING TO UPDATE PANEL
 				 */
@@ -1113,7 +1286,7 @@ public class Main extends JFrame {
 				/*
 				 * ADD EACH OF THE USER'S TABLES BUTTONS
 				 */
-				for (Table table: currentUserTables) {
+				for (Table table: currentUser.getTables()) {
 					optionsPanel.add(table.getTableButton());
 				}
 				optionsPanel.repaint();
@@ -1136,37 +1309,59 @@ public class Main extends JFrame {
 				/*
 				 * GET VARIABLES
 				 */
-				currentUserTables = currentUser.getTables();
 				now = LocalDateTime.now();			
 				/*
 				 * MAKE A NEW TABLE AND APPLY ATTRIBUTES
 				 */
 				Table newTable = new Table();
 				newTable.calculateTotals();
-				/*
-				 * ADD IT TO THE USER'S TABLES
-				 */
-				currentUserTables.add(newTable);
+				currentTable = newTable;
 				try {
+					/*
+					 * GET CONNECTION
+					 */
 					Class.forName("com.mysql.cj.jdbc.Driver");
 					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+					/*
+					 * CREATE A NEW TABLE 
+					 */
 					Statement stmt = conn.createStatement();
-					String statement = "INSERT INTO Tables (userID, tableNum, tableDateCreated, tableTimeCreated)"
+					String addTables = "INSERT INTO Tables (userID, tableNum, tableDateCreated, tableTimeCreated)"
 							+ "VALUES ('"
-							+ currentUserID
+							+ currentUser.getUserID()
 							+ "', '"
 							+ currentTable.getTableNum()
 							+ "', '"
-							+ currentTable.getDateCreated()
+							+ currentTable.getDate()
 							+ "', '"
-							+ currentTable.getTimeCreated()
+							+ currentTable.getTime()
 							+ "');";
-					stmt.executeUpdate(statement);
+					stmt.executeUpdate(addTables);
+					/*
+					 * GET THE TABLE ID THAT WAS JUST CREATED
+					 */
+					String getNextTableNumber = "SELECT LAST_INSERT_ID()";
+					Statement stmt2 = conn.createStatement();
+					ResultSet nextTableNumber = stmt2.executeQuery(getNextTableNumber);
+					
+					int next = 0;
+					while (nextTableNumber.next()) {
+						next = nextTableNumber.getInt(1);
+					}
+					/*
+					 * CREATE A MENU ITEM LIST WITH A MATCHING TABLE ID
+					 */
+					String addList = "INSERT INTO MenuItemList (menuItemListID) VALUES ('" + next + "');";
+					stmt.executeUpdate(addList);
+					
+					String updateTableMenuItemList = "UPDATE Tables SET menuItemListID='" + next + "' WHERE tableID='" + next + "';";
+					stmt.executeUpdate(updateTableMenuItemList);
+					currentTable.getTableButton().setTableNumberOnLabel(next);
+					currentTable.setTableID(next);
 				}
 				catch (Exception e ) {
 					JOptionPane.showMessageDialog(null, e);
 				}
-				
 				/*
 				 * REMOVE EVERYTHING TO UPDATE PANEL
 				 */
@@ -1176,7 +1371,25 @@ public class Main extends JFrame {
 				/*
 				 * ADD EACH OF THE USER'S TABLE BUTTONS
 				 */
-				for (Table table: currentUserTables) {
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+					Statement stmt = conn.createStatement();
+					String getUserTables = "SELECT * FROM Tables WHERE tableDateCreated='" + df.format(now) + "'";
+					
+					ResultSet userTables = stmt.executeQuery(getUserTables);
+				}
+				catch (Exception e ) {
+					JOptionPane.showMessageDialog(null, e);
+				}
+				/*
+				 * ADD IT TO THE USER'S TABLES
+				 */
+				currentUser.addToTables(currentTable);
+				/*
+				 * DISPLAY THE USER'S TABLES
+				 */
+				for (Table table: currentUser.getTables()) {
 					optionsPanel.add(table.getTableButton());
 				}
 				optionsPanel.repaint();
@@ -1202,13 +1415,17 @@ public class Main extends JFrame {
 			currentUser.setUserLastName("");
 			currentUser.setUserRank("");
 			currentUser.setUserHireDate("");
-			currentUserTables = null;
-			currentTableMenuItems = null;
+			currentUserTables.clear();
+			currentTableMenuItems.clear();
 			/*
 			 * REMOVE ALL TABLES AND OPEN CHECKS
 			 */
 			optionsPanel.removeAll();
+			optionsPanel.repaint();
+			optionsPanel.revalidate();
 			menuItemPanel.removeAll();
+			menuItemPanel.repaint();
+			menuItemPanel.revalidate();
 			/*
 			 * REMOVE MAIN PANELS
 			 */
