@@ -10,7 +10,6 @@ import java.util.List;
  * DATE CREATED:	2/20/2019
  * 
  */
-
 public class User {
 		
 	private String userID;
@@ -19,6 +18,7 @@ public class User {
 	private String userRank;
 	private String userHireDate;
 	private List<Table> tables;
+	private boolean clockedIn;
 		
 	public User(String userID, String userFirstName, String userLastName, String userRank, String userHireDate) {
 		this.userID = userID;
@@ -27,6 +27,7 @@ public class User {
 		this.userRank = userRank;
 		this.userHireDate = userHireDate;
 		this.tables = new ArrayList<Table>();
+		this.clockedIn = false;
 	}
 
 	public String getUserID() {
@@ -69,8 +70,20 @@ public class User {
 		return tables;
 	}
 
+	public void addToTables(Table table) {
+		this.tables.add(table);
+	}
+	
 	public void setTables(List<Table> tables) {
 		this.tables = tables;
+	}
+
+	public boolean isClockedIn() {
+		return clockedIn;
+	}
+
+	public void setClockedIn(boolean clockedIn) {
+		this.clockedIn = clockedIn;
 	}
 }
 

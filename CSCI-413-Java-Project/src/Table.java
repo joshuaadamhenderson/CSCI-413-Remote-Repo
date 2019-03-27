@@ -10,9 +10,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +31,10 @@ public class Table {
 	
 	private int tableID;
 	private int tableNum;
-	private String dateCreated;
-	private String timeCreated;
 	private double subtotal;
 	private double tax;
 	private double total;
+	private int menuItemListID;
 	private List<MenuItem> menuItems;
 	private List<DisplayPanelLabelPanel> menuItemLabelPanels;
 	private DisplayPanelLabelPanel tableInformationPanel;
@@ -47,24 +51,21 @@ public class Table {
 	private JLabel tableDateCreatedLabel;
 	private JLabel tableTimeCreatedLabel;
 	private TableButton tableButton;
-	private LocalDate currentDate;
-	private LocalTime currentTime;
+	private Date date;
+	private Time time;
 
 	public Table() {
-		/*
-		 * GET VARIABLES
-		 */
-		currentDate = LocalDate.now();
-		currentTime = LocalTime.now();
+		
+		Main.now = LocalDateTime.now();
 		/*
 		 * ASSIGN VALUES TO VARIABLES
 		 */
-			this.tableID = 0;
-			this.dateCreated = Main.df.format(currentDate);
-			this.timeCreated = Main.tf.format(currentTime);
-			this.subtotal = 0;
-			this.tax = subtotal * Main.CURRENT_TAX_RATE;
-			this.total = 0;
+		this.tableID = 0;
+		this.subtotal = 0;
+		this.date = Date.valueOf(Main.df.format(Main.now));
+		this.time = Time.valueOf(Main.tf.format(Main.now));
+		this.tax = 0;
+		this.total = 0;
 		/*
 		 * INSTANTIATE NEW OBJECTS FOR THE TABLE
 		 */
@@ -73,8 +74,8 @@ public class Table {
 		subtotalPanel = new DisplayPanelLabelPanel();
 		totalPanel = new DisplayPanelLabelPanel();
 		taxPanel = new DisplayPanelLabelPanel();
-		tableIDLabel = new JLabel("Table " + Integer.toString(tableID));
-		tableTimeCreatedLabel = new JLabel(dateCreated + "   " + timeCreated);
+		tableIDLabel = new JLabel("Check " + Integer.toString(tableID));
+		tableTimeCreatedLabel = new JLabel("");
 		subtotalTitleLabel = new JLabel("Subtotal");
 		taxTitleLabel = new JLabel("Tax");
 		totalTitleLabel = new JLabel("Total");
@@ -113,7 +114,7 @@ public class Table {
 		tableButton.setTable(this);
 		tableButton.setTableNumberOnLabel(tableID);
 		tableButton.setTableTotalOnLabel(total);
-		tableButton.setTimeCreatedOnLabel(dateCreated + "   " + timeCreated);
+		tableButton.setTimeCreatedOnLabel(date, time);
 	}
 
 	public void calculateTotals() {
@@ -132,6 +133,7 @@ public class Table {
 	
 	public void setTableID(int tableID) {
 		tableButton.setTableNumberOnLabel(tableID);
+		tableIDLabel.setText("Check " + String.format("%d", tableID));
 		this.tableID = tableID;
 	}
 	
@@ -145,12 +147,6 @@ public class Table {
 	public void setMenuItems(List<MenuItem> menuItems) {
 		tableButton.setMenuItems(menuItems);
 		this.menuItems = menuItems;
-	}
-	public String getTimeCreated() {
-		return timeCreated;
-	}
-	public void setTimeCreated(String timeCreated) {
-		this.timeCreated = timeCreated;
 	}
 	public TableButton getTableButton() {
 		return tableButton;
@@ -250,22 +246,6 @@ public class Table {
 		this.tableNum = tableNum;
 	}
 
-	public String getDateCreated() {
-		return dateCreated;
-	}
-
-	public void setDateCreated(String dateCreated) {
-		this.dateCreated = dateCreated;
-	}
-
-	public LocalDate getCurrentDate() {
-		return currentDate;
-	}
-
-	public void setCurrentDate(LocalDate currentDate) {
-		this.currentDate = currentDate;
-	}
-
 	public JLabel getTableDateCreatedLabel() {
 		return tableDateCreatedLabel;
 	}
@@ -273,4 +253,37 @@ public class Table {
 	public void setTableDateCreatedLabel(JLabel tableDateCreatedLabel) {
 		this.tableDateCreatedLabel = tableDateCreatedLabel;
 	}
+
+	public int getMenuItemListID() {
+		return menuItemListID;
+	}
+
+	public void setMenuItemListID(int menuItemListID) {
+		this.menuItemListID = menuItemListID;
+	}
+	
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public Time getTime() {
+		return time;
+	}
+
+	public void setTime(Time time) {
+		this.time = time;
+	}
+	public JLabel getTableTimeCreatedLabel() {
+		return tableTimeCreatedLabel;
+	}
+
+	public void setTableTimeCreatedLabel(JLabel tableTimeCreatedLabel) {
+		this.tableTimeCreatedLabel = tableTimeCreatedLabel;
+	}
+
+	
 }
