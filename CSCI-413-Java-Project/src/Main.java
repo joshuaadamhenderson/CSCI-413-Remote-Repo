@@ -16,6 +16,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -111,36 +112,38 @@ public class Main extends JFrame {
 	/*
 	 * DIMENSIONS
 	 */
-	public static final int MAIN_WIDTH = 1366;
-	public static final int MAIN_HEIGHT = 768;
-	public static final int CATEGORY_PANEL_WIDTH = 890;
-	public static final int CATEGORY_PANEL_HEIGHT = 540;
-	public static final int DISPLAY_PANEL_WIDTH = 466;
-	public static final int DISPLAY_PANEL_HEIGHT = 466;
+	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	
+	
+	public static final int MAIN_WIDTH = (int)screenSize.getWidth();
+	public static final int MAIN_HEIGHT = (int)screenSize.getHeight();
+	public static final int CATEGORY_PANEL_WIDTH = (int) (MAIN_WIDTH*0.65);
+	public static final int CATEGORY_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.70);
+	public static final int DISPLAY_PANEL_WIDTH = (int) (MAIN_WIDTH*0.34);
+	public static final int DISPLAY_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.60);
 	public static final int FUNCTION_PANEL_WIDTH = 0;
-	public static final int FUNCTION_PANEL_HEIGHT = 100;
-	public static final int OPTIONS_PANEL_WIDTH = 900;
-	public static final int OPTIONS_PANEL_HEIGHT = 550;
+	public static final int FUNCTION_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.13);
+	public static final int OPTIONS_PANEL_WIDTH = (int) (MAIN_WIDTH*0.66);
+	public static final int OPTIONS_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.71);
 	public static final int USER_PANEL_WIDTH = 0;
-	public static final int USER_PANEL_HEIGHT = 90;
-	public static final int HEADER_PANEL_WIDTH = 1366;
-	public static final int HEADER_PANEL_HEIGHT = 168;
-	public static final int KEYPAD_PANEL_WIDTH = 420;
-	public static final int KEYPAD_PANEL_HEIGHT = 470;
-	public static final int PAYMENT_BUTTON_WIDTH = 250;
-	public static final int PAYMENT_BUTTON_HEIGHT = 110;
-	public static final int TABLE_BUTTON_HEIGHT = 70;
-	public static final int TABLE_BUTTON_WIDTH = 880;
-	public static final int MENU_ITEM_PANEL_WIDTH = 430;
-	public static final int MENU_ITEM_PANEL_HEIGHT = 455;
-	public static final int MENU_ITEM_PANEL_SCROLL_PANE_WIDTH = 450;
-	public static final int MENU_ITEM_PANEL_SCROLL_PANE_HEIGHT = 460;
-	public static final int MENU_ITEM_LABEL_PANEL_WIDTH = 400;
-	public static final int MENU_ITEM_LABEL_PANEL_HEIGHT = 30;
-	public static final int TABLE_COSTS_PANEL_WIDTH = 460;
-	public static final int TABLE_COSTS_PANEL_HEIGHT = 200;
+	public static final int USER_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.11);
+	public static final int HEADER_PANEL_WIDTH = MAIN_WIDTH;
+	public static final int HEADER_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.22);
+	public static final int KEYPAD_PANEL_WIDTH = (int) (MAIN_WIDTH*0.31);
+	public static final int KEYPAD_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.61);
+	public static final int PAYMENT_BUTTON_WIDTH = (int) (MAIN_WIDTH*0.18);
+	public static final int PAYMENT_BUTTON_HEIGHT = (int) (MAIN_HEIGHT*0.14);
+	public static final int TABLE_BUTTON_HEIGHT = (int) (MAIN_HEIGHT*0.09);
+	public static final int TABLE_BUTTON_WIDTH = (int) (MAIN_WIDTH*0.64);
+	public static final int MENU_ITEM_PANEL_WIDTH = (int) (MAIN_WIDTH*0.31);
+	public static final int MENU_ITEM_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.59);
+	public static final int MENU_ITEM_PANEL_SCROLL_PANE_WIDTH = (int) (MAIN_WIDTH*0.33);
+	public static final int MENU_ITEM_PANEL_SCROLL_PANE_HEIGHT = (int) (MAIN_HEIGHT*0.60);
+	public static final int MENU_ITEM_LABEL_PANEL_WIDTH = (int) (MAIN_WIDTH*0.29);
+	public static final int MENU_ITEM_LABEL_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.04);
+	public static final int TABLE_COSTS_PANEL_WIDTH = (int) (MAIN_WIDTH*0.33);
+	public static final int TABLE_COSTS_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.26);
 	public static final int MENU_PANEL_WIDTH = 0;
-	public static final int MENU_PANEL_HEIGHT = 48;
+	public static final int MENU_PANEL_HEIGHT = (int) (MAIN_HEIGHT*0.06);
 	/*
 	 * TAX RATE
 	 */
