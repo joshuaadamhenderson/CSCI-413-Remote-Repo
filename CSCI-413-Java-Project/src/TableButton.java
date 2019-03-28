@@ -4,7 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +71,7 @@ public class TableButton extends JButton {
 		add(tableTimeCreatedLabel, BorderLayout.EAST);
 		addActionListener(tableButtonHandler);
 	}
-	/*
+	/* _____________________________________________________________________________________________________
 	 * TABLE BUTTON HANDLER
 	 */
 	private class TableButtonHandler implements ActionListener {
@@ -81,10 +85,11 @@ public class TableButton extends JButton {
 		}
 		public void actionPerformed(ActionEvent event) {
 			try {
+				table.calculateTotals();
 				/*
-				 * GET VARIABLES
+				 * CLEAR THE CURRENT TABLE INFO
 				 */
-				Main.currentTable = table;
+				Main.currentTable = null;
 				/*
 				 * REMOVE EVERYTHING TO UPDATE THE PANEL
 				 */
@@ -92,54 +97,49 @@ public class TableButton extends JButton {
 				Main.menuItemPanel.repaint();
 				Main.menuItemPanel.revalidate();
 				/*
-				 * ADD A HORIZON LINE AT THE TOP
-				 */
-				Main.menuItemPanel.add(Main.horizonLine, BorderLayout.WEST);
-				/*
 				 * ADD THE TABLE INFORMATION
 				 */
-				Main.menuItemPanel.add(Main.currentTable.getTableInformationPanel());
-				/*
-				 * ADD ANOTHER HORIZON LINE
-				 */
-				Main.menuItemPanel.add(Main.horizonLine2, BorderLayout.WEST);
+				Main.menuItemPanel.add(Main.horizonLine, BorderLayout.WEST);
+				Main.menuItemPanel.add(table.getTableInformationPanel());
 				/*
 				 * ADD THE MENU ITEMS
 				 */
-				Main.currentTableMenuItems = Main.currentTable.getMenuItems();
-				for (MenuItem menuItem: Main.currentTable.getMenuItems()) {
+				Main.menuItemPanel.add(Main.horizonLine2, BorderLayout.WEST);
+				for (MenuItem menuItem: table.getMenuItems()) {
 					Main.menuItemPanel.add(menuItem.getMenuItemLabelPanel());
 					count++;
 				}
 				/*
-				 * ADD ANOTHER HORIZON LINE
+				 * ADD UPDATED COST INFORMATION
 				 */
 				Main.menuItemPanel.add(Main.horizonLine3, BorderLayout.WEST);
-				/*
-				 * UPDATE COSTS
-				 */
-				Main.currentTable.calculateTotals();
-				/*
-				 * ADD THE COST INFORMATION
-				 */
-				Main.menuItemPanel.add(Main.currentTable.getSubtotalPanel());
-				Main.menuItemPanel.add(Main.currentTable.getTaxPanel());
-				Main.menuItemPanel.add(Main.currentTable.getTotalPanel());
-				/*
-				 * ADD ANOTHER HORIZON LINE
-				 */
+				Main.menuItemPanel.add(table.getSubtotalPanel());
+				Main.menuItemPanel.add(table.getTaxPanel());
+				Main.menuItemPanel.add(table.getTotalPanel());
 				Main.menuItemPanel.add(Main.horizonLine4, BorderLayout.WEST);
+				/*
+				 * GET THE SCROLL PANE VARIABLE
+				 */
 				scrollPaneAdjustment = (count * 35) - 230;
+				/*
+				 * RESET THE MENU ITEM PANEL SIZE
+				 */
 				Main.menuItemPanel.setPreferredSize(new Dimension(Main.MENU_ITEM_PANEL_WIDTH, Main.MENU_ITEM_PANEL_HEIGHT + scrollPaneAdjustment));
 				Main.menuItemPanel.repaint();
 				Main.menuItemPanel.revalidate();
+				/*
+				 * RESET VARIABLES
+				 */
 				count = 0;
 				scrollPaneAdjustment = 0;
+				/*
+				 * MAKE THIS TABLE THE CURRENT TABLE
+				 */
+				Main.currentTable = table;
 			}
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
 			}
-
 		} 
 	}	
 	public void setTableNumberOnLabel(int tableNumber) {

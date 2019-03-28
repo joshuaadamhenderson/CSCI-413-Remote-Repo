@@ -294,7 +294,9 @@ public class Table {
 	public void setTableTimeCreatedLabel(JLabel tableTimeCreatedLabel) {
 		this.tableTimeCreatedLabel = tableTimeCreatedLabel;
 	}
-
+	public void setTableTimeCreatedOnLabel(Date date, Time time) {
+		tableTimeCreatedLabel.setText(date.toString() + "   " + time.toString());
+	}
 	
 
 }
