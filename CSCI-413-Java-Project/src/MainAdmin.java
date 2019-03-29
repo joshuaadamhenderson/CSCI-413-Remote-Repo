@@ -280,7 +280,7 @@ public class MainAdmin extends JFrame {
 					}
 				}
 
-				if (userIDTextField.getText() == "") {
+				if (userIDTextField.getText() == "" || userIDTextField == null) {
 					JOptionPane.showMessageDialog(null, "Must enter user ID.");
 				}
 				else {

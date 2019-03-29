@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.UIManager;
 /*
  * MAIN CLASS
  */
@@ -485,7 +486,7 @@ public class Main extends JFrame {
 	 * MAIN CONSTRUCTOR *
 	 * 					*
 	 ********************
-	 */	
+	 */
 	public Main() {
 		/*
 		 * MAIN FRAME SETTINGS
@@ -498,6 +499,16 @@ public class Main extends JFrame {
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+		/*
+		 * UI SETTINGS
+		 */
+		UIManager.put("OptionPane.background", Main.ORIGINAL_DARK_BLUE);
+		UIManager.put("Panel.background", Main.ORIGINAL_DARK_BLUE);
+		UIManager.put("OptionPane.messageFont", new Font("Arial", Font.BOLD, 28));
+		UIManager.put("OptionPane.messageForeground", Color.WHITE);
+		UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 28));
+		UIManager.put("OptionPane.okButtonText", "      OK      ");
+
 		/*
 		 * LOGIN PANEL SETTINGS
 		 */
@@ -888,62 +899,76 @@ public class Main extends JFrame {
 				Class.forName(DRIVER_CLASS);
 				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
 				/*
-				 * GET THE CLOCKED IN STATUS OF THE USER ID
+				 * SEARCH DATABASE FOR USER ID
 				 */
 				Statement stmt = conn.createStatement();
-				String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";
-				ResultSet clockedInStatus = stmt.executeQuery(getClockedInStatus);
-				while (clockedInStatus.next()) {
+				String searchForUserID = "SELECT * FROM Users WHERE userID='" + currentUserID + "';";
+				ResultSet userIDSearchResults = stmt.executeQuery(searchForUserID);
+				if (userIDSearchResults.next()) {
 					/*
-					 * CHECK CLOCKED IN STATUS
+					 * GET THE CLOCKED IN STATUS OF THE USER ID
 					 */
-					if (clockedInStatus.getInt(1) == 0) {
+					Statement stmt2 = conn.createStatement();
+					String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";
+					ResultSet clockedInStatus = stmt2.executeQuery(getClockedInStatus);
+					while (clockedInStatus.next()) {
 						/*
-						 * CHANGE CLOCKED IN STATUS
+						 * CHECK CLOCKED IN STATUS
 						 */
-						Statement stmt2 = conn.createStatement();
-						String setClockedInStatus = "UPDATE Users SET userClockedIn='1' WHERE userID='" + currentUserID + "';";
-						stmt2.executeUpdate(setClockedInStatus);						
-						/*
-						 * DISPLAY CLOCKED IN MESSAGE
-						 */
-						JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked in at " + tf.format(now) + ".");
-						/*
-						 * CREATE A NEW SHIFT AND ADD A START TIME
-						 */
-						String setUserTimeIn = "INSERT INTO Shifts (userID, shiftStart, shiftEnd, shiftDate) VALUES ('"
-								+ currentUserID
-								+ "', '"
-								+ tf.format(now)
-								+ "', '"
-								+ tf.format(now)
-								+ "', '"
-								+ df.format(now)
-								+ "');";
-						stmt2.executeUpdate(setUserTimeIn);
-						/*
-						 * GET THE USER'S ATTRIBUTES
-						 */
-						Statement stmt3 = conn.createStatement();
-						String getUserAttributes = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";
-						ResultSet userAttributes = stmt3.executeQuery(getUserAttributes);
-						/*
-						 * SET THE USER'S ATTRIBUTES TO THE CURRENT USER				
-						 */
-						while (userAttributes.next()) {	
-							currentUser.setUserID(userAttributes.getString(1));
-							currentUser.setUserFirstName(userAttributes.getString(2));
-							currentUser.setUserLastName(userAttributes.getString(3));
-							currentUser.setUserRank(userAttributes.getString(4));
-							currentUser.setUserHireDate(userAttributes.getString(5));
+						if (clockedInStatus.getInt(1) == 0) {
+							/*
+							 * CHANGE CLOCKED IN STATUS
+							 */
+							Statement stmt3 = conn.createStatement();
+							String setClockedInStatus = "UPDATE Users SET userClockedIn='1' WHERE userID='" + currentUserID + "';";
+							stmt3.executeUpdate(setClockedInStatus);						
+							/*
+							 * DISPLAY CLOCKED IN MESSAGE
+							 */
+							JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked in at " + tf.format(now) + ".");
+							/*
+							 * CREATE A NEW SHIFT AND ADD A START TIME
+							 */
+							String setUserTimeIn = "INSERT INTO Shifts (userID, shiftStart, shiftEnd, shiftDate) VALUES ('"
+									+ currentUserID
+									+ "', '"
+									+ tf.format(now)
+									+ "', '"
+									+ tf.format(now)
+									+ "', '"
+									+ df.format(now)
+									+ "');";
+							stmt3.executeUpdate(setUserTimeIn);
+							/*
+							 * GET THE USER'S ATTRIBUTES
+							 */
+							Statement stmt4 = conn.createStatement();
+							String getUserAttributes = "SELECT userID, userFirstName, userLastName, userRank, userHireDate FROM Users WHERE userID = '" + currentUserID + "';";
+							ResultSet userAttributes = stmt4.executeQuery(getUserAttributes);
+							/*
+							 * SET THE USER'S ATTRIBUTES TO THE CURRENT USER				
+							 */
+							while (userAttributes.next()) {	
+								currentUser.setUserID(userAttributes.getString(1));
+								currentUser.setUserFirstName(userAttributes.getString(2));
+								currentUser.setUserLastName(userAttributes.getString(3));
+								currentUser.setUserRank(userAttributes.getString(4));
+								currentUser.setUserHireDate(userAttributes.getString(5));
+							}
 						}
+						else {
+							JOptionPane.showMessageDialog(null, "User already clocked in.");
+						}
+						/*
+						 * CLEAR THE ATTEMPTED LOGIN ID
+						 */
+						userLoginTextField.setText("");
+						currentUserID = "";
 					}
-					else {
-						JOptionPane.showMessageDialog(null, "User already clocked in.");
-					}
-					/*
-					 * CLEAR THE ATTEMPTED LOGIN ID
-					 */
+					
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "User ID not found.");
 					userLoginTextField.setText("");
 					currentUserID = "";
 				}
@@ -1033,6 +1058,11 @@ public class Main extends JFrame {
 				Statement stmt = conn.createStatement();
 				String getClockedInStatus = "SELECT userClockedIn FROM Users WHERE userID = '" + currentUserID + "';";
 				ResultSet clockedInStatus = stmt.executeQuery(getClockedInStatus);
+				if (!clockedInStatus.isBeforeFirst()) {
+					JOptionPane.showMessageDialog(null, "Invalid user ID.");
+					userLoginTextField.setText("");
+					currentUserID = "";
+				}
 				/*
 				 * CHECK IF THE USER IS CLOCKED IN
 				 */
@@ -1078,7 +1108,6 @@ public class Main extends JFrame {
 							currentTable.setTableID(userTables.getInt(1));
 							currentTable.setMenuItemListID(userTables.getInt(2));
 							currentTable.setTableNum(userTables.getInt(3));
-							currentTable.getTableButton().setTimeCreatedOnLabel(userTables.getDate(4), userTables.getTime(5));
 							currentTable.setTableTimeCreatedOnLabel(userTables.getDate(4), userTables.getTime(5));
 							/*
 							 * ADD TABLE TO THE CURRENT USER TABLES
@@ -1210,10 +1239,11 @@ public class Main extends JFrame {
 				 * GET THE ABSOLUTE VALUE OF THE AMOUNT BELOW ZERO
 				 */
 				Double change = (Math.abs(currentTable.getTotal()));
+				currentTable.setTotal(0);
 				/*
 				 * PRINT THAT VALUE TO A MESSAGE SHOWING THE CUSTOMER'S CHANGE
 				 */
-				JOptionPane.showMessageDialog(null, "Change Due: $" + change);
+				JOptionPane.showMessageDialog(null, String.format("CHANGE DUE:\n\n $%.2f", change));
 				/*
 				 * GET CONNECTION
 				 */
@@ -1243,7 +1273,6 @@ public class Main extends JFrame {
 									+ "', '"
 									+ currentTable.getTime()
 									+ "');";
-							JOptionPane.showMessageDialog(null, "I got here." + addToArchives);
 							stmt2.executeUpdate(addToArchives);
 						}
 						/*
@@ -1488,6 +1517,7 @@ public class Main extends JFrame {
 					 */
 					newTable.getTableButton().setTableNumberOnLabel(next);
 					newTable.getTableButton().setTableTotalOnLabel(newTable.getTotal());
+					newTable.setTableTimeCreatedOnLabel(newTable.getDate(), newTable.getTime());
 					newTable.setTableID(next);
 				}
 				catch (Exception e ) {

@@ -296,6 +296,7 @@ public class Table {
 	}
 	public void setTableTimeCreatedOnLabel(Date date, Time time) {
 		tableTimeCreatedLabel.setText(date.toString() + "   " + time.toString());
+		tableButton.setTimeCreatedOnLabel(date, time);
 	}
 	
 

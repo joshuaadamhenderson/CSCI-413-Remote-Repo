@@ -17,6 +17,8 @@ public class User {
 	private String userLastName;
 	private String userRank;
 	private String userHireDate;
+	private double payRate;
+	private double salary;
 	private List<Table> tables;
 	private boolean clockedIn;
 		
@@ -84,6 +86,22 @@ public class User {
 
 	public void setClockedIn(boolean clockedIn) {
 		this.clockedIn = clockedIn;
+	}
+
+	public double getPayRate() {
+		return payRate;
+	}
+
+	public void setPayRate(double payRate) {
+		this.payRate = payRate;
+	}
+
+	public double getSalary() {
+		return salary;
+	}
+
+	public void setSalary(double salary) {
+		this.salary = salary;
 	}
 }
 
