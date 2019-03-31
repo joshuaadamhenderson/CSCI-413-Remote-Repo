@@ -7,14 +7,12 @@
  * DATE CREATED:	2/1/2019
  *
  * IMPORTED CLASSES
- *
- * The two class libraries we'll be using the most are the Abstract Windows Toolkit (awt), and Java's Swing components.
- * The swing components have an automatic "look and feel" to them, meaning while using Windows, the JFrame will look like
- * a Windows-based window (minimize, maximize, close buttons, title at the top).  *
  */
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -23,10 +21,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.lang.Math;
 
 import javax.swing.ImageIcon;
@@ -44,13 +45,6 @@ import javax.swing.UIManager;
  */
 public class Main extends JFrame {
 	/*
-	 * 
-	 * 	NAMING CONVENTIONS
-	 * 
-	 * 	Constants:				MENU_ITEM
-	 * 	Classes and Objects:	MenuItem
-	 * 	Variables:				menuItem
-	 * 
 	 *	IMAGES
 	 */
 	public static final ImageIcon BUTTON_IMAGE_PAYMENTS = new ImageIcon("src/buttonPayments.jpg");
@@ -60,11 +54,14 @@ public class Main extends JFrame {
 	public static final ImageIcon BUTTON_IMAGE_PRINT = new ImageIcon("src/buttonPrint.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EDIT_TIPS = new ImageIcon("src/buttonEditTips.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EMPLOYEES = new ImageIcon("src/buttonEmployees.jpg");
+	public static final ImageIcon BUTTON_IMAGE_REPORTS = new ImageIcon("src/buttonReports.jpg");
 	public static final ImageIcon BUTTON_IMAGE_EXIT = new ImageIcon("src/buttonExit.jpg");
 	public static final ImageIcon BUTTON_IMAGE_1 = new ImageIcon("src/button_1.jpg");
 	public static final ImageIcon BUTTON_IMAGE_5 = new ImageIcon("src/button_5.jpg");
 	public static final ImageIcon BUTTON_IMAGE_20 = new ImageIcon("src/button_20.jpg");
 	public static final ImageIcon BUTTON_IMAGE_100 = new ImageIcon("src/button_100.jpg");
+	public static final ImageIcon BUTTON_SALES_REPORTS = new ImageIcon("src/buttonSalesReports.png");
+	public static final ImageIcon BUTTON_EMPLOYEE_PAYROLL = new ImageIcon("src/buttonEmployeePayroll.png");
 	public static final ImageIcon BUTTON_IMAGE_CLOCK_IN = new ImageIcon("src/clockIn.png");
 	public static final ImageIcon BUTTON_IMAGE_CLOCK_OUT = new ImageIcon("src/clockOut.png");	
 	public static final ImageIcon LOGO = new ImageIcon("src/welcomeLabel.png");	
@@ -159,7 +156,7 @@ public class Main extends JFrame {
 	public static final String DATABASE = "r2db";	
 	public static final String USERNAME = "root";
 	public static final String PASSWORD = "";
-	public static final String CONNECTION_PATH = "jdbc:mysql://" + HOSTNAME + "/" + DATABASE;
+	public static final String URL = "jdbc:mysql://" + HOSTNAME + "/" + DATABASE;
 	/*
 	 * DATE
 	 */
@@ -188,6 +185,8 @@ public class Main extends JFrame {
 	 * FRAMES
 	 */
 	public static MainAdmin mainAdmin = new MainAdmin();
+	public static EmployeePayrollFrame employeePayrollFrame= new EmployeePayrollFrame();
+	public static SalesReportFrame salesReportFrame= new SalesReportFrame();
 	/*
 	 * PANELS
 	 */
@@ -213,7 +212,8 @@ public class Main extends JFrame {
 	public static CategoryPanel	beveragesPanel = new CategoryPanel();
 	public static CategoryPanel	aLaCartePanel = new CategoryPanel();
 	public static CategoryPanel	toGoPanel = new CategoryPanel();
-	public static CategoryPanel payments = new CategoryPanel();
+	public static CategoryPanel paymentsPanel = new CategoryPanel();
+	public static CategoryPanel reportsPanel = new CategoryPanel();
 	/*
 	 * SCROLL PANES
 	 */
@@ -343,10 +343,10 @@ public class Main extends JFrame {
 	public static JButton buttonModify = new JButton(BUTTON_IMAGE_MODIFY);
 	public static JButton buttonEditTips = new JButton(BUTTON_IMAGE_EDIT_TIPS);
 	public static JButton buttonEmployees = new JButton(BUTTON_IMAGE_EMPLOYEES);
-	public static JButton button7 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton buttonReports = new JButton(BUTTON_IMAGE_REPORTS);
 	public static JButton button8 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button9 = new JButton(BUTTON_IMAGE_STYLE);
-	public static JButton FunctionPanelExitButton = new JButton(BUTTON_IMAGE_EXIT);
+	public static JButton buttonExit = new JButton(BUTTON_IMAGE_EXIT);
 	/*
 	 * PAYMENTS CATEGORY PANEL BUTTONS
 	 */
@@ -354,6 +354,11 @@ public class Main extends JFrame {
 	public static JButton button_5 = new JButton(BUTTON_IMAGE_5);
 	public static JButton button_20 = new JButton(BUTTON_IMAGE_20);
 	public static JButton button_100 = new JButton(BUTTON_IMAGE_100);
+	/*
+	 * REPORTS CATEGORY PANEL BUTTONS
+	 */
+	public static JButton buttonSalesReports = new JButton(BUTTON_SALES_REPORTS);
+	public static JButton buttonEmployeePayroll = new JButton(BUTTON_EMPLOYEE_PAYROLL);
 	/*
 	 * USER PANEL BUTTONS
 	 */
@@ -402,6 +407,7 @@ public class Main extends JFrame {
 	 * FUNCTION PANEL BUTTON HANDLERS
 	 */
 	public static FunctionPanelPaymentsButtonHandler functionPanelPaymentsButtonHandler;
+	public static FunctionPanelReportsButtonHandler functionPanelReportsButtonHandler;
 	public static FunctionPanelEmployeesButtonHandler functionPanelEmployeesButtonHandler;
 	
 	/*
@@ -480,6 +486,8 @@ public class Main extends JFrame {
 	public static NewCheckButtonHandler newCheckButtonHandler;
 	public static ExitButtonHandler exitButtonHandler;
 	public static ExitSystemHandler exitSystemHandler;
+	public static SalesReportButtonHandler salesReportButtonHandler;
+	public static EmployeePayrollButtonHandler employeePayrollButtonHandler;
 	/*
 	 ********************
 	 * 					*
@@ -508,6 +516,7 @@ public class Main extends JFrame {
 		UIManager.put("OptionPane.messageForeground", Color.WHITE);
 		UIManager.put("OptionPane.buttonFont", new Font("Arial", Font.BOLD, 28));
 		UIManager.put("OptionPane.okButtonText", "      OK      ");
+		UIManager.put("OptionPane.border", new LineBorder(Main.ORIGINAL_DARK_BLUE, 50));
 
 		/*
 		 * LOGIN PANEL SETTINGS
@@ -548,6 +557,7 @@ public class Main extends JFrame {
 		menuItemPanelScrollPane.getVerticalScrollBar().setBackground(ORIGINAL_DARK_BLUE);
 		
 		welcomeLabel.setIcon(LOGO);
+			
 		/*
 		 * ASSEMBLE THE PANELS
 		 */
@@ -586,13 +596,15 @@ public class Main extends JFrame {
 		functionPanel.add(buttonModify);
 		functionPanel.add(buttonEditTips);
 		functionPanel.add(buttonEmployees);		
-		functionPanel.add(button7);		
+		functionPanel.add(buttonReports);		
 		functionPanel.add(button8);
-		functionPanel.add(FunctionPanelExitButton);
-		payments.add(button_1);
-		payments.add(button_5);
-		payments.add(button_20);
-		payments.add(button_100);
+		functionPanel.add(buttonExit);
+		paymentsPanel.add(button_1);
+		paymentsPanel.add(button_5);
+		paymentsPanel.add(button_20);
+		paymentsPanel.add(button_100);
+		reportsPanel.add(buttonSalesReports);
+		reportsPanel.add(buttonEmployeePayroll);		
 		appetizersPanel.add(buffaloWingsButton);
 		appetizersPanel.add(chickenTendersButton);
 		appetizersPanel.add(friedAsparagusButton);
@@ -640,7 +652,7 @@ public class Main extends JFrame {
 		repaint();
 		revalidate();
 		/*
-		 * INSTANTIATE EVENT LISTENERS
+		 * LOGIN PANEL EVENT LISTENERS
 		 */
 		loginPanelConfirmKeyButtonHandler = new LoginPanelConfirmKeyButtonHandler();
 		loginPanelClearKeyButtonHandler = new LoginPanelClearKeyButtonHandler();
@@ -656,20 +668,34 @@ public class Main extends JFrame {
 		LoginPanelKey8 = new LoginPanelKeypadButtonHandler(8);
 		LoginPanelKey9 = new LoginPanelKeypadButtonHandler(9);
 		LoginPanelKey0 = new LoginPanelKeypadButtonHandler(0);
-
+		exitSystemHandler = new ExitSystemHandler();
+		/*
+		 * USER PANEL BUTTON EVENT LISTENERS
+		 */
 		currentUserChecksButtonHandler = new CurrentUserChecksButtonHandler();
 		newCheckButtonHandler = new NewCheckButtonHandler();
-		exitButtonHandler = new ExitButtonHandler();
-		exitSystemHandler = new ExitSystemHandler();
-		
+		/*
+		 * FUNCTION PANEL BUTTON EVENT LISTENERS
+		 */
+		functionPanelReportsButtonHandler = new FunctionPanelReportsButtonHandler();
+		functionPanelEmployeesButtonHandler = new FunctionPanelEmployeesButtonHandler();
 		functionPanelPaymentsButtonHandler = new FunctionPanelPaymentsButtonHandler();
+		exitButtonHandler = new ExitButtonHandler();
+		/*
+		 * PAYMENT BUTTON EVENT LISTENERS
+		 */
 		payment100Handler = new PaymentButtonHandler(100);
 		payment20Handler = new PaymentButtonHandler(20);
 		payment5Handler = new PaymentButtonHandler(5);
 		payment1Handler = new PaymentButtonHandler(1);
-		
-		functionPanelEmployeesButtonHandler = new FunctionPanelEmployeesButtonHandler();
-
+		/*
+		 * REPORTS BUTTON EVENT LISTENERS
+		 */
+		salesReportButtonHandler = new SalesReportButtonHandler();
+		employeePayrollButtonHandler = new EmployeePayrollButtonHandler();
+		/*
+		 * CATEGORY PANEL BUTTON EVENT LISTENERS
+		 */
 		appetizersHandler = new MenuPanelButtonHandler(appetizersPanel);
 		entreesHandler = new MenuPanelButtonHandler(entreesPanel);
 		sidesHandler = new MenuPanelButtonHandler(sidesPanel);
@@ -678,6 +704,9 @@ public class Main extends JFrame {
 		beveragesHandler = new MenuPanelButtonHandler(beveragesPanel);
 		aLaCarteHandler = new MenuPanelButtonHandler(aLaCartePanel);
 		toGoHandler = new MenuPanelButtonHandler(toGoPanel);
+		/*
+		 * MENU ITEM BUTTON EVENT LISTENERS
+		 */
 		
 		//appetizer	
 		buffaloWingsHandler = new MenuItemButtonHandler(buffaloWings);
@@ -732,6 +761,41 @@ public class Main extends JFrame {
 		loginPanelExitButton.addActionListener(exitSystemHandler);
 		loginPanelClockInButton.addActionListener(loginPanelClockInButtonHandler);
 		loginPanelClockOutButton.addActionListener(loginPanelClockOutButtonHandler);
+		button1Key.addActionListener(LoginPanelKey1);
+		button2Key.addActionListener(LoginPanelKey2);
+		button3Key.addActionListener(LoginPanelKey3);
+		button4Key.addActionListener(LoginPanelKey4);
+		button5Key.addActionListener(LoginPanelKey5);
+		button6Key.addActionListener(LoginPanelKey6);
+		button7Key.addActionListener(LoginPanelKey7);
+		button8Key.addActionListener(LoginPanelKey8);
+		button9Key.addActionListener(LoginPanelKey9);
+		button0Key.addActionListener(LoginPanelKey0);
+		
+		newCheck.addActionListener(newCheckButtonHandler);
+		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
+		
+		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
+		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
+		buttonReports.addActionListener(functionPanelReportsButtonHandler);
+		buttonExit.addActionListener(exitButtonHandler);
+		
+		buttonSalesReports.addActionListener(salesReportButtonHandler);
+		buttonEmployeePayroll.addActionListener(employeePayrollButtonHandler);
+		
+		button_100.addActionListener(payment100Handler);
+		button_20.addActionListener(payment20Handler);
+		button_5.addActionListener(payment5Handler);
+		button_1.addActionListener(payment1Handler);
+
+		appetizersButton.addActionListener(appetizersHandler);
+		entreesButton.addActionListener(entreesHandler);
+		sidesButton.addActionListener(sidesHandler);
+		soupsButton.addActionListener(soupsHandler);
+		dessertsButton.addActionListener(dessertsHandler);
+		beveragesButton.addActionListener(beveragesHandler);
+		aLaCarteButton.addActionListener(aLaCarteHandler);
+		toGoButton.addActionListener(toGoHandler);
 		
 		//appetizer
 		buffaloWingsButton.addActionListener(buffaloWingsHandler);
@@ -741,6 +805,7 @@ public class Main extends JFrame {
 		ultimateNachosButton.addActionListener(ultimateNachosHandler);
 		crabCakesButton.addActionListener(crabCakesHandler);
 		appetizersButton.addActionListener(appetizersHandler);
+		
 		//entree
 		chickenSaladButton.addActionListener(chickenSaladHandler);
 		cheeseburgerButton.addActionListener(cheeseburgerHandler);
@@ -749,6 +814,7 @@ public class Main extends JFrame {
 		lambLollipopsButton.addActionListener(lambLollipopsHandler);
 		friedPorkChopsButton.addActionListener(friedPorkChopsHandler);
 		entreesButton.addActionListener(entreesHandler);
+		
 		//sides
 		mashedPotatoesButton.addActionListener(mashedPotatoesHandler);
 		greenBeansButton.addActionListener(greenBeansHandler);
@@ -764,6 +830,7 @@ public class Main extends JFrame {
 		broccoliChedderButton.addActionListener(broccoliChedderHandler);
 		tortillaButton.addActionListener(tortillaHandler);
 		soupsButton.addActionListener(soupsHandler);
+		
 		//desserts
 		cheesecakeButton.addActionListener(cheesecakeHandler);
 		moltenLavaCakeButton.addActionListener(moltenLavaCakeHandler);
@@ -771,6 +838,7 @@ public class Main extends JFrame {
 		breadPuddingButton.addActionListener(breadPuddingHandler);
 		friedIceCreamButton.addActionListener(friedIceCreamHandler);
 		dessertsButton.addActionListener(dessertsHandler);
+		
 		//beverages
 		cocaColaButton.addActionListener(cocaColaHandler);
 		drPepperButton.addActionListener(drPepperHandler);
@@ -779,37 +847,6 @@ public class Main extends JFrame {
 		lemonadeButton.addActionListener(lemonadeHandler);
 		sweetTeaButton.addActionListener(sweetTeaHandler);
 		pepsiButton.addActionListener(pepsiHandler);
-		beveragesButton.addActionListener(beveragesHandler);
-		aLaCarteButton.addActionListener(aLaCarteHandler);
-		toGoButton.addActionListener(toGoHandler);
-		
-		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
-		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
-		
-		button_100.addActionListener(payment100Handler);
-		button_20.addActionListener(payment20Handler);
-		button_5.addActionListener(payment5Handler);
-		button_1.addActionListener(payment1Handler);
-		
-		button1Key.addActionListener(LoginPanelKey1);
-		button2Key.addActionListener(LoginPanelKey2);
-		button3Key.addActionListener(LoginPanelKey3);
-		button4Key.addActionListener(LoginPanelKey4);
-		button5Key.addActionListener(LoginPanelKey5);
-		button6Key.addActionListener(LoginPanelKey6);
-		button7Key.addActionListener(LoginPanelKey7);
-		button8Key.addActionListener(LoginPanelKey8);
-		button9Key.addActionListener(LoginPanelKey9);
-		button0Key.addActionListener(LoginPanelKey0);
-		FunctionPanelExitButton.addActionListener(exitButtonHandler);
-		newCheck.addActionListener(newCheckButtonHandler);
-		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
-		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
-		appetizersButton.addActionListener(appetizersHandler);
-		entreesButton.addActionListener(entreesHandler);
-		sidesButton.addActionListener(sidesHandler);
-		soupsButton.addActionListener(soupsHandler);
-		dessertsButton.addActionListener(dessertsHandler);
 		beveragesButton.addActionListener(beveragesHandler);
 		aLaCarteButton.addActionListener(aLaCarteHandler);
 		toGoButton.addActionListener(toGoHandler);
@@ -897,7 +934,7 @@ public class Main extends JFrame {
 				 * CREATE CONNECTION
 				 */
 				Class.forName(DRIVER_CLASS);
-				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
+				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * SEARCH DATABASE FOR USER ID
 				 */
@@ -927,10 +964,19 @@ public class Main extends JFrame {
 							 */
 							JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked in at " + tf.format(now) + ".");
 							/*
+							 * GET THE TIMESTAMP OF THE CLOCK IN TIME
+							 */
+							Timestamp clockInTimestamp = new Timestamp(now.atZone(ZoneId.systemDefault()).toEpochSecond());
+							long clockInLong = clockInTimestamp.getTime();
+							/*
 							 * CREATE A NEW SHIFT AND ADD A START TIME
 							 */
-							String setUserTimeIn = "INSERT INTO Shifts (userID, shiftStart, shiftEnd, shiftDate) VALUES ('"
+							String setUserTimeIn = "INSERT INTO Shifts (userID, shiftStart, shiftEnd, shiftClockedIn, shiftClockedOut, shiftDate) VALUES ('"
 									+ currentUserID
+									+ "', '"
+									+ TimeUnit.SECONDS.toMinutes(clockInLong)
+									+ "', '"
+									+ TimeUnit.SECONDS.toMinutes(clockInLong)
 									+ "', '"
 									+ tf.format(now)
 									+ "', '"
@@ -993,7 +1039,7 @@ public class Main extends JFrame {
 				 * GET CONNECTION
 				 */
 				Class.forName(DRIVER_CLASS);
-				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
+				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * GET THE CLOCKED IN STATUS
 				 */
@@ -1009,16 +1055,20 @@ public class Main extends JFrame {
 						/*
 						 * CLOCK THE USER OUT
 						 */
+						Timestamp clockInTimestamp = new Timestamp(now.atZone(ZoneId.systemDefault()).toEpochSecond());
+						long clockOutLong = clockInTimestamp.getTime();
 						JOptionPane.showMessageDialog(null, "User " + currentUserID + " clocked out at " + tf.format(now) + ".");
 						Statement stmt2 = conn.createStatement();
 						String setClockedOutStatus = "UPDATE Users SET userClockedIn='0' WHERE userID='" + currentUserID + "';";
-						String setUserTimeOut = "UPDATE Shifts SET shiftEnd='"
+						String setUserTimeOut = "UPDATE Shifts SET shiftClockedOut='"
 						+ tf.format(now)
+						+ "', shiftEnd='"
+						+ TimeUnit.SECONDS.toMinutes(clockOutLong)
 						+ "' WHERE userID='"
 						+ currentUserID
 						+ "'AND shiftDate='"
 						+ df.format(now)
-						+ "';";						
+						+ "';";
 						stmt2.executeUpdate(setClockedOutStatus);
 						stmt2.executeUpdate(setUserTimeOut);
 					}
@@ -1051,7 +1101,7 @@ public class Main extends JFrame {
 				 * CREATE CONNECTION
 				 */
 				Class.forName(DRIVER_CLASS);
-				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
+				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * GET THE CLOCKED IN STATUS OF THE USER ID
 				 */
@@ -1213,7 +1263,22 @@ public class Main extends JFrame {
 			optionsPanel.removeAll();
 			optionsPanel.repaint();
 			optionsPanel.validate();					
-			optionsPanel.add(payments);
+			optionsPanel.add(paymentsPanel);
+			optionsPanel.repaint();
+			optionsPanel.validate();
+		}
+	}
+	/* _____________________________________________________________________________________________________
+	 * FUNCTION PANEL REPORTS BUTTON HANDLER
+	 */
+	private class FunctionPanelReportsButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			optionsPanel.removeAll();
+			optionsPanel.repaint();
+			optionsPanel.validate();					
+			optionsPanel.add(reportsPanel);
 			optionsPanel.repaint();
 			optionsPanel.validate();
 		}
@@ -1230,75 +1295,98 @@ public class Main extends JFrame {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			currentTable.setTotal(currentTable.getTotal() - value);
-			/*
-			 * CHECK IF THE VALUE WAS DROPPED TO ZERO
-			 */
-			if (currentTable.getTotal() <= 0) {
+			if (currentTable != null) {
+				currentTable.setTotal(currentTable.getTotal() - value);
 				/*
-				 * GET THE ABSOLUTE VALUE OF THE AMOUNT BELOW ZERO
+				 * CHECK IF THE VALUE WAS DROPPED TO ZERO
 				 */
-				Double change = (Math.abs(currentTable.getTotal()));
-				currentTable.setTotal(0);
-				/*
-				 * PRINT THAT VALUE TO A MESSAGE SHOWING THE CUSTOMER'S CHANGE
-				 */
-				JOptionPane.showMessageDialog(null, String.format("CHANGE DUE:\n\n $%.2f", change));
-				/*
-				 * GET CONNECTION
-				 */
-				try {
-					Class.forName(DRIVER_CLASS);
-					Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
+				if (currentTable.getTotal() <= 0) {
 					/*
-					 * GET EACH MENU ITEM FROM THE CURRENT TABLE
+					 * GET THE ABSOLUTE VALUE OF THE AMOUNT BELOW ZERO
 					 */
-					Statement stmt = conn.createStatement();					
-					String getMenuItems = "SELECT * FROM MenuItemList WHERE menuItemListID='" + (int)currentTable.getTableID() + "';";
-					ResultSet menuItems = stmt.executeQuery(getMenuItems);
+					Double change = (Math.abs(currentTable.getTotal()));
+					currentTable.setTotal(0);
+					/*
+					 * PRINT THAT VALUE TO A MESSAGE SHOWING THE CUSTOMER'S CHANGE
+					 */
+					JOptionPane.showMessageDialog(null, String.format("CHANGE DUE:\n\n $%.2f", change));
+					/*
+					 * GET CONNECTION
+					 */
+					try {
+						Class.forName(DRIVER_CLASS);
+						Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 						/*
-						 * ADD THE MENU ITEM TO THE ORDER ARCHIVE DATABASE
+						 * GET EACH MENU ITEM FROM THE CURRENT TABLE
 						 */
-						while (menuItems.next()) {
-							Statement stmt2 = conn.createStatement();
-							String addToArchives = "INSERT INTO OrderArchive (userID, menuItemID, tableNum, tableDateCreated, tableTimeCreated) "
-									+ "VALUES ('"
-									+ currentUser.getUserID()
-									+ "', '"
-									+ menuItems.getString(1)
-									+ "', '"
-									+ currentTable.getTableNum()
-									+ "', '"
-									+ currentTable.getDate()
-									+ "', '"
-									+ currentTable.getTime()
-									+ "');";
-							stmt2.executeUpdate(addToArchives);
-						}
-						/*
-						 * REMOVE THIS TABLE FROM THE TABLE DATABASE
-						 */
-						Statement stmt3 = conn.createStatement();
-						String deleteTable = "DELETE FROM Tables WHERE tableID = '" + currentTable.getTableID() + "'";
-						stmt3.executeUpdate(deleteTable);
-						/*
-						 * REMOVE THE MENU ITEM LIST FROM THE DATABASE
-						 */
-						Statement stmt4 = conn.createStatement();
-						String deleteMenuItemList = "DELETE FROM MenuItemList WHERE menuItemListID = '" + currentTable.getTableID() + "'";
-						stmt4.executeUpdate(deleteMenuItemList);
-						/*
-						 * DELETE THIS TABLE FROM THE USER'S TABLES
-						 */
-						currentUser.getTables().remove(currentTable);
+						Statement stmt = conn.createStatement();					
+						String getMenuItems = "SELECT * FROM MenuItemList WHERE menuItemListID='" + (int)currentTable.getTableID() + "';";
+						ResultSet menuItems = stmt.executeQuery(getMenuItems);
+							/*
+							 * ADD THE MENU ITEM TO THE ORDER ARCHIVE DATABASE
+							 */
+							while (menuItems.next()) {
+								Statement stmt2 = conn.createStatement();
+								String addToArchives = "INSERT INTO OrderArchive (userID, menuItemID, tableNum, tableDateCreated, tableTimeCreated) "
+										+ "VALUES ('"
+										+ currentUser.getUserID()
+										+ "', '"
+										+ menuItems.getString(3)
+										+ "', '"
+										+ currentTable.getTableNum()
+										+ "', '"
+										+ currentTable.getDate()
+										+ "', '"
+										+ currentTable.getTime()
+										+ "');";
+								stmt2.executeUpdate(addToArchives);
+							}
+							/*
+							 * REMOVE THIS TABLE FROM THE TABLE DATABASE
+							 */
+							Statement stmt3 = conn.createStatement();
+							String deleteTable = "DELETE FROM Tables WHERE tableID = '" + currentTable.getTableID() + "'";
+							stmt3.executeUpdate(deleteTable);
+							/*
+							 * REMOVE THE MENU ITEM LIST FROM THE DATABASE
+							 */
+							Statement stmt4 = conn.createStatement();
+							String deleteMenuItemList = "DELETE FROM MenuItemList WHERE menuItemListID = '" + currentTable.getTableID() + "'";
+							stmt4.executeUpdate(deleteMenuItemList);
+							/*
+							 * DELETE THIS TABLE FROM THE USER'S TABLES
+							 */
+							currentUser.getTables().remove(currentTable);
+					}
+					catch (Exception f) {
+						JOptionPane.showMessageDialog(null, f);
+					}				
+					menuItemPanel.removeAll();
+					menuItemPanel.repaint();
+					menuItemPanel.revalidate();
+					currentTable = null;
 				}
-				catch (Exception f) {
-					JOptionPane.showMessageDialog(null, f);
-				}				
-				menuItemPanel.removeAll();
-				menuItemPanel.repaint();
-				menuItemPanel.revalidate();
 			}
+		}
+	}
+	/* _____________________________________________________________________________________________________
+	 * SALES REPORT BUTTON HANDLER
+	 */	
+	private class SalesReportButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			salesReportFrame.setVisible(true);
+		}
+	}
+	/* _____________________________________________________________________________________________________
+	 * EMPLOYEE PAYROLL BUTTON HANDLER
+	 */	
+	private class EmployeePayrollButtonHandler implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			employeePayrollFrame.setVisible(true);
 		}
 	}
 	/* _____________________________________________________________________________________________________
@@ -1348,71 +1436,74 @@ public class Main extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
-				/*
-				 * GET CONNECTION
-				 */
-				Class.forName(DRIVER_CLASS);
-				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);
-				/*
-				 * ADD THE ITEM TO A MENU ITEM LIST IN THE DATABASE
-				 */
-				Statement stmt = conn.createStatement();
-				String addToTable = "INSERT INTO MenuItemList (menuItemListID, menuItemID)"
-						+ "VALUES ('" + (int)currentTable.getTableID() + "', '" + menuItem.getMenuItemID() + "');";
-				stmt.executeUpdate(addToTable);
-				/*
-				 * GET THE MENU ITEMS
-				 */
-				currentTableMenuItems = currentTable.getMenuItems();
-				/*
-				 * MAKE A COPY OF THE MENU ITEM
-				 */
-				MenuItem currentMenuItemCopy = new MenuItem(menuItem);
-				/*
-				 * ADD IT TO THE TABLE'S MENU ITEMS
-				 */
-				currentTableMenuItems.add(currentMenuItemCopy);
-				/*
-				 * REMOVE EVERYTHING TO UPDATE THE PANEL
-				 */
-				menuItemPanel.removeAll();
-				menuItemPanel.repaint();
-				menuItemPanel.revalidate();
-				/*
-				 * ADD THE TABLE INFORMATION
-				 */
-				menuItemPanel.add(horizonLine, BorderLayout.WEST);
-				menuItemPanel.add(currentTable.getTableInformationPanel());
-				/*
-				 * ADD THE MENU ITEMS
-				 */
-				menuItemPanel.add(horizonLine2, BorderLayout.WEST);
-				currentTableMenuItems = currentTable.getMenuItems();
-				for (MenuItem menuItem: currentTable.getMenuItems()) {
-					menuItemPanel.add(menuItem.getMenuItemLabelPanel());
-					count++;
+				if (currentTable != null) {
+					/*
+					 * GET CONNECTION
+					 */
+					Class.forName(DRIVER_CLASS);
+					Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+					/*
+					 * ADD THE ITEM TO A MENU ITEM LIST IN THE DATABASE
+					 */
+					Statement stmt = conn.createStatement();
+					String addToTable = "INSERT INTO MenuItemList (menuItemListID, menuItemID)"
+							+ "VALUES ('" + (int)currentTable.getTableID() + "', '" + menuItem.getMenuItemID() + "');";
+					stmt.executeUpdate(addToTable);
+					/*
+					 * GET THE MENU ITEMS
+					 */
+					currentTableMenuItems = currentTable.getMenuItems();
+					/*
+					 * MAKE A COPY OF THE MENU ITEM
+					 */
+					MenuItem currentMenuItemCopy = new MenuItem(menuItem);
+					/*
+					 * ADD IT TO THE TABLE'S MENU ITEMS
+					 */
+					currentTableMenuItems.add(currentMenuItemCopy);
+					/*
+					 * REMOVE EVERYTHING TO UPDATE THE PANEL
+					 */
+					menuItemPanel.removeAll();
+					menuItemPanel.repaint();
+					menuItemPanel.revalidate();
+					/*
+					 * ADD THE TABLE INFORMATION
+					 */
+					menuItemPanel.add(horizonLine, BorderLayout.WEST);
+					menuItemPanel.add(currentTable.getTableInformationPanel());
+					/*
+					 * ADD THE MENU ITEMS
+					 */
+					menuItemPanel.add(horizonLine2, BorderLayout.WEST);
+					currentTableMenuItems = currentTable.getMenuItems();
+					for (MenuItem menuItem: currentTable.getMenuItems()) {
+						menuItemPanel.add(menuItem.getMenuItemLabelPanel());
+						count++;
+					}
+					/*
+					 * ADD THE UPDATED COST INFORMATION
+					 */
+					menuItemPanel.add(horizonLine3, BorderLayout.WEST);
+					currentTable.calculateTotals();
+					menuItemPanel.add(currentTable.getSubtotalPanel());
+					menuItemPanel.add(currentTable.getTaxPanel());
+					menuItemPanel.add(currentTable.getTotalPanel());
+					menuItemPanel.add(horizonLine4, BorderLayout.WEST);
+					/*
+					 * ADJUST THE SCROLL PANE
+					 */
+					scrollPaneAdjustment = (count * 35) - 230;
+					menuItemPanel.setPreferredSize(new Dimension(Main.MENU_ITEM_PANEL_WIDTH, Main.MENU_ITEM_PANEL_HEIGHT + scrollPaneAdjustment));
+					menuItemPanel.repaint();
+					menuItemPanel.revalidate();
+					/*
+					 * RESET VARIABLES
+					 */
+					count = 0;
+					scrollPaneAdjustment = 0;
+					
 				}
-				/*
-				 * ADD THE UPDATED COST INFORMATION
-				 */
-				menuItemPanel.add(horizonLine3, BorderLayout.WEST);
-				currentTable.calculateTotals();
-				menuItemPanel.add(currentTable.getSubtotalPanel());
-				menuItemPanel.add(currentTable.getTaxPanel());
-				menuItemPanel.add(currentTable.getTotalPanel());
-				menuItemPanel.add(horizonLine4, BorderLayout.WEST);
-				/*
-				 * ADJUST THE SCROLL PANE
-				 */
-				scrollPaneAdjustment = (count * 35) - 230;
-				menuItemPanel.setPreferredSize(new Dimension(Main.MENU_ITEM_PANEL_WIDTH, Main.MENU_ITEM_PANEL_HEIGHT + scrollPaneAdjustment));
-				menuItemPanel.repaint();
-				menuItemPanel.revalidate();
-				/*
-				 * RESET VARIABLES
-				 */
-				count = 0;
-				scrollPaneAdjustment = 0;
 			}
 			catch (Exception e) {
 				JOptionPane.showMessageDialog(null, e);
@@ -1428,6 +1519,7 @@ public class Main extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
+				currentTable = null;
 				/*
 				 * REMOVE EVERYTHING TO UPDATE PANEL
 				 */
@@ -1457,11 +1549,12 @@ public class Main extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
+				currentTable = null;
 				/*
 				 * GET CONNECTION
 				 */
 				Class.forName(DRIVER_CLASS);
-				Connection conn = DriverManager.getConnection(CONNECTION_PATH, USERNAME, PASSWORD);				
+				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);				
 				/*
 				 * GET THE CURRENT TIME
 				 */
