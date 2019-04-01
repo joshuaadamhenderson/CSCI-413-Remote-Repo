@@ -72,21 +72,21 @@ public class SalesReportFrame extends JFrame {
 		footerPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
 		footerPanel.setPreferredSize(new Dimension(0, (int)(Main.screenSize.getHeight() * 0.10)));
 		selectionPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
-		selectionPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.35), (int)(Main.screenSize.getHeight() * 0.75)));
+		selectionPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.25), (int)(Main.screenSize.getHeight() * 0.75)));
 		formPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
-		formPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.65), (int)(Main.screenSize.getHeight() * 0.75)));
+		formPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.74), (int)(Main.screenSize.getHeight() * 0.75)));
 		exitButton.setBackground(Main.ORIGINAL_DARK_BLUE);
 		exitButton.setPreferredSize(new Dimension(150, 70));
 		exitButton.setFont(Main.KEYPAD_FONT);
 		exitButton.setForeground(Color.WHITE);
 		salesRecordsScrollPane.setBackground(Color.WHITE);
 		salesRecordsPanel.setBackground(Color.WHITE);
-		salesRecordsPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.60), (int)(Main.screenSize.getHeight() * 0.74)));
+		salesRecordsPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.70), (int)(Main.screenSize.getHeight() * 0.74)));
 
 		add(headerPanel, BorderLayout.PAGE_START);
 		add(footerPanel, BorderLayout.PAGE_END);
 		add(centerPanel, BorderLayout.CENTER);
-		formPanel.add(salesRecordsPanel);
+		formPanel.add(salesRecordsScrollPane);
 		centerPanel.add(selectionPanel, BorderLayout.WEST);
 		centerPanel.add(formPanel, BorderLayout.EAST);
 		headerPanel.add(welcomeLabel, BorderLayout.WEST);
@@ -145,11 +145,13 @@ public class SalesReportFrame extends JFrame {
 					salesRecordsPanel.add(new SalesRecordLabelPanel("DATE", "TIME", "EMPLOYEE", "TABLE", "ITEM", "PRICE"));
 					salesRecordsPanel.add(new JLabel("___________________________________________________________________________________________________________________"));
 					Double totalSales = 0.0;
+					int panelCount = 0;
 					while (archiveOrders.next()) {
+						panelCount++;
 						String employeeFirstName = "";
 						String employeeLastName = "";
 						String menuItemName = "";
-						String menuItemPrice = "";
+						Double menuItemPrice = 0.0;
 						/*
 						 * GET MENU ITEM ATTRIBUTES
 						 */
@@ -159,7 +161,7 @@ public class SalesReportFrame extends JFrame {
 							ResultSet itemAttributes = stmt2.executeQuery(getItemAttributes);
 							while (itemAttributes.next()) {
 								menuItemName = itemAttributes.getString(1);
-								menuItemPrice = itemAttributes.getString(2);
+								menuItemPrice = itemAttributes.getDouble(2);
 								totalSales += itemAttributes.getDouble(2);
 							}
 						}
@@ -189,7 +191,7 @@ public class SalesReportFrame extends JFrame {
 								archiveOrders.getString(6), 
 								employeeFirstName + " " + employeeLastName, 
 								archiveOrders.getString(4), 
-								menuItemName, menuItemPrice);
+								menuItemName, String.format("%.2f", menuItemPrice));
 						/*
 						 * ADD THE PANEL
 						 */
@@ -197,8 +199,9 @@ public class SalesReportFrame extends JFrame {
 						salesRecordsPanel.repaint();
 						salesRecordsPanel.revalidate();
 					}
-					salesRecordsPanel.add(new JLabel("___________________________________________________________________________________________________________________"));
-					salesRecordsPanel.add(new SalesRecordLabelPanel("", "", "", "", "TOTAL SALES", totalSales.toString()));
+					salesRecordsPanel.add(new JLabel("____________________________________________________________________________________________________________"));
+					salesRecordsPanel.add(new SalesRecordLabelPanel("", "", "", "", "TOTAL SALES", String.format("%.2f", totalSales)));
+					salesRecordsPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.70), (int)((Main.screenSize.getHeight() * 0.74) + (panelCount * 32))));
 				}
 				catch (Exception e) {
 					JOptionPane.showMessageDialog(null, e);

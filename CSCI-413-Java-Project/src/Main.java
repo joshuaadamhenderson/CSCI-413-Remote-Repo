@@ -222,7 +222,7 @@ public class Main extends JFrame {
 	 * PLACEHOLDERS
 	 */
 	public static String currentUserID = ""; // Placeholder
-	public static User currentUser = new User("", "", "", "", ""); // Placeholder
+	public static User currentUser = new User("", "", "", "", 0.0, ""); // Placeholder
 	public static Table currentTable = new Table(); // Placeholder
 	public static List<Table> currentUserTables = new ArrayList<Table>(); // Placeholder
 	public static MenuItem currentMenuItem = new MenuItem("", "", 0);	
@@ -231,50 +231,51 @@ public class Main extends JFrame {
 	 * MENU ITEMS
 	 */
 	//appetizers
-	public static MenuItem buffaloWings = new MenuItem("100", "Buffalo Wings", 6.99);
-	public static MenuItem chickenTenders = new MenuItem("110", "Chicken Tenders", 6.99);
-	public static MenuItem friedAsparagus = new MenuItem("120", "Fried Asparagus", 6.99);
-	public static MenuItem spicyHummus = new MenuItem("130", "Spicy Hummus", 6.99);
-	public static MenuItem ultimateNachos = new MenuItem("140", "Ultimate Nachos", 6.99);
-	public static MenuItem crabCakes = new MenuItem("150", "Crab Cakes", 6.99);
+	public static MenuItem buffaloWings = new MenuItem("100", "Buffalo Wings", 8.50);
+	public static MenuItem chickenTenders = new MenuItem("110", "Chicken Tenders", 6.25);
+	public static MenuItem friedAsparagus = new MenuItem("120", "Fried Asparagus", 6.50);
+	public static MenuItem spicyHummus = new MenuItem("130", "Spicy Hummus", 5.50);
+	public static MenuItem ultimateNachos = new MenuItem("140", "Ultimate Nachos", 10.75);
+	public static MenuItem crabCakes =  new MenuItem("150", "Crab Cakes", 11.25);
 	
 	//entree
-	public static MenuItem chickenSalad = new MenuItem("2000", "Chicken Salad", 8.50);
-	public static MenuItem cheeseburger = new MenuItem("2005", "Cheeseburger", 8.50);
-	public static MenuItem tunaSteak = new MenuItem("2010", "Tuna Steak", 8.50);
-	public static MenuItem shrimpAlfredo = new MenuItem("2015", "Shrimp Alfredo", 8.50);
-	public static MenuItem lambLollipops = new MenuItem("2020", "Lamb Lollipops", 8.50);
-	public static MenuItem friedPorkChops = new MenuItem("2025", "Fried Pork Chops", 8.50);
+	public static MenuItem chickenSalad = new MenuItem("200", "Chicken Salad", 12.50);
+	public static MenuItem cheeseburger = new MenuItem("210", "Cheeseburger", 10.25);
+	public static MenuItem tunaSteak = new MenuItem("220", "Tuna Steak", 13.50);
+	public static MenuItem shrimpAlfredo = new MenuItem("230", "Shrimp Alfredo", 14.50);
+	public static MenuItem lambLollipops = new MenuItem("240", "Lamb Lollipops", 15.75);
+	public static MenuItem friedPorkChops = new MenuItem("250", "Fried Pork Chops", 9.50);
 	
 	//sides
-	public static MenuItem mashedPotatoes = new MenuItem("3000", "mashed Potatoes", 2.35);
-	public static MenuItem greenBeans = new MenuItem("3005", "Green Beans", 2.35);
-	public static MenuItem redBeansAndRice = new MenuItem("3010", "Red Beans and Rice", 2.35);
-	public static MenuItem waffleFries = new MenuItem("3015", "Waffle Fries", 2.35);
-	public static MenuItem macAndCheese = new MenuItem("3020", "Mac N' Cheese", 2.35);
-	public static MenuItem steamedBroccoli = new MenuItem("3025", "Steamed Broccoli", 2.35);
+	public static MenuItem mashedPotatoes = new MenuItem("300", "Mashed Potatoes", 2.50);
+	public static MenuItem greenBeans = new MenuItem("310", "Green Beans", 2.50);
+	public static MenuItem redBeansAndRice = new MenuItem("320", "Red Beans and Rice", 3.25);
+	public static MenuItem waffleFries = new MenuItem("330", "Waffle Fries", 2.50);
+	public static MenuItem macAndCheese = new MenuItem("340", "Mac 'N Cheese", 3.25);
+	public static MenuItem steamedBroccoli = new MenuItem("350", "Steamed Broccoli", 2.25);
 	
 	//soups
-	public static MenuItem clamChowder = new MenuItem("4000", "Clam Chowder", 3.25);
-	public static MenuItem loadedBakedPotato = new MenuItem("4005", "Loaded Baked Potatoe", 3.25);
-	public static MenuItem broccoliCheddar = new MenuItem("4010", "Broccoli Chedder", 3.25);
-	public static MenuItem tortilla = new MenuItem("4015", "Tortilla Soup", 3.25);
+	public static MenuItem clamChowder = new MenuItem("400", "Clam Chowder", 5.50);
+	public static MenuItem loadedBakedPotato = new MenuItem("410", "Loaded Baked Potato", 5.50);
+	public static MenuItem broccoliCheddar = new MenuItem("420", "Broccoli Cheddar", 5.50);
+	public static MenuItem tortilla = new MenuItem("430", "Tortilla", 5.50);
 	
 	//desserts
-	public static MenuItem cheesecake = new MenuItem("5000", "Cheesecake", 5.50);
-	public static MenuItem moltenLavaCake = new MenuItem("5005", "Molten Lava Cake", 5.50);
-	public static MenuItem cookieSkillet = new MenuItem("5010", "Cookie Skillet", 5.50);
-	public static MenuItem breadPudding = new MenuItem("5015", "Bread Pudding", 5.50);
-	public static MenuItem friedIceCream = new MenuItem("5020", "Fried Ice Cream", 5.50);
+	public static MenuItem cheesecake = new MenuItem("500", "Cheesecake", 4.75);
+	public static MenuItem moltenLavaCake = new MenuItem("510", "Molten Lava Cake", 5.75);
+	public static MenuItem cookieSkillet = new MenuItem("520", "Cookie Skillet", 5.75);
+	public static MenuItem breadPudding = new MenuItem("530", "Bread Pudding", 4.50);
+	public static MenuItem friedIceCream = new MenuItem("540", "Fried Ice Cream", 5.75);
 	
 	//beverages
-	public static MenuItem cocaCola = new MenuItem("6000", "Coca Cola", 2.20);
-	public static MenuItem drPepper = new MenuItem("6005", "Dr. Pepper", 2.20);
-	public static MenuItem hiC = new MenuItem("6010", "Hi-C", 2.20);
-	public static MenuItem rootBeer = new MenuItem("6015", "Root Beer", 2.20);
-	public static MenuItem lemonade = new MenuItem("6020", "Lemonade", 2.20);
-	public static MenuItem sweetTea = new MenuItem("6025", "Sweet Tea", 2.20);
-	public static MenuItem pepsi = new MenuItem("6030", "Pepsi", 2.20);
+	public static MenuItem cocaCola = new MenuItem("600", "Coca Cola", 2.25);
+	public static MenuItem drPepper = new MenuItem("610", "Dr. Pepper", 2.25);
+	public static MenuItem hiC = new MenuItem("620", "Hi-C", 2.25);
+	public static MenuItem rootBeer = new MenuItem("630", "Root Beer", 2.25);
+	public static MenuItem lemonade = new MenuItem("640", "Lemonade", 2.25);
+	public static MenuItem sweetTea = new MenuItem("650", "Sweet Tea", 2.25);
+	public static MenuItem pepsi = new MenuItem("660", "Pepsi", 2.25);
+	public static MenuItem water = new MenuItem("670", "Water", 0.00);
 	/*
 	 * MENU PANEL BUTTONS
 	 */
@@ -290,20 +291,20 @@ public class Main extends JFrame {
 	 * CATEGORY PANEL MENU BUTTONS
 	 */
 	//appetizers
-	public static MenuButton buffaloWingsButton = new MenuButton("BUFFALO", "WINGS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);		
-	public static MenuButton chickenTendersButton = new MenuButton("CHICKEN", "TENDERS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
-	public static MenuButton friedAsparagusButton = new MenuButton("FRIED", "ASPARAGUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
-	public static MenuButton spicyHummusButton = new MenuButton("SPICY", "HUMMUS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
-	public static MenuButton ultimateNachosButton = new MenuButton("ULTIMATE", "NACHOS", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
-	public static MenuButton crabCakesButton = new MenuButton("CRAB", "CAKES", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton buffaloWingsButton = new MenuButton("Buffalo", "Wings", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);		
+	public static MenuButton chickenTendersButton = new MenuButton("Chicken", "Tenders", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton friedAsparagusButton = new MenuButton("Fried", "Asparagus", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton spicyHummusButton = new MenuButton("Spicy", "Hummus", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton ultimateNachosButton = new MenuButton("Ultimate", "Nachos", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
+	public static MenuButton crabCakesButton = new MenuButton("Crab", "Cakes", Main.MENU_ITEM_BUTTON_COLOR_1, Color.WHITE);
 	
 	//entrees
-	public static MenuButton chickenSaladButton = new MenuButton("CHICKEN", "SALAD", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
-	public static MenuButton cheeseburgerButton = new MenuButton("CHEESEBURGER", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
-	public static MenuButton tunaSteakButton = new MenuButton("TUNA", "STEAK", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
-	public static MenuButton shrimpAlfredoButton = new MenuButton("SHRIMP", "ALFREDO", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
-	public static MenuButton lambLollipopsButton = new MenuButton("LAMB", "LOLLIPOPS", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
-	public static MenuButton friedPorkChopsButton = new MenuButton("FRIED", "PORK CHOPS", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton chickenSaladButton = new MenuButton("Chicken", "Salad", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton cheeseburgerButton = new MenuButton("Cheeseburger", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton tunaSteakButton = new MenuButton("Tuna", "Steak", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton shrimpAlfredoButton = new MenuButton("Shrimp", "Alfredo", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton lambLollipopsButton = new MenuButton("Lamb", "Lollipops", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
+	public static MenuButton friedPorkChopsButton = new MenuButton("Fried", "Pork Chops", Main.MENU_ITEM_BUTTON_COLOR_2, Color.WHITE);
 	
 	//sides
 	public static MenuButton mashedPotatoesButton = new MenuButton("Mashed", "Potatoes", Main.MENU_ITEM_BUTTON_COLOR_3, Color.WHITE);
@@ -334,6 +335,7 @@ public class Main extends JFrame {
 	public static MenuButton lemonadeButton = new MenuButton("Lemonade", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
 	public static MenuButton sweetTeaButton = new MenuButton("Sweet Tea", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
 	public static MenuButton pepsiButton = new MenuButton("Pepsi", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
+	public static MenuButton waterButton = new MenuButton("Water", Main.MENU_ITEM_BUTTON_COLOR_5, Color.WHITE);
 	/*
 	 * FUNCTION PANEL BUTTONS
 	 */
@@ -344,8 +346,14 @@ public class Main extends JFrame {
 	public static JButton buttonEditTips = new JButton(BUTTON_IMAGE_EDIT_TIPS);
 	public static JButton buttonEmployees = new JButton(BUTTON_IMAGE_EMPLOYEES);
 	public static JButton buttonReports = new JButton(BUTTON_IMAGE_REPORTS);
+	public static JButton button1 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button2 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button3 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button4 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button5 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button6 = new JButton(BUTTON_IMAGE_STYLE);
+	public static JButton button7 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton button8 = new JButton(BUTTON_IMAGE_STYLE);
-	public static JButton button9 = new JButton(BUTTON_IMAGE_STYLE);
 	public static JButton buttonExit = new JButton(BUTTON_IMAGE_EXIT);
 	/*
 	 * PAYMENTS CATEGORY PANEL BUTTONS
@@ -409,17 +417,13 @@ public class Main extends JFrame {
 	public static FunctionPanelPaymentsButtonHandler functionPanelPaymentsButtonHandler;
 	public static FunctionPanelReportsButtonHandler functionPanelReportsButtonHandler;
 	public static FunctionPanelEmployeesButtonHandler functionPanelEmployeesButtonHandler;
-	
 	/*
-	 * Payment button handlers
+	 * PAYMENT BUTTON HANDLERS
 	 */
-	
 	public static PaymentButtonHandler payment100Handler;
 	public static PaymentButtonHandler payment20Handler;
 	public static PaymentButtonHandler payment5Handler;
-	public static PaymentButtonHandler payment1Handler;
-	
-	
+	public static PaymentButtonHandler payment1Handler;	
 	/*
 	 * MENU PANEL BUTTON HANDLERS
 	 */
@@ -460,8 +464,8 @@ public class Main extends JFrame {
 	
 	//soup
 	public static MenuItemButtonHandler clamChowderHandler;
-	public static MenuItemButtonHandler loadedBakedPotatoeHandler;
-	public static MenuItemButtonHandler broccoliChedderHandler;
+	public static MenuItemButtonHandler loadedBakedPotatoHandler;
+	public static MenuItemButtonHandler broccoliCheddarHandler;
 	public static MenuItemButtonHandler tortillaHandler;
 	
 	//desserts
@@ -479,6 +483,7 @@ public class Main extends JFrame {
 	public static MenuItemButtonHandler lemonadeHandler;
 	public static MenuItemButtonHandler sweetTeaHandler;
 	public static MenuItemButtonHandler pepsiHandler;
+	public static MenuItemButtonHandler waterHandler;
 	/*
 	 * OTHER BUTTON HANDLERS
 	 */
@@ -585,20 +590,7 @@ public class Main extends JFrame {
 		keypadPanel.add(loginPanelClearKey);
 		headerPanel.add(functionPanel);
 		headerPanel.add(menuPanel);
-		displayPanel.add(userPanel, BorderLayout.PAGE_START);
-		displayPanel.add(menuItemPanelScrollPane, BorderLayout.PAGE_END);
-		userPanel.add(currentUserLabel);
-		userPanel.add(newCheck);
-		userPanel.add(currentUserChecks);
-		functionPanel.add(buttonPayments);
-		functionPanel.add(buttonOpen);
-		functionPanel.add(buttonPrint);
-		functionPanel.add(buttonModify);
-		functionPanel.add(buttonEditTips);
-		functionPanel.add(buttonEmployees);		
-		functionPanel.add(buttonReports);		
-		functionPanel.add(button8);
-		functionPanel.add(buttonExit);
+		
 		paymentsPanel.add(button_1);
 		paymentsPanel.add(button_5);
 		paymentsPanel.add(button_20);
@@ -639,7 +631,8 @@ public class Main extends JFrame {
 		beveragesPanel.add(lemonadeButton);
 		beveragesPanel.add(sweetTeaButton);
 		beveragesPanel.add(pepsiButton);
-		
+		beveragesPanel.add(waterButton);
+
 		menuPanel.add(appetizersButton);
 		menuPanel.add(entreesButton);
 		menuPanel.add(sidesButton);
@@ -648,6 +641,13 @@ public class Main extends JFrame {
 		menuPanel.add(beveragesButton);
 		menuPanel.add(aLaCarteButton);
 		menuPanel.add(toGoButton);
+
+		displayPanel.add(userPanel, BorderLayout.PAGE_START);
+		displayPanel.add(menuItemPanelScrollPane, BorderLayout.PAGE_END);
+		userPanel.add(currentUserLabel);
+		userPanel.add(newCheck);
+		userPanel.add(currentUserChecks);
+
 		add(loginPanel);
 		repaint();
 		revalidate();
@@ -734,8 +734,8 @@ public class Main extends JFrame {
 		
 		//soups
 		clamChowderHandler = new MenuItemButtonHandler(clamChowder);
-		loadedBakedPotatoeHandler = new MenuItemButtonHandler(loadedBakedPotato);
-		broccoliChedderHandler = new MenuItemButtonHandler(broccoliCheddar);
+		loadedBakedPotatoHandler = new MenuItemButtonHandler(loadedBakedPotato);
+		broccoliCheddarHandler = new MenuItemButtonHandler(broccoliCheddar);
 		tortillaHandler = new MenuItemButtonHandler(tortilla);
 		
 		//desserts
@@ -753,6 +753,7 @@ public class Main extends JFrame {
 		lemonadeHandler = new MenuItemButtonHandler(lemonade);
 		sweetTeaHandler = new MenuItemButtonHandler(sweetTea);
 		pepsiHandler = new MenuItemButtonHandler(pepsi);
+		waterHandler = new MenuItemButtonHandler(water);
 		/*
 		 * ADD EVENT LISTENERS
 		 */
@@ -804,7 +805,6 @@ public class Main extends JFrame {
 		spicyHummusButton.addActionListener(spicyHummusHandler);
 		ultimateNachosButton.addActionListener(ultimateNachosHandler);
 		crabCakesButton.addActionListener(crabCakesHandler);
-		appetizersButton.addActionListener(appetizersHandler);
 		
 		//entree
 		chickenSaladButton.addActionListener(chickenSaladHandler);
@@ -813,7 +813,6 @@ public class Main extends JFrame {
 		shrimpAlfredoButton.addActionListener(shrimpAlfredoHandler);
 		lambLollipopsButton.addActionListener(lambLollipopsHandler);
 		friedPorkChopsButton.addActionListener(friedPorkChopsHandler);
-		entreesButton.addActionListener(entreesHandler);
 		
 		//sides
 		mashedPotatoesButton.addActionListener(mashedPotatoesHandler);
@@ -822,14 +821,12 @@ public class Main extends JFrame {
 		waffleFriesButton.addActionListener(waffleFriesHandler);
 		macAndCheeseButton.addActionListener(macAndCheeseHandler);
 		steamedBroccoliButton.addActionListener(steamedBroccoliHandler);
-		sidesButton.addActionListener(sidesHandler);
 		
 		//soups
 		clamChowderButton.addActionListener(clamChowderHandler);
-		loadedBakedPotatoeButton.addActionListener(loadedBakedPotatoeHandler);
-		broccoliChedderButton.addActionListener(broccoliChedderHandler);
+		loadedBakedPotatoeButton.addActionListener(loadedBakedPotatoHandler);
+		broccoliChedderButton.addActionListener(broccoliCheddarHandler);
 		tortillaButton.addActionListener(tortillaHandler);
-		soupsButton.addActionListener(soupsHandler);
 		
 		//desserts
 		cheesecakeButton.addActionListener(cheesecakeHandler);
@@ -837,7 +834,6 @@ public class Main extends JFrame {
 		cookieSkilletButton.addActionListener(cookieSkilletHandler);
 		breadPuddingButton.addActionListener(breadPuddingHandler);
 		friedIceCreamButton.addActionListener(friedIceCreamHandler);
-		dessertsButton.addActionListener(dessertsHandler);
 		
 		//beverages
 		cocaColaButton.addActionListener(cocaColaHandler);
@@ -847,9 +843,7 @@ public class Main extends JFrame {
 		lemonadeButton.addActionListener(lemonadeHandler);
 		sweetTeaButton.addActionListener(sweetTeaHandler);
 		pepsiButton.addActionListener(pepsiHandler);
-		beveragesButton.addActionListener(beveragesHandler);
-		aLaCarteButton.addActionListener(aLaCarteHandler);
-		toGoButton.addActionListener(toGoHandler);
+		waterButton.addActionListener(waterHandler);
 	}
 	/*
 	 ***************
@@ -1202,9 +1196,6 @@ public class Main extends JFrame {
 						/*
 						 * REMOVE THE LOGIN PANEL
 						 */
-						remove(loginPanel);
-						repaint();
-						revalidate();
 						/*
 						 * REMOVE THE OPTIONS PANEL TO UPDATE
 						 */
@@ -1214,12 +1205,55 @@ public class Main extends JFrame {
 						/*
 						 * ADD THE MAIN PANELS
 						 */
-						add(headerPanel, BorderLayout.PAGE_START);
-						add(optionsPanel, BorderLayout.LINE_START);
-						add(displayPanel, BorderLayout.LINE_END);
-						add(statusPanel, BorderLayout.PAGE_END);
-						repaint();
-						revalidate();
+						if (currentUser.getUserRank().equals("Manager")) {
+							remove(loginPanel);
+							repaint();
+							revalidate();
+							functionPanel.removeAll();
+							functionPanel.add(buttonPayments);
+							functionPanel.add(buttonEmployees);
+							functionPanel.add(buttonReports);
+							functionPanel.add(button1);
+							functionPanel.add(button2);
+							functionPanel.add(button3);
+							functionPanel.add(button4);
+							functionPanel.add(button5);
+							functionPanel.add(button6);
+							functionPanel.add(buttonExit);
+							add(headerPanel, BorderLayout.PAGE_START);
+							add(optionsPanel, BorderLayout.LINE_START);
+							add(displayPanel, BorderLayout.LINE_END);
+							add(statusPanel, BorderLayout.PAGE_END);
+							repaint();
+							revalidate();
+						}
+						else if (currentUser.getUserRank().equals("Server")) {
+							remove(loginPanel);
+							repaint();
+							revalidate();
+							functionPanel.removeAll();
+							functionPanel.add(buttonPayments);
+							functionPanel.add(button1);
+							functionPanel.add(button2);
+							functionPanel.add(button3);
+							functionPanel.add(button4);
+							functionPanel.add(button5);
+							functionPanel.add(button6);
+							functionPanel.add(button7);
+							functionPanel.add(button8);
+							functionPanel.add(buttonExit);
+							add(headerPanel, BorderLayout.PAGE_START);
+							add(optionsPanel, BorderLayout.LINE_START);
+							add(displayPanel, BorderLayout.LINE_END);
+							add(statusPanel, BorderLayout.PAGE_END);
+							repaint();
+							revalidate();							
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "Must be server or manager to log in.");
+							currentUserID = "";
+							userLoginTextField.setText("");
+						}
 						try {
 							/*
 							 * REMOVE EVERYTHING TO UPDATE PANEL

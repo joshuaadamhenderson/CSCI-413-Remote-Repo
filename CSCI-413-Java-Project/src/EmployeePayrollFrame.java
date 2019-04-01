@@ -68,16 +68,16 @@ public class EmployeePayrollFrame extends JFrame {
 		footerPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
 		footerPanel.setPreferredSize(new Dimension(0, (int)(Main.screenSize.getHeight() * 0.10)));
 		selectionPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
-		selectionPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.35), (int)(Main.screenSize.getHeight() * 0.75)));
+		selectionPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.25), (int)(Main.screenSize.getHeight() * 0.75)));
 		formPanel.setBackground(Main.ORIGINAL_DARK_BLUE);
-		formPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.65), (int)(Main.screenSize.getHeight() * 0.75)));
+		formPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.74), (int)(Main.screenSize.getHeight() * 0.75)));
 		exitButton.setBackground(Main.ORIGINAL_DARK_BLUE);
 		exitButton.setPreferredSize(new Dimension(150, 70));
 		exitButton.setFont(Main.KEYPAD_FONT);
 		exitButton.setForeground(Color.WHITE);
 		employeePayrollScrollPane.setBackground(Color.WHITE);
 		employeePayrollPanel.setBackground(Color.WHITE);
-		employeePayrollPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.60), (int)(Main.screenSize.getHeight() * 0.74)));
+		employeePayrollPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.70), (int)(Main.screenSize.getHeight() * 0.74)));
 		
 		add(headerPanel, BorderLayout.PAGE_START);
 		add(footerPanel, BorderLayout.PAGE_END);
@@ -139,8 +139,9 @@ public class EmployeePayrollFrame extends JFrame {
 					employeePayrollPanel.add(new EmployeePayrollLabelPanel("DATE", "IN", "OUT", "HOURS WORKED", "PAY RATE", "SHIFT PAY"));
 					employeePayrollPanel.add(new JLabel("___________________________________________________________________________________________________________________"));
 					Double totalPay = 0.0;
-					
+					int panelCount = 0;
 					while (employeeShifts.next()) {
+						panelCount++;
 						String employeePayRate = "";
 						/*
 						 * GET EMPLOYEE PAY RATE
@@ -178,7 +179,7 @@ public class EmployeePayrollFrame extends JFrame {
 								employeeShifts.getString(7), 
 								timeClockedIn, 
 								timeClockedOut, 
-								String.format("%.2f", hours), employeePayRate, String.format("%.2f", shiftPay));
+								String.format("%.2f", hours), String.format("%.2f", payRate), String.format("%.2f", shiftPay));
 						/*
 						 * ADD THE PANEL
 						 */
@@ -188,6 +189,7 @@ public class EmployeePayrollFrame extends JFrame {
 					}
 					employeePayrollPanel.add(new JLabel("___________________________________________________________________________________________________________________"));
 					employeePayrollPanel.add(new EmployeePayrollLabelPanel("", "", "", "", "GROSS PAY", String.format("%.2f", totalPay)));
+					employeePayrollPanel.setPreferredSize(new Dimension((int)(Main.screenSize.getWidth() * 0.70), (int)((Main.screenSize.getHeight() * 0.74)) + (panelCount * 22)));
 				}
 				catch (Exception e) {
 					JOptionPane.showMessageDialog(null, e);

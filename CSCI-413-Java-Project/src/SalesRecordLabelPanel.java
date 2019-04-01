@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class SalesRecordLabelPanel extends JPanel {
 
-	private static final int SALES_RECORD_PANEL_HEIGHT = 16;
+	private static final int SALES_RECORD_PANEL_HEIGHT = 18;
 	private JLabel dateLabel = new JLabel();
 	private JLabel timeLabel = new JLabel();
 	private JLabel employeeLabel = new JLabel();
@@ -36,10 +36,10 @@ public class SalesRecordLabelPanel extends JPanel {
 		
 		dateLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.15), SALES_RECORD_PANEL_HEIGHT));
 		timeLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.15), SALES_RECORD_PANEL_HEIGHT));
-		employeeLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.28), SALES_RECORD_PANEL_HEIGHT));
-		tableNumberLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.15), SALES_RECORD_PANEL_HEIGHT));
-		menuItemLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.15), SALES_RECORD_PANEL_HEIGHT));
-		menuItemPriceLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.08), SALES_RECORD_PANEL_HEIGHT));
+		employeeLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.20), SALES_RECORD_PANEL_HEIGHT));
+		tableNumberLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.12), SALES_RECORD_PANEL_HEIGHT));
+		menuItemLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.20), SALES_RECORD_PANEL_HEIGHT));
+		menuItemPriceLabel.setPreferredSize(new Dimension((int)(SalesReportFrame.salesRecordsPanel.getWidth() * 0.11), SALES_RECORD_PANEL_HEIGHT));
 		
 		dateLabel.setFont(salesRecordFont);
 		timeLabel.setFont(salesRecordFont);

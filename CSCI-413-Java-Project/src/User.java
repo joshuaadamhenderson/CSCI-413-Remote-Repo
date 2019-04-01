@@ -17,16 +17,16 @@ public class User {
 	private String userLastName;
 	private String userRank;
 	private String userHireDate;
-	private double payRate;
-	private double salary;
+	private Double userPayRate;
 	private List<Table> tables;
 	private boolean clockedIn;
 		
-	public User(String userID, String userFirstName, String userLastName, String userRank, String userHireDate) {
+	public User(String userID, String userFirstName, String userLastName, String userRank, Double userPayRate, String userHireDate) {
 		this.userID = userID;
 		this.userFirstName = userFirstName; 
 		this.userLastName = userLastName;
 		this.userRank = userRank;
+		this.userPayRate = userPayRate;
 		this.userHireDate = userHireDate;
 		this.tables = new ArrayList<Table>();
 		this.clockedIn = false;
@@ -88,20 +88,12 @@ public class User {
 		this.clockedIn = clockedIn;
 	}
 
-	public double getPayRate() {
-		return payRate;
+	public Double getUserPayRate() {
+		return userPayRate;
 	}
 
-	public void setPayRate(double payRate) {
-		this.payRate = payRate;
-	}
-
-	public double getSalary() {
-		return salary;
-	}
-
-	public void setSalary(double salary) {
-		this.salary = salary;
+	public void setUserPayRate(Double userPayRate) {
+		this.userPayRate = userPayRate;
 	}
 }
 

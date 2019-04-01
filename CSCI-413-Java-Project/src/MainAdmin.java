@@ -46,6 +46,7 @@ public class MainAdmin extends JFrame {
 	public static AdminPanelLabel userFirstNameLabel = new AdminPanelLabel("First Name");
 	public static AdminPanelLabel userLastNameLabel = new AdminPanelLabel("Last Name");
 	public static AdminPanelLabel userRankLabel = new AdminPanelLabel("Position");
+	public static AdminPanelLabel userPayRateLabel = new AdminPanelLabel("Pay Rate");
 	public static AdminPanelLabel userHireDateLabel = new AdminPanelLabel("Date Hired");
 	/*
 	 * TEXT FIELDS
@@ -54,6 +55,7 @@ public class MainAdmin extends JFrame {
 	public static AdminPanelTextField userFirstNameTextField = new AdminPanelTextField();
 	public static AdminPanelTextField userLastNameTextField = new AdminPanelTextField();
 	public static AdminPanelTextField userRankTextField = new AdminPanelTextField();
+	public static AdminPanelTextField userPayRateTextField = new AdminPanelTextField();
 	public static AdminPanelTextField userHireDateTextField = new AdminPanelTextField();
 	/*
 	 * COMBO BOX
@@ -170,12 +172,14 @@ public class MainAdmin extends JFrame {
 		fieldPanel.add(userFirstNameLabel);
 		fieldPanel.add(userLastNameLabel);
 		fieldPanel.add(userRankLabel);
+		fieldPanel.add(userPayRateLabel);
 		fieldPanel.add(userHireDateLabel);
 		
 		boxPanel.add(userIDTextField);
 		boxPanel.add(userFirstNameTextField);
 		boxPanel.add(userLastNameTextField);
 		boxPanel.add(userRankTextField);
+		boxPanel.add(userPayRateTextField);
 		boxPanel.add(userHireDateTextField);
 		boxPanel.add(spacerPanel);
 		boxPanel.add(createNewUserButton);
@@ -208,7 +212,7 @@ public class MainAdmin extends JFrame {
 			ResultSet rs = stmt.executeQuery(string);
 			
 			while (rs.next()) {
-				userList.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				userList.add(new User(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDouble(5), rs.getString(6)));
 			}
 		}
 		catch (Exception e) {
@@ -245,6 +249,7 @@ public class MainAdmin extends JFrame {
 				userFirstNameTextField.setText(userList.get(userSelection.getSelectedIndex() - 1).getUserFirstName());
 				userLastNameTextField.setText(userList.get(userSelection.getSelectedIndex() - 1).getUserLastName());
 				userRankTextField.setText(userList.get(userSelection.getSelectedIndex() - 1).getUserRank());
+				userPayRateTextField.setText(userList.get(userSelection.getSelectedIndex() - 1).getUserPayRate().toString());
 				userHireDateTextField.setText(userList.get(userSelection.getSelectedIndex() - 1).getUserHireDate());
 			}
 		}
@@ -334,6 +339,8 @@ public class MainAdmin extends JFrame {
 						+ userRankTextField.getText()
 						+ "', userHireDate='"
 						+ userHireDateTextField.getText()
+						+ "', userPayRate='"
+						+ userPayRateTextField.getText()
 						+ "' WHERE userID='"
 						+ userIDTextField.getText()
 						+ "';";
