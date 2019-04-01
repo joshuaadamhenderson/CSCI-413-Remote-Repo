@@ -204,8 +204,7 @@ public class MainAdmin extends JFrame {
 	public void GetUsers() {
 		
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+			Connection conn = DriverManager.getConnection(Main.URL, Main.USERNAME, Main.PASSWORD);
 			Statement stmt = conn.createStatement();
 			
 			String string = "SELECT * FROM Users;";
@@ -237,6 +236,7 @@ public class MainAdmin extends JFrame {
 				userFirstNameTextField.setText("");
 				userLastNameTextField.setText("");
 				userRankTextField.setText("");
+				userPayRateTextField.setText("");
 				userHireDateTextField.setText("");															
 			}
 			else {
@@ -272,8 +272,7 @@ public class MainAdmin extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				Connection conn = DriverManager.getConnection(Main.URL, Main.USERNAME, Main.PASSWORD);
 				Statement stmt = conn.createStatement();
 				
 				String userRequest = "SELECT * FROM Users WHERE userID = '" + userIDTextField.getText() + "';";
@@ -299,6 +298,8 @@ public class MainAdmin extends JFrame {
 							+ "', '"
 							+ userRankTextField.getText()
 							+ "', '"
+							+ userPayRateTextField.getText()
+							+ "', '"
 							+ userHireDateTextField.getText()
 							+ "');";
 					stmt.executeUpdate(insertUser);
@@ -307,6 +308,7 @@ public class MainAdmin extends JFrame {
 					userFirstNameTextField.setText("");
 					userLastNameTextField.setText("");
 					userRankTextField.setText("");
+					userPayRateTextField.setText("");
 					userHireDateTextField.setText("");															
 				}
 			}
@@ -326,8 +328,7 @@ public class MainAdmin extends JFrame {
 		public void actionPerformed(ActionEvent event) {
 			
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+				Connection conn = DriverManager.getConnection(Main.URL, Main.USERNAME, Main.PASSWORD);
 				Statement stmt = conn.createStatement();
 				
 				String userUpdate = "UPDATE Users SET "
@@ -354,6 +355,7 @@ public class MainAdmin extends JFrame {
 			userFirstNameTextField.setText("");
 			userLastNameTextField.setText("");
 			userRankTextField.setText("");
+			userPayRateTextField.setText("");
 			userHireDateTextField.setText("");																		
 		}
 	}
@@ -371,8 +373,7 @@ public class MainAdmin extends JFrame {
 			
 			if (dialogResponse == JOptionPane.YES_OPTION) {
 				try {
-					Class.forName("com.mysql.cj.jdbc.Driver");
-					Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/r2db", "root", "");
+					Connection conn = DriverManager.getConnection(Main.URL, Main.USERNAME, Main.PASSWORD);
 					Statement stmt = conn.createStatement();
 					
 					String userDelete = "DELETE FROM Users WHERE userID='" + userIDTextField.getText() + "';";
@@ -385,6 +386,7 @@ public class MainAdmin extends JFrame {
 				userFirstNameTextField.setText("");
 				userLastNameTextField.setText("");
 				userRankTextField.setText("");
+				userPayRateTextField.setText("");
 				userHireDateTextField.setText("");															
 			}
 		}

@@ -927,7 +927,6 @@ public class Main extends JFrame {
 				/*
 				 * CREATE CONNECTION
 				 */
-				Class.forName(DRIVER_CLASS);
 				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * SEARCH DATABASE FOR USER ID
@@ -1032,7 +1031,6 @@ public class Main extends JFrame {
 				/*
 				 * GET CONNECTION
 				 */
-				Class.forName(DRIVER_CLASS);
 				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * GET THE CLOCKED IN STATUS
@@ -1094,7 +1092,6 @@ public class Main extends JFrame {
 				/*
 				 * CREATE CONNECTION
 				 */
-				Class.forName(DRIVER_CLASS);
 				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				/*
 				 * GET THE CLOCKED IN STATUS OF THE USER ID
@@ -1277,6 +1274,8 @@ public class Main extends JFrame {
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "User needs to be clocked in.");
+						currentUserID = "";
+						userLoginTextField.setText("");
 					}
 				}
 				
@@ -1348,7 +1347,6 @@ public class Main extends JFrame {
 					 * GET CONNECTION
 					 */
 					try {
-						Class.forName(DRIVER_CLASS);
 						Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 						/*
 						 * GET EACH MENU ITEM FROM THE CURRENT TABLE
@@ -1474,7 +1472,6 @@ public class Main extends JFrame {
 					/*
 					 * GET CONNECTION
 					 */
-					Class.forName(DRIVER_CLASS);
 					Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 					/*
 					 * ADD THE ITEM TO A MENU ITEM LIST IN THE DATABASE
@@ -1587,7 +1584,6 @@ public class Main extends JFrame {
 				/*
 				 * GET CONNECTION
 				 */
-				Class.forName(DRIVER_CLASS);
 				Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);				
 				/*
 				 * GET THE CURRENT TIME
