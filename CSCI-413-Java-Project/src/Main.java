@@ -1593,6 +1593,22 @@ public class Main extends JFrame {
 				 * MAKE A NEW TABLE
 				 */
 				Table newTable = new Table();
+				/*
+				 * DECLARE A VARIABLE HERE
+				 */
+				
+				/*
+				 * GET THE TABLE NUMBER
+				 */
+				
+				/*
+				 * OPEN THE TABLE SELECTION FRAME
+				 */
+				
+				/*
+				 * STORE A TABLE NUMBER TO INSERT
+				 */
+							
 				try {
 					/*
 					 * INSERT A NEW TABLE IN THE DATABASE 

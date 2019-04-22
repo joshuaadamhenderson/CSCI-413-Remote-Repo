@@ -288,7 +288,7 @@ public class MainAdmin extends JFrame {
 					JOptionPane.showMessageDialog(null, "Must enter user ID.");
 				}
 				else {
-					String insertUser = "INSERT INTO Users (userID, userFirstName, userLastName, userRank, userHireDate)"
+					String insertUser = "INSERT INTO Users (userID, userFirstName, userLastName, userRank, userPayRate, userHireDate)"
 							+ "VALUES ('"
 							+ userIDTextField.getText()
 							+ "', '"
