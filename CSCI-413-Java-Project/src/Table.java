@@ -48,6 +48,7 @@ public class Table {
 	private JLabel taxLabel;
 	private JLabel totalLabel;
 	private JLabel tableIDLabel;
+	private JLabel tableNumberLabel;
 	private JLabel tableDateCreatedLabel;
 	private JLabel tableTimeCreatedLabel;
 	private TableButton tableButton;
@@ -62,6 +63,7 @@ public class Table {
 		 * ASSIGN VALUES TO VARIABLES
 		 */
 		this.tableID = 0;
+		this.tableNum = 0;
 		this.subtotal = 0;
 		this.date = Date.valueOf(Main.df.format(Main.now));
 		this.time = Time.valueOf(Main.tf.format(Main.now));
@@ -76,6 +78,7 @@ public class Table {
 		totalPanel = new DisplayPanelLabelPanel();
 		taxPanel = new DisplayPanelLabelPanel();
 		tableIDLabel = new JLabel("Check " + Integer.toString(tableID));
+		tableNumberLabel = new JLabel("  Table " + Integer.toString(tableNum));
 		tableTimeCreatedLabel = new JLabel("");
 		subtotalTitleLabel = new JLabel("Subtotal");
 		taxTitleLabel = new JLabel("Tax");
@@ -88,6 +91,7 @@ public class Table {
 		 * ADD LABELS TO TABLE INFORMATION PANEL
 		 */
 		tableInformationPanel.add(tableIDLabel, BorderLayout.WEST);
+		tableInformationPanel.add(tableNumberLabel);
 		tableInformationPanel.add(tableTimeCreatedLabel, BorderLayout.EAST);
 		/*
 		 * ADD LABELS TO COST PANELS
@@ -108,12 +112,13 @@ public class Table {
 		taxLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		totalLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		tableIDLabel.setFont(Main.DISPLAY_PANEL_FONT);
+		tableNumberLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		tableTimeCreatedLabel.setFont(Main.DISPLAY_PANEL_FONT);
 		/*
 		 * SET LABELS ON TABLE'S TABLE BUTTON
 		 */
 		tableButton.setTable(this);
-		tableButton.setTableNumberOnLabel(tableID);
+		tableButton.setTableIDOnLabel(tableID, tableNum);
 		tableButton.setTableTotalOnLabel(total);
 		tableButton.setTimeCreatedOnLabel(date, time);
 	}
@@ -132,10 +137,15 @@ public class Table {
 		setSubtotal(subtotal);
 	}
 	
-	public void setTableID(int tableID) {
-		tableButton.setTableNumberOnLabel(tableID);
+	public void setTableID(int tableID, int tableNum) {
+		tableButton.setTableIDOnLabel(tableID, tableNum);
 		tableIDLabel.setText("Check " + String.format("%d", tableID));
 		this.tableID = tableID;
+	}
+	
+	public void setTableNum(int tableNumber) {
+		tableNumberLabel.setText("Table " + String.format("%d", tableNumber));
+		this.tableNum = tableNumber;
 	}
 	
 	public double getTableID() {
@@ -241,10 +251,6 @@ public class Table {
 
 	public int getTableNum() {
 		return tableNum;
-	}
-
-	public void setTableNum(int tableNum) {
-		this.tableNum = tableNum;
 	}
 
 	public JLabel getTableDateCreatedLabel() {

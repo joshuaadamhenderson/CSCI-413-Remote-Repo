@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 
 public class TableButton extends JButton {
 
+	private JLabel tableIDLabel;
 	private JLabel tableNumberLabel;
 	private JLabel tableTotalLabel;
 	private JLabel tableTimeCreatedLabel;
@@ -50,7 +51,8 @@ public class TableButton extends JButton {
 		/*
 		 * INSTANTIATE LABELS AND MENUITEM LIST
 		 */
-		tableNumberLabel = new JLabel(String.format("%f", table.getTableID()));
+		tableIDLabel = new JLabel(String.format("%f   Table %d", table.getTableID(), table.getTableNum()));
+		tableNumberLabel = new JLabel(String.format("Table %d", table.getTableNum()));
 		tableTotalLabel = new JLabel(String.format("%f", table.getTotal()));
 		tableTimeCreatedLabel = new JLabel("table time created goes here");
 		menuItems = new ArrayList<MenuItem>();
@@ -58,17 +60,20 @@ public class TableButton extends JButton {
 		/*
 		 * LABEL SETTINGS
 		 */
+		tableIDLabel.setForeground(Main.TABLE_BUTTON_TEXT_COLOR);
 		tableNumberLabel.setForeground(Main.TABLE_BUTTON_TEXT_COLOR);
 		tableTotalLabel.setForeground(Main.TABLE_BUTTON_TEXT_COLOR);
 		tableTimeCreatedLabel.setForeground(Main.TABLE_BUTTON_TEXT_COLOR);
+		tableIDLabel.setFont(Main.TABLE_BUTTON_FONT);
 		tableNumberLabel.setFont(Main.TABLE_BUTTON_FONT);
 		tableTotalLabel.setFont(Main.TABLE_BUTTON_FONT);
 		tableTimeCreatedLabel.setFont(Main.TABLE_BUTTON_FONT);
+		tableTimeCreatedLabel.setHorizontalAlignment(JLabel.RIGHT);
 		/*
 		 * ADD LABELS
 		 */
-		add(tableNumberLabel, BorderLayout.WEST);
-		add(tableTotalLabel);
+		add(tableIDLabel, BorderLayout.WEST);
+		add(tableTotalLabel, BorderLayout.CENTER);
 		add(tableTimeCreatedLabel, BorderLayout.EAST);
 		addActionListener(tableButtonHandler);
 	}
@@ -143,9 +148,10 @@ public class TableButton extends JButton {
 			}
 		} 
 	}	
-	public void setTableNumberOnLabel(int tableNumber) {
-		tableNumberLabel.setText("Check " + Integer.toString(tableNumber) + "     ");
+	public void setTableIDOnLabel(int tableID, int tableNum) {
+		tableIDLabel.setText("Check " + Integer.toString(tableID) + "     " + "Table " + Integer.toString(tableNum) + "      ");
 	}
+	
 	
 	public void setTableTotalOnLabel(double tableTotal) {
 		tableTotalLabel.setText(String.format("$%.2f", tableTotal));
@@ -155,6 +161,14 @@ public class TableButton extends JButton {
 		tableTimeCreatedLabel.setText(date.toString() + "   " + time.toString());
 	}
 	
+	public JLabel getTableIDLabel() {
+		return tableIDLabel;
+	}
+	
+	public void setTableIDLabel(JLabel tableIDLabel) {
+		this.tableIDLabel = tableIDLabel;
+	}
+
 	public JLabel getTableNumberLabel() {
 		return tableNumberLabel;
 	}

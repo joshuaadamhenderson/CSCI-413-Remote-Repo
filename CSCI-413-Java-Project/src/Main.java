@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -35,6 +36,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
@@ -169,6 +171,7 @@ public class Main extends JFrame {
 	 */
 	public static JLabel welcomeLabel = new JLabel();
 	public static JLabel currentUserLabel = new JLabel("");
+	public static JLabel tableSelectionLabel = new JLabel("Please Select a Table");
 	public static JLabel horizonLine = new JLabel("***********************************************************************************");
 	public static JLabel horizonLine2 = new JLabel("***********************************************************************************");
 	public static JLabel horizonLine3 = new JLabel("***********************************************************************************");
@@ -185,8 +188,8 @@ public class Main extends JFrame {
 	 * FRAMES
 	 */
 	public static MainAdmin mainAdmin = new MainAdmin();
-	public static EmployeePayrollFrame employeePayrollFrame= new EmployeePayrollFrame();
-	public static SalesReportFrame salesReportFrame= new SalesReportFrame();
+	public static EmployeePayrollFrame employeePayrollFrame = new EmployeePayrollFrame();
+	public static SalesReportFrame salesReportFrame = new SalesReportFrame();
 	/*
 	 * PANELS
 	 */
@@ -214,6 +217,9 @@ public class Main extends JFrame {
 	public static CategoryPanel	toGoPanel = new CategoryPanel();
 	public static CategoryPanel paymentsPanel = new CategoryPanel();
 	public static CategoryPanel reportsPanel = new CategoryPanel();
+	public static JPanel tableSelectionPanel = new JPanel();
+	public static JPanel tableSelectionHolder = new JPanel();
+	public static JPanel tableSelectionHeader = new JPanel();
 	/*
 	 * SCROLL PANES
 	 */
@@ -227,6 +233,7 @@ public class Main extends JFrame {
 	public static List<Table> currentUserTables = new ArrayList<Table>(); // Placeholder
 	public static MenuItem currentMenuItem = new MenuItem("", "", 0);	
 	public static List<MenuItem> currentTableMenuItems = new ArrayList<MenuItem>(); // Placeholder
+	public static int currentTableNumber = 0;
 	/*
 	 * MENU ITEMS
 	 */
@@ -276,6 +283,22 @@ public class Main extends JFrame {
 	public static MenuItem sweetTea = new MenuItem("650", "Sweet Tea", 2.25);
 	public static MenuItem pepsi = new MenuItem("660", "Pepsi", 2.25);
 	public static MenuItem water = new MenuItem("670", "Water", 0.00);
+	/*
+	 * TABLE SELECTION PANEL BUTTONS
+	 */
+	public static TableSelectionButton table100 = new TableSelectionButton(100);
+	public static TableSelectionButton table101 = new TableSelectionButton(101);
+	public static TableSelectionButton table102 = new TableSelectionButton(102);
+	public static TableSelectionButton table103 = new TableSelectionButton(103);
+	public static TableSelectionButton table200 = new TableSelectionButton(200);
+	public static TableSelectionButton table201 = new TableSelectionButton(201);
+	public static TableSelectionButton table202 = new TableSelectionButton(202);
+	public static TableSelectionButton table203 = new TableSelectionButton(203);
+	public static TableSelectionButton table300 = new TableSelectionButton(300);
+	public static TableSelectionButton table301 = new TableSelectionButton(301);
+	public static TableSelectionButton table302 = new TableSelectionButton(302);
+	public static TableSelectionButton table303 = new TableSelectionButton(303);
+	
 	/*
 	 * MENU PANEL BUTTONS
 	 */
@@ -411,6 +434,21 @@ public class Main extends JFrame {
 	public static LoginPanelClearKeyButtonHandler loginPanelClearKeyButtonHandler;
 	public static LoginPanelClockInButtonHandler loginPanelClockInButtonHandler;
 	public static LoginPanelClockOutButtonHandler loginPanelClockOutButtonHandler;
+	/*
+	 * TABLE SELECTION BUTTON HANDLERS
+	 */
+	public static TableSelectionButtonHandler table100ButtonHandler;
+	public static TableSelectionButtonHandler table101ButtonHandler;
+	public static TableSelectionButtonHandler table102ButtonHandler;
+	public static TableSelectionButtonHandler table103ButtonHandler;
+	public static TableSelectionButtonHandler table200ButtonHandler;
+	public static TableSelectionButtonHandler table201ButtonHandler;
+	public static TableSelectionButtonHandler table202ButtonHandler;
+	public static TableSelectionButtonHandler table203ButtonHandler;
+	public static TableSelectionButtonHandler table300ButtonHandler;
+	public static TableSelectionButtonHandler table301ButtonHandler;
+	public static TableSelectionButtonHandler table302ButtonHandler;
+	public static TableSelectionButtonHandler table303ButtonHandler;
 	/*
 	 * FUNCTION PANEL BUTTON HANDLERS
 	 */
@@ -562,6 +600,16 @@ public class Main extends JFrame {
 		menuItemPanelScrollPane.getVerticalScrollBar().setBackground(ORIGINAL_DARK_BLUE);
 		
 		welcomeLabel.setIcon(LOGO);
+		/*
+		 * TABLE SELECTION SETTINGS
+		 */
+		tableSelectionHolder.setBackground(MAIN_BG_COLOR);
+		tableSelectionHeader.setBackground(MAIN_BG_COLOR);
+		tableSelectionPanel.setPreferredSize(new Dimension(700, 500));
+		tableSelectionLabel.setForeground(MAIN_TEXT_COLOR);
+		tableSelectionLabel.setFont(KEYPAD_FONT);
+		tableSelectionHeader.setPreferredSize(new Dimension(0, 100));
+		tableSelectionPanel.setLayout(new GridLayout(3, 4));
 			
 		/*
 		 * ASSEMBLE THE PANELS
@@ -642,6 +690,21 @@ public class Main extends JFrame {
 		menuPanel.add(aLaCarteButton);
 		menuPanel.add(toGoButton);
 
+		tableSelectionPanel.add(table100);
+		tableSelectionPanel.add(table101);
+		tableSelectionPanel.add(table102);
+		tableSelectionPanel.add(table103);
+		tableSelectionPanel.add(table200);
+		tableSelectionPanel.add(table201);
+		tableSelectionPanel.add(table202);
+		tableSelectionPanel.add(table203);
+		tableSelectionPanel.add(table300);
+		tableSelectionPanel.add(table301);
+		tableSelectionPanel.add(table302);
+		tableSelectionPanel.add(table303);
+		tableSelectionHolder.add(tableSelectionPanel);
+		tableSelectionHeader.add(tableSelectionLabel);
+		
 		displayPanel.add(userPanel, BorderLayout.PAGE_START);
 		displayPanel.add(menuItemPanelScrollPane, BorderLayout.PAGE_END);
 		userPanel.add(currentUserLabel);
@@ -669,6 +732,21 @@ public class Main extends JFrame {
 		LoginPanelKey9 = new LoginPanelKeypadButtonHandler(9);
 		LoginPanelKey0 = new LoginPanelKeypadButtonHandler(0);
 		exitSystemHandler = new ExitSystemHandler();
+		/*
+		 * TABLE SELECTION BUTTON HANDLERS
+		 */
+		table100ButtonHandler = new TableSelectionButtonHandler(100);
+		table101ButtonHandler = new TableSelectionButtonHandler(101);
+		table102ButtonHandler = new TableSelectionButtonHandler(102);
+		table103ButtonHandler = new TableSelectionButtonHandler(103);
+		table200ButtonHandler = new TableSelectionButtonHandler(200);
+		table201ButtonHandler = new TableSelectionButtonHandler(201);
+		table202ButtonHandler = new TableSelectionButtonHandler(202);
+		table203ButtonHandler = new TableSelectionButtonHandler(203);
+		table300ButtonHandler = new TableSelectionButtonHandler(300);
+		table301ButtonHandler = new TableSelectionButtonHandler(301);
+		table302ButtonHandler = new TableSelectionButtonHandler(302);
+		table303ButtonHandler = new TableSelectionButtonHandler(303);
 		/*
 		 * USER PANEL BUTTON EVENT LISTENERS
 		 */
@@ -775,6 +853,19 @@ public class Main extends JFrame {
 		
 		newCheck.addActionListener(newCheckButtonHandler);
 		currentUserChecks.addActionListener(currentUserChecksButtonHandler);
+		
+		table100.addActionListener(table100ButtonHandler);
+		table101.addActionListener(table101ButtonHandler);
+		table102.addActionListener(table102ButtonHandler);
+		table103.addActionListener(table103ButtonHandler);
+		table200.addActionListener(table200ButtonHandler);
+		table201.addActionListener(table201ButtonHandler);
+		table202.addActionListener(table202ButtonHandler);
+		table203.addActionListener(table203ButtonHandler);
+		table300.addActionListener(table300ButtonHandler);
+		table301.addActionListener(table301ButtonHandler);
+		table302.addActionListener(table302ButtonHandler);
+		table303.addActionListener(table303ButtonHandler);
 		
 		buttonPayments.addActionListener(functionPanelPaymentsButtonHandler);
 		buttonEmployees.addActionListener(functionPanelEmployeesButtonHandler);
@@ -1134,7 +1225,7 @@ public class Main extends JFrame {
 						 * GET ALL THE USER'S TABLES FROM TODAY
 						 */
 						Statement stmt3 = conn.createStatement();
-						String getUserTables = "SELECT tableID, menuItemListID, tableNum, tableDateCreated, tableTimeCreated "
+						String getUserTables = "SELECT tableID, tableNum, tableDateCreated, tableTimeCreated "
 								+ "FROM Tables WHERE userID='"
 								+ currentUser.getUserID()
 								+ "' AND tableDateCreated='"
@@ -1146,10 +1237,10 @@ public class Main extends JFrame {
 						 */
 						while (userTables.next()) {
 							currentTable = new Table();
-							currentTable.setTableID(userTables.getInt(1));
-							currentTable.setMenuItemListID(userTables.getInt(2));
-							currentTable.setTableNum(userTables.getInt(3));
-							currentTable.setTableTimeCreatedOnLabel(userTables.getDate(4), userTables.getTime(5));
+							currentTable.setTableID(userTables.getInt(1), userTables.getInt(2));
+							currentTable.setTableNum(userTables.getInt(2));
+							currentTable.setTableTimeCreatedOnLabel(userTables.getDate(3), userTables.getTime(4));
+							
 							/*
 							 * ADD TABLE TO THE CURRENT USER TABLES
 							 */
@@ -1593,22 +1684,9 @@ public class Main extends JFrame {
 				 * MAKE A NEW TABLE
 				 */
 				Table newTable = new Table();
-				/*
-				 * DECLARE A VARIABLE HERE
-				 */
-				
-				/*
-				 * GET THE TABLE NUMBER
-				 */
-				
-				/*
-				 * OPEN THE TABLE SELECTION FRAME
-				 */
-				
-				/*
-				 * STORE A TABLE NUMBER TO INSERT
-				 */
-							
+				JOptionPane.showMessageDialog(null, tableSelectionHolder);
+				newTable.setTableNum(currentTableNumber);
+			
 				try {
 					/*
 					 * INSERT A NEW TABLE IN THE DATABASE 
@@ -1617,7 +1695,6 @@ public class Main extends JFrame {
 					String addTables = "INSERT INTO Tables "
 							+ "(userID, "
 							+ "tableNum, "
-							+ "menuItemListID, "
 							+ "tableDateCreated, "
 							+ "tableTimeCreated, "
 							+ "tableSubtotal, "
@@ -1625,8 +1702,6 @@ public class Main extends JFrame {
 							+ "tableTotal)"
 							+ "VALUES ('"
 							+ currentUser.getUserID()
-							+ "', '"
-							+ newTable.getTableNum()
 							+ "', '"
 							+ newTable.getTableNum()
 							+ "', '"
@@ -1654,10 +1729,10 @@ public class Main extends JFrame {
 					/*
 					 * SET THE TABLE BUTTON VARIABLES
 					 */
-					newTable.getTableButton().setTableNumberOnLabel(next);
+					newTable.getTableButton().setTableIDOnLabel(next, newTable.getTableNum());
 					newTable.getTableButton().setTableTotalOnLabel(newTable.getTotal());
 					newTable.setTableTimeCreatedOnLabel(newTable.getDate(), newTable.getTime());
-					newTable.setTableID(next);
+					newTable.setTableID(next, newTable.getTableNum());
 				}
 				catch (Exception e ) {
 					JOptionPane.showMessageDialog(null, e);
@@ -1697,6 +1772,23 @@ public class Main extends JFrame {
 			}
 		}
 	}
+	/* _____________________________________________________________________________________________________
+	 * TABLE SELECTION BUTTON HANDLER
+	 */
+	private class TableSelectionButtonHandler implements ActionListener {
+		
+		private int tableNum;
+		
+		private TableSelectionButtonHandler(int tableNum) {
+			this.tableNum = tableNum;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent event) {
+			currentTableNumber = tableNum;
+		}
+	}
+	
 	/* _____________________________________________________________________________________________________
 	 * EXIT BUTTON HANDLER
 	 */
